@@ -9,7 +9,7 @@ const commands = {
         description: 'Returns all of my commands.',
         do: function(message, client, args, Discord){
             let embed = new Discord.RichEmbed();
-            embed.setAuthor(client.avatarURL, 'My Commands');
+            embed.setAuthor('My Commands', client.avatarURL);
             embed.setDescription('This is a test');
             message.channel.send({embed});
         }
