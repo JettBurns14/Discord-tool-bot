@@ -33,7 +33,6 @@ const commands = {
             let fetched = message.channel.fetchMessages({count: deleteCount});
             message.channel.bulkDelete(fetched)
                 .catch(error => message.reply(`Couldn't delete messages because of: ${error}`));
-            }
         }
     },
 }
