@@ -24,7 +24,7 @@ const commands = {
         do: function(message, client, args, Discord) {
             try {
                 if (args[0] <= 99 && args > 1){
-                    message.channel.bulkDelete(args[0]);
+                    message.channel.bulkDelete(parseInt(args[0]) + 1);
                 } else {
                     message.reply("Please provide a number under 100 and above 1");
                 }
