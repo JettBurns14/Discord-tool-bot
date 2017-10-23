@@ -7,12 +7,23 @@ const commands = {
     help: {
         name: 'help',
         description: 'Returns all of my commands.',
+        usage: prefix + this.name,
         do: function(message, client, args, Discord){
             try {
-                let embed = new Discord.RichEmbed();
-                embed.setAuthor('My Commands', client.avatarURL);
-                embed.setDescription('This is a test');
-                message.channel.send({embed});
+                if (!args[0]){
+                    let embed = new Discord.RichEmbed();
+                    embed.setAuthor('My Commands', client.avatarURL);
+                    embed.setDescription('This is a test');
+                    message.channel.send({embed});
+                } else {
+                    for (let i in commands){
+                        let selection = args[0];
+                        let embed = new Discord.RichEmbed();
+                        embed.addField('Usage:', commands.selection.usage);
+                        embed.addField('Description:', commands.selection.description);
+                    }
+                }
+
             } catch (e) {
                 console.log(e);
             }
@@ -21,6 +32,7 @@ const commands = {
     purge: {
         name: 'purge',
         description: 'Remove messages in bulk.',
+        usage: prefix + this.name + " <number>",
         do: function(message, client, args, Discord) {
             try {
                 if (args[0] <= 99 && args > 1){
