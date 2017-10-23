@@ -13,7 +13,7 @@ const commands = {
             embed.setAuthor(client.avatarURL, 'My Commands');
             embed.setDescription('This is a test');
             message.channel.send(embed);
-        };
+        }
     }
 
 };
