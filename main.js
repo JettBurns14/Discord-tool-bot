@@ -27,7 +27,7 @@ client.on('message', (message) => {
     let command = message.content.substring(prefix.length).split(' ');
     console.log(command[0]);
     for (let i in commands){
-        if (command[0] === commands[i].name){
+        if (command[0].toLowerCase() === commands[i].name){
             commands[i].do(message, client, args, Discord);
         }
     }
