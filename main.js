@@ -1,7 +1,6 @@
 // Write code here, obviously
 const Discord = require('discord.js');
 const client = new Discord.Client();
-client.login(process.env.BOT_TOKEN);
 const prefix = '?';
 
 const commands = {
@@ -12,7 +11,7 @@ const commands = {
             let embed = new Discord.RichEmbed();
             embed.setAuthor(client.avatarURL, 'My Commands');
             embed.setDescription('This is a test');
-            message.channel.send(embed);
+            message.channel.send({embed});
         }
     },
     purge: {
