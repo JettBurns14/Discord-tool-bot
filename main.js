@@ -40,10 +40,10 @@ const commands = {
 client.on('message', (message) => {
     if (message.author.bot) return;
     if (!message.content.startsWith(prefix)) return;
-    let args = message.content.split(' ')(1);
+    let args = message.content.split(" ").splice(1);
     let command = message.content.substring(prefix.length).split(' ');
     for (let i in commands){
-        if (message.content.startsWith(commands[i].name)){
+        if (command[0] === commands[i].name)){
             commands[i].do(message, client, args, Discord);
         }
     }
