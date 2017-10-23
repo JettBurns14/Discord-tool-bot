@@ -31,6 +31,7 @@ const commands = {
             } catch (e) {
                 console.log(e);
             }
+        }
     },
 };
 
