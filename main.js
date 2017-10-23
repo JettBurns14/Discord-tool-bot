@@ -35,9 +35,8 @@ const commands = {
                 .catch(error => message.reply(`Couldn't delete messages because of: ${error}`));
             }
         }
-    }
-
-};
+    },
+}
 
 client.on('message', (message) => {
     if (message.author.bot) return;
