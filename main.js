@@ -12,7 +12,7 @@ const commands = {
             let embed = new Discord.RichEmbed();
             embed.setTitle('My Commands');
             embed.setDescription('This is a test');
-            message.channel.send(embed);
+            message.channel.send({ embed });
         }
     }
 
