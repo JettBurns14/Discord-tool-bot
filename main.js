@@ -16,12 +16,10 @@ const commands = {
                     embed.setDescription('This is a test');
                     message.channel.send({embed});
                 } else {
-                    for (let i in commands){
-                        let selection = args[0];
-                        let embed = new Discord.RichEmbed();
-                        embed.addField('Usage:', commands[selection].usage);
-                        embed.addField('Description:', commands[selection].description);
-                    }
+                    let selection = args[0];
+                    let embed = new Discord.RichEmbed();
+                    embed.addField('Usage:', this.usage);
+                    embed.addField('Description:', this.description);
                 }
 
             } catch (e) {
