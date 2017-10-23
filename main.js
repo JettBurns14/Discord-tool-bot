@@ -19,8 +19,8 @@ const commands = {
                     for (let i in commands){
                         let selection = args[0];
                         let embed = new Discord.RichEmbed();
-                        embed.addField('Usage:', commands.selection.usage);
-                        embed.addField('Description:', commands.selection.description);
+                        embed.addField('Usage:', commands[selection].usage);
+                        embed.addField('Description:', commands[selection].description);
                     }
                 }
 
