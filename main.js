@@ -8,31 +8,31 @@ const commands = {
         name: 'help',
         description: 'Returns all of my commands.',
         do: function(message, client, args, Discord){
-            let embed = new Discord.RichEmbed();
-            embed.setAuthor('My Commands', client.avatarURL);
-            embed.setDescription('This is a test');
-            message.channel.send({embed});
+            try {
+                let embed = new Discord.RichEmbed();
+                embed.setAuthor('My Commands', client.avatarURL);
+                embed.setDescription('This is a test');
+                message.channel.send({embed});
+            } catch (e) {
+                console.log(e);
+            }
         }
     },
     purge: {
         name: 'purge',
         description: 'Remove messages in bulk.',
         do: function(message, client, args, Discord) {
-            let deleteCount = parseInt(args[0], 10);
-
-            if(!deleteCount || deleteCount < 2 || deleteCount > 100) {
-                //message.reply("Please provide a number between 2 and 100 for the number of messages to delete");
-                let embed = new Discord.RichEmbed();
-                embed.setAuthor(client.avatarURL, 'Purge');
-                embed.setDescription('Please provide a number between 2 and 100 for the number of messages to delete');
-                message.channel.send(embed);    
+            try {
+                if (args[0] <= 99 && args > 1){
+                    message.channel.bulkDelete(args[0] + 1).then(() => {
+                        message.reply(`Successfully deleted ${args[0]} messages`);
+                    });
+                } else {
+                    message.reply("Please provide a number under 100");
+                }
+            } catch (e) {
+                console.log(e);
             }
-
-            // So we get our messages, and delete them. Simple enough, right?
-            let fetched = message.channel.fetchMessages({count: deleteCount});
-            message.channel.bulkDelete(fetched)
-                .catch(error => message.reply(`Couldn't delete messages because of: ${error}`));
-        }
     },
 }
 
