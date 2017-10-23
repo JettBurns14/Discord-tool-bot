@@ -19,13 +19,13 @@ const commands = {
 };
 
 client.on('ready', () => {
-    console.log(`Logged in as ${client.tag}`)    
+    console.log(`Logged in as ${client.user.tag}`)    
 });
 
 client.on('message', (message) => {
     if (message.author.bot) return;
     if (!message.content.startsWith(prefix)) return;
-    let args = message.content.split(' ')(1);
+    let args = message.content.split(" ").splice(1);
     let command = message.content.substring(prefix.length).split(' ');
     for (let i in commands){
         if (message.content.startsWith(commands[i].name)){
