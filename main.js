@@ -56,7 +56,7 @@ const commands = {
                     let reason = args.slice(1).join(' ');
                     if(message.mentions.members.size !== 0){
                         message.mentions.members.first().kick(reason).then((member) => {
-                            message.reply(`${member.tag} has been kicked by ${message.author.tag} because: ${reason}`);
+                            message.reply(`${message.mentions.members.first().tag} has been kicked by ${message.author.tag} because: ${reason}`);
                         });
                     } else {
                         message.channel.send("You didn't identify a valid user");
