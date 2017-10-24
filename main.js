@@ -52,7 +52,15 @@ const commands = {
         usage: `${prefix} kick <member> <reason>`,
         do: (message, client, args, Discord) => {
             try {
-                
+                if (message.member.hasPermission("KICK_MEMBERS")){
+                    if(message.mentions.members.size !== 0){
+                        message.mentions.members.first().kick();
+                    } else {
+                        message.channel.send("You didn't identify a valid user");
+                    }
+                } else {
+                    message.channel.send("You do not have permissions to use this command.");
+                }
             } catch(e) {
                 console.log(e);
             }
