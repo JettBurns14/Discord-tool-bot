@@ -16,7 +16,7 @@ const commands = {
                     embed.setDescription('This is a test');
                     message.channel.send({embed});
                 } else {
-                    console.log(this);
+                    console.log(commands['purge'].usage);
                     /**
                     let selection = args[0];
                     let embed = new Discord.RichEmbed();
