@@ -7,7 +7,7 @@ const commands = {
     help: {
         name: 'help',
         description: 'Returns all of my commands.',
-        usage: prefix + commands.help.name,
+        usage: this,
         do: (message, client, args, Discord) => {
             try {
                 if (!args[0]){
