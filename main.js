@@ -17,10 +17,13 @@ const commands = {
                     embed.setDescription('This is a test');
                     message.channel.send({embed});
                 } else {
+                    console.log(this);
+                    /**
                     let selection = args[0];
                     let embed = new Discord.RichEmbed();
                     embed.addField('Usage:', cmds[selection].usage);
                     embed.addField('Description:', cmds[selection].description);
+                    **/
                 }
 
             } catch (e) {
