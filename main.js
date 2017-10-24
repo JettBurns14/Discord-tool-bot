@@ -20,8 +20,8 @@ const commands = {
                     
                     let selection = args[0];
                     let embed = new Discord.RichEmbed();
-                    embed.addField('Usage:', cmds[selection].usage);
-                    embed.addField('Description:', cmds[selection].description);
+                    embed.addField('Usage:', commands[selection].usage);
+                    embed.addField('Description:', commands[selection].description);
                     message.channel.send({ embed });
                 }
 
