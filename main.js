@@ -4,6 +4,7 @@ const client = new Discord.Client();
 const prefix = '?';
 
 const commands = {
+    cmds: this,
     help: {
         name: 'help',
         description: 'Returns all of my commands.',
@@ -18,8 +19,8 @@ const commands = {
                 } else {
                     let selection = args[0];
                     let embed = new Discord.RichEmbed();
-                    embed.addField('Usage:', this.usage);
-                    embed.addField('Description:', this.description);
+                    embed.addField('Usage:', cmds[selection].usage);
+                    embed.addField('Description:', cmds[selection].description);
                 }
 
             } catch (e) {
