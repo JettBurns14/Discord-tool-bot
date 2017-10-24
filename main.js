@@ -7,7 +7,7 @@ const commands = {
     help: {
         name: 'help',
         description: 'Returns all of my commands.',
-        usage: this.name,
+        usage: prefix + 'help',
         do: (message, client, args, Discord) => {
             try {
                 if (!args[0]){
@@ -31,7 +31,7 @@ const commands = {
     purge: {
         name: 'purge',
         description: 'Remove messages in bulk.',
-        usage: this,
+        usage: prefix + 'purge <number>',
         do: (message, client, args, Discord) => {
             try {
                 if (args[0] <= 99 && args > 1){
