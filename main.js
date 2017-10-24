@@ -7,7 +7,7 @@ const commands = {
     help: {
         name: 'help',
         description: 'Returns all of my commands.',
-        usage: `${prefix} help`,
+        usage: `${prefix}help`,
         do: (message, client, args, Discord) => {
             try {
                 if (!args[0]){
@@ -31,7 +31,7 @@ const commands = {
     purge: {
         name: 'purge',
         description: 'Remove messages in bulk.',
-        usage: `${prefix} purge <number>`,
+        usage: `${prefix}purge <number>`,
         do: (message, client, args, Discord) => {
             try {
                 if (args[0] <= 99 && args > 1){
@@ -49,12 +49,12 @@ const commands = {
     kick: {
         name: 'kick',
         description: 'Kick a member.',
-        usage: `${prefix} kick <member> <reason>`,
+        usage: `${prefix}kick <member> <reason>`,
         do: (message, client, args, Discord) => {
             try {
                 if (message.member.hasPermission("KICK_MEMBERS")){
                     if(message.mentions.members.size !== 0){
-                        message.mentions.members.first().kick();
+                        message.mentions.members.first().kick(args[1]);
                     } else {
                         message.channel.send("You didn't identify a valid user");
                     }
