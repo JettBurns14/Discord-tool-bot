@@ -31,7 +31,7 @@ const commands = {
     purge: {
         name: 'purge',
         description: 'Remove messages in bulk.',
-        usage: prefix + commands.purge.name + " <number>",
+        usage: this,
         do: (message, client, args, Discord) => {
             try {
                 if (args[0] <= 99 && args > 1){
