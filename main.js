@@ -4,12 +4,11 @@ const client = new Discord.Client();
 const prefix = '?';
 
 const commands = {
-    cmds: this,
     help: {
         name: 'help',
         description: 'Returns all of my commands.',
         usage: prefix + this.name,
-        do: function(message, client, args, Discord){
+        do: (message, client, args, Discord) => {
             try {
                 if (!args[0]){
                     let embed = new Discord.RichEmbed();
@@ -35,7 +34,7 @@ const commands = {
         name: 'purge',
         description: 'Remove messages in bulk.',
         usage: prefix + this.name + " <number>",
-        do: function(message, client, args, Discord) {
+        do: (message, client, args, Discord) => {
             try {
                 if (args[0] <= 99 && args > 1){
                     message.channel.bulkDelete(parseInt(args[0]) + 1).then(() => {
