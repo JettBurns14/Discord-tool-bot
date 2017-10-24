@@ -46,6 +46,19 @@ const commands = {
             }
         }
     },
+    kick: {
+        name: 'kick',
+        description: 'Kick a member.',
+        // Use literals
+        usage: prefix + 'kick <member> <reason>',
+        do: (message, client, args, Discord) => {
+            try {
+                
+            } catch(e) {
+                console.log(e);
+            }
+        }
+    }
 };
 
 client.on('message', (message) => {
