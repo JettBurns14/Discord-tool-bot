@@ -34,12 +34,16 @@ const commands = {
         usage: `${prefix}purge <number>`,
         do: (message, client, args, Discord) => {
             try {
-                if (args[0] <= 99 && args > 1){
-                    message.channel.bulkDelete(parseInt(args[0]) + 1).then(() => {
-                        message.reply(`Deleted ${args[0]} messages`);
-                    });
+                if (message.member.hasPermission("MANAGE_MESSAGES")){
+                    if (args[0] <= 99 && args > 1){
+                        message.channel.bulkDelete(parseInt(args[0]) + 1).then(() => {
+                            message.reply(`Deleted ${args[0]} messages`);
+                        });
+                    } else {
+                        message.reply("Please provide a number under 100 and above 1");
+                    }
                 } else {
-                    message.reply("Please provide a number under 100 and above 1");
+                    message.channel.send("You do not have permissions to use this command.");
                 }
             } catch (e) {
                 console.log(e);
