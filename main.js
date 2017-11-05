@@ -60,7 +60,7 @@ const commands = {
                     let reason = args.slice(1).join(' ');
                     if(message.mentions.members.size !== 0){
                         message.mentions.members.first().kick(reason)
-                        message.reply(`${message.mentions.users.first().tag} has been kicked by ${message.author.tag} because: ${reason}`);
+                        message.channel.send(`@${message.mentions.users.first().tag} has been kicked by @${message.author.tag} because: ${reason}`);
                        
                     } else {
                         message.channel.send("You didn't identify a valid user");
@@ -70,6 +70,26 @@ const commands = {
                 }
             } catch(e) {
                 console.log(e);
+            }
+        }
+    },
+    ban: {
+        name: 'ban',
+        description: 'Ban a member.',
+        usage: `${prefix}ban <member> <reason>`,
+        do: (message, client, args, Discord) => {
+            try {
+                if (message.member.hasPermission("BAN_MEMBERS")) {
+                    let reason = args.slice(1).join(' ');
+                    if(message.mentions.members.size !== 0){
+                        message.mentions.members.first().ban(reason)
+                        message.channel.send(`@${message.mentions.users.first().tag} has been banned by @${message.author.tag} because: ${reason}`);
+                    } else {
+                        message.channel.send("You didn't identify a valid user");
+                    }
+                }
+            } catch(e) {
+                console.log(e);              
             }
         }
     }
