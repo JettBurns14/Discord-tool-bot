@@ -13,7 +13,7 @@ const commands = {
                 if (!args[0]){
                     let embed = new Discord.RichEmbed();
                     embed.setAuthor('My Commands', client.avatarURL);
-                    embed.setDescription(Object.keys(commands));
+                    embed.setDescription(Object.keys(prefix + commands));
                     message.channel.send({ embed });
                 } else {                 
                     let selection = args[0];
