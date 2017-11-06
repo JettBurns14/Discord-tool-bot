@@ -97,21 +97,30 @@ const commands = {
     },
     blacklist: {
         name: 'User blacklist',
-        description: 'Blacklist a member or view the blacklist.',
-        usage: `${prefix}blacklist [member]`,
+        description: 'Add or remove member to blacklist, and view it.',
+        usage: `${prefix}blacklist [add/remove] [member]`,
         do: (message, client, args, Discord) => {
-            try {
-                //if (message.member.hasPermission("MANAGE_MESSAGES")) {
-                    //if (args[0]) {
-                        message.channel.send(args[0] + ' is first arg, testing');
-                        // Member is added to blacklist json.
-                        // Also add function to remove.
-                    //}
-                //} else {
-                    //message.channel.send("You do not have permissions to use this command.");
+            //if (message.member.hasPermission("MANAGE_MESSAGES")) {
+                //if (args[0]) {
+                    // message.channel.send('testing');
+                    // Member is added to blacklist json.
+                    // Also add function to remove.
                 //}
+            //} else {
+                //message.channel.send("You do not have permissions to use this command.");
+            //}
+            try {
+                if (message.member.hasPermission("MANAGE_MESSAGES")) {
+                    //let reason = args.slice(1).join(' ');
+                    if (message.mentions.members.size !== 0) {
+                        //message.mentions.members.first().ban(reason)
+                        message.channel.send(`<@${message.mentions.users.first().id}> has been mentioned by <@${message.author.id}>.`);
+                    } else {
+                        message.channel.send("You didn't identify a valid user");
+                    }
+                }
             } catch(e) {
-                console.log(e);
+                console.log(e);              
             }
         }
     }
