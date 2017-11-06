@@ -102,15 +102,8 @@ const commands = {
         description: 'Add or remove member to blacklist, and view it.',
         usage: `${prefix}blacklist [add/remove] [member]`,
         do: (message, client, args, Discord) => {
-            if (message.member.hasPermission("MANAGE_MESSAGES")) {
-                if (args[0] === 'add') {
-                     
-                }
-            } else {
-                //message.channel.send("You do not have permissions to use this command.");
-            }
             try {
-                if (message.member.hasPermission("MANAGE_MESSAGES")) {
+                if (message.member.hasPermission("MANAGE_SERVER")) {
                     //let reason = args.slice(1).join(' ');
                     if (message.mentions.members.size !== 0) {
                         //message.mentions.members.first().ban(reason)
