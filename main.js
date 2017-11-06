@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const prefix = '?';
 const bannedRoles = [];
+var storage = require("./bot.json");
 
 const commands = {
     help: {
@@ -54,7 +55,7 @@ const commands = {
     kick: {
         name: 'kick',
         description: 'Kick a member.',
-        usage: `${prefix}kick <member> <reason>`,
+        usage: `${prefix}kick <member> [reason]`,
         do: (message, client, args, Discord) => {
             try {
                 if (message.member.hasPermission("KICK_MEMBERS")){
@@ -77,7 +78,7 @@ const commands = {
     ban: {
         name: 'ban',
         description: 'Ban a member.',
-        usage: `${prefix}ban <member> <reason>`,
+        usage: `${prefix}ban <member> [reason]`,
         do: (message, client, args, Discord) => {
             try {
                 if (message.member.hasPermission("BAN_MEMBERS")) {
@@ -91,6 +92,26 @@ const commands = {
                 }
             } catch(e) {
                 console.log(e);              
+            }
+        }
+    },
+    blacklist: {
+        name: 'User blacklist',
+        description: 'Blacklist a member or view the blacklist.',
+        usage: `${prefix}blacklist [member]`,
+        do: (message, client, args, Discord) => {
+            try {
+                if (message.member.hasPermission("MANAGE_MESSAGES")) {
+                    if (args[0]) {
+                        message.channel.send(args[0] + ' is first arg, testing');
+                        // Member is added to blacklist json.
+                        // Also add function to remove.
+                    }
+                } else {
+                    message.channel.send("You do not have permissions to use this command.");
+                }
+            } catch(e) {
+                console.log(e);
             }
         }
     }
