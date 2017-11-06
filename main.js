@@ -108,4 +108,10 @@ client.on('message', (message) => {
 
 });
 
+client.on("messageReactionAdd", (messageReaction, user) => {
+    if(messageReaction.emoji.name === "🚩" && messageReaction.count >= 3){
+        messageReaction.message.delete();
+    }
+});
+
 client.login(process.env.BOT_TOKEN);
