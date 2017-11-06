@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const prefix = '?';
 const bannedRoles = [];
-var storage = require("./bot.json");
+var blacklist = require("./bot.json");
 
 const commands = {
     help: {
@@ -101,15 +101,15 @@ const commands = {
         usage: `${prefix}blacklist [member]`,
         do: (message, client, args, Discord) => {
             try {
-                if (message.member.hasPermission("MANAGE_MESSAGES")) {
+                //if (message.member.hasPermission("MANAGE_MESSAGES")) {
                     //if (args[0]) {
                         message.channel.send(args[0] + ' is first arg, testing');
                         // Member is added to blacklist json.
                         // Also add function to remove.
                     //}
-                } else {
-                    message.channel.send("You do not have permissions to use this command.");
-                }
+                //} else {
+                    //message.channel.send("You do not have permissions to use this command.");
+                //}
             } catch(e) {
                 console.log(e);
             }
