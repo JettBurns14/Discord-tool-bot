@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const prefix = '?';
 const bannedRoles = [];
-var blacklist = require("./bot.json");
+//var blacklist = require("./bot.json");
 
 const commands = {
     help: {
@@ -116,6 +116,10 @@ const commands = {
         }
     }
 };
+
+client.on('ready', () => {
+    console.log('ready');
+});
 
 client.on('message', (message) => {
     if (message.author.bot) return;
