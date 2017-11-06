@@ -109,6 +109,7 @@ client.on('message', (message) => {
 
 });
 
+/*
 client.on("messageReactionAdd", (messageReaction, user) => {
     if(messageReaction.emoji.name === "🚩"){
         let flagCount = messageReaction.count;
@@ -122,6 +123,6 @@ client.on("messageReactionAdd", (messageReaction, user) => {
         }
         if(flagCount >= 3) messageReaction.message.delete();
     }
-});
+});*/
 
 client.login(process.env.BOT_TOKEN);
