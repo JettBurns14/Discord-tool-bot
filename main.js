@@ -109,7 +109,7 @@ client.on('message', (message) => {
 });
 
 client.on("messageReactionAdd", (messageReaction, user) => {
-    if(messageReaction.emoji.name === "🚩" && messageReaction.count >= 2){
+    if(messageReaction.emoji.name === "🚩" && messageReaction.count >= 3){
         messageReaction.message.delete();
     }
 });
