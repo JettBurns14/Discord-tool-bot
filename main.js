@@ -2,6 +2,7 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const prefix = '?';
+const bannedRoles = [];
 
 const commands = {
     help: {
@@ -109,8 +110,17 @@ client.on('message', (message) => {
 });
 
 client.on("messageReactionAdd", (messageReaction, user) => {
-    if(messageReaction.emoji.name === "🚩" && messageReaction.count >= 3){
-        messageReaction.message.delete();
+    if(messageReaction.emoji.name === "🚩"){
+        let flagCount = messageReaction.count;
+        for(let i = 0; i < messageReaction.users.length; i ++){
+            for(let j = 0; j < bannedRoles.length; j ++){
+                if(messageReaction.message.guild.members.find("id", messageReaction.users[i]).roles.find("name", bannedRoles[j])){
+                    flagCount --;
+                    break;
+                }
+            }
+        }
+        if(flagCount >= 3) messageReaction.message.delete();
     }
 });
 
