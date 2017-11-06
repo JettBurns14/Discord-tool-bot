@@ -102,11 +102,11 @@ const commands = {
         do: (message, client, args, Discord) => {
             try {
                 if (message.member.hasPermission("MANAGE_MESSAGES")) {
-                    if (args[0]) {
+                    //if (args[0]) {
                         message.channel.send(args[0] + ' is first arg, testing');
                         // Member is added to blacklist json.
                         // Also add function to remove.
-                    }
+                    //}
                 } else {
                     message.channel.send("You do not have permissions to use this command.");
                 }
