@@ -4,7 +4,7 @@ const client = new Discord.Client();
 const fs = require('fs');
 
 const prefix = '?';
-const bannedRoles = [];
+//const bannedRoles = [];
 //var blacklist = require("./bot.json");
 
 const commands = {
@@ -136,20 +136,18 @@ client.on('message', (message) => {
 
 });
 
-/*
+
 client.on("messageReactionAdd", (messageReaction, user) => {
-    if(messageReaction.emoji.name === "🚩"){
+    if (messageReaction.emoji.name === "🚩") {
         let flagCount = messageReaction.count;
-        for(let i = 0; i < messageReaction.users.length; i ++){
-            for(let j = 0; j < bannedRoles.length; j ++){
-                if(messageReaction.message.guild.members.find("id", messageReaction.users[i]).roles.find("name", bannedRoles[j])){
-                    flagCount --;
-                    break;
-                }
+        for (let i = 0; i < messageReaction.users.length; i++) {
+            if (!messageReaction.message.guild.members.find("id", messageReaction.users[i]).roles.find("id", "376911822722433035")) {
+                flagCount --;
+                break;
             }
         }
         if(flagCount >= 3) messageReaction.message.delete();
     }
-});*/
+});
 
 client.login(process.env.BOT_TOKEN);
