@@ -16,7 +16,7 @@ const commands = {
             try {
                 if (!args[0]){
                     let embed = new Discord.RichEmbed();
-                    embed.setAuthor('My Commands', client.avatarURL);
+                    embed.setAuthor('My Commands', client.user.avatarURL);
                     embed.setDescription(Object.keys(commands));
                     message.channel.send({ embed });
                 } else {                 
