@@ -141,7 +141,7 @@ client.on("messageReactionAdd", (messageReaction, user) => {
     if (messageReaction.emoji.name === "🚩") {
         let flagCount = messageReaction.count;
         for (let i = 0; i < messageReaction.users.length; i++) {
-            if (!messageReaction.message.guild.members.find("id", messageReaction.users[i]).roles.find("id", "376911822722433035")) {
+            if (!messageReaction.message.guild.members.find("id", messageReaction.users[i]).roles.find("name", "Trusty flagger")) {
                 flagCount --;
                 break;
             }
