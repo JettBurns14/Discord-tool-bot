@@ -153,6 +153,7 @@ client.on("messageReactionAdd", (messageReaction, user) => {
             embed.setColor([247, 237, 96]);
             embed.setAuthor(messageReaction.message.author.tag, messageReaction.message.author.avatarURL);
             embed.addField(`Message flagged in #${messageReaction.message.channel.name} by <someone>`, messageReaction.message.content);
+            embed.setFooter(messageReaction.message.createdTimestamp);
             // embed.addField('Flagged by:', 'WIP');
             // messageReaction.message.channel.send({ embed }); // nah
             client.channels.find('id', '369502585440436236').send({ embed });
