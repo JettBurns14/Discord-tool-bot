@@ -120,7 +120,7 @@ const commands = {
 };
 
 client.on('ready', () => {
-    console.log('ready');
+    console.log(`Logged in as ${client.user.tag}`);
 });
 
 client.on('message', (message) => {
@@ -147,6 +147,8 @@ client.on("messageReactionAdd", (messageReaction, user) => {
             }
         }
         if(flagCount >= 3) messageReaction.message.delete();
+        
+        messageReaction.message.channel.send('Post was removed by:' + messageReaction.users);
     }
 });
 
