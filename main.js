@@ -148,9 +148,7 @@ client.on("messageReactionAdd", (messageReaction, user) => {
         }
         if (flagCount >= 3) {
             messageReaction.message.delete();
-            for (let i = 0; i < messageReaction.users.length; i++) {
-                messageReaction.message.channel.send('Post was removed by: ' + messageReaction.users.find('id', messageReaction.users[i]));
-            }
+            messageReaction.message.channel.send('Post was removed by: ' + messageReaction.users.find('id', messageReaction.message.users));
         }
     }
 });
