@@ -146,9 +146,15 @@ client.on("messageReactionAdd", (messageReaction, user) => {
                 break;
             }
         }
-        if (flagCount >= 3) {
+        if (flagCount >= 2) {
             messageReaction.message.delete();
-            messageReaction.message.channel.send('Post was removed by: ' + messageReaction.users.find('id', messageReaction.message.users));
+            //messageReaction.message.channel.send('Post was removed by: ' + messageReaction.users.find('id', messageReaction.message.users));
+            let embed = new Discord.RichEmbed();
+            embed.setColor([247, 237, 96]);
+            embed.setAuthor('Message was flagged', client.user.avatarURL);
+            embed.addField('Content:', messageReaction.message.content);
+            embed.addField('Flagged by:', 'WIP');
+            messageReaction.message.channel.send({ embed });
         }
     }
 });
