@@ -142,6 +142,7 @@ client.on("messageReactionAdd", (messageReaction, user) => {
         let flagCount = messageReaction.count;
         for (let i = 0; i < messageReaction.users.length; i++) {
             if (!messageReaction.message.guild.members.find("id", messageReaction.users[i]).roles.find("name", "Trusty flagger")) {
+                console.log('User without "trusty flagger" flagged a post');
                 flagCount --;
                 break;
             }
