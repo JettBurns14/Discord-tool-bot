@@ -140,6 +140,7 @@ client.on('message', (message) => {
 client.on("messageReactionAdd", (messageReaction, user) => {
     if (messageReaction.emoji.name === "🚩") {
         let flagCount = messageReaction.count;
+        /*
         for (let i = 0; i < messageReaction.users.length; i++) {
             if (messageReaction.message.guild.members.find("id", messageReaction.users[i]).roles.find("name", "Trusty flagger")) {
                 //console.log('User without "trusty flagger" flagged a post');
@@ -147,7 +148,8 @@ client.on("messageReactionAdd", (messageReaction, user) => {
                 //flagCount --;
                 //break;
             }
-        }
+        }*/
+        console.log(messageReaction.users.length);
         if (flagCount >= 2) {
             messageReaction.message.delete();
             //messageReaction.message.channel.send('Post was removed by: ' + messageReaction.users.find('id', messageReaction.message.users));
