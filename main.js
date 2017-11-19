@@ -149,7 +149,9 @@ client.on("messageReactionAdd", (messageReaction, user) => {
                 //break;
             }
         }*/
-        console.log(messageReaction.message.guild.members.find("id", messageReaction.users).roles.find("name", "Trusty flagger"));
+        for (let i = 0; i < messageReaction.users.length; i++) {
+            console.log(messageReaction.message.guild.members.find("id", messageReaction.users[i]).roles.find("name", "Trusty flagger"));
+        }
         if (flagCount >= 2) {
             //messageReaction.message.delete();
             //messageReaction.message.channel.send('Post was removed by: ' + messageReaction.users.find('id', messageReaction.message.users));
