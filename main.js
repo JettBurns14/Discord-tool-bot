@@ -149,7 +149,7 @@ client.on("messageReactionAdd", (messageReaction, user) => {
                 //break;
             }
         }*/
-        console.log(messageReaction.users.find('username', messageReaction.users);
+        console.log(messageReaction.users.find('username', messageReaction.users));
         if (flagCount >= 2) {
             //messageReaction.message.delete();
             //messageReaction.message.channel.send('Post was removed by: ' + messageReaction.users.find('id', messageReaction.message.users));
