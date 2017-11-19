@@ -151,7 +151,7 @@ client.on("messageReactionAdd", (messageReaction, user) => {
         }*/
         console.log(messageReaction.users.length);
         if (flagCount >= 2) {
-            messageReaction.message.delete();
+            //messageReaction.message.delete();
             //messageReaction.message.channel.send('Post was removed by: ' + messageReaction.users.find('id', messageReaction.message.users));
             let embed = new Discord.RichEmbed();
             embed.setColor([247, 237, 96]);
