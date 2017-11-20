@@ -140,9 +140,9 @@ client.on('message', (message) => {
 client.on("messageReactionAdd", (messageReaction, user) => {
     if (messageReaction.emoji.name === "🚩") {
         let flagCount = messageReaction.count;
-        console.log(messageReaction.message.guild.members);
+//        console.log(messageReaction.message.guild.members);
         for (let i = 0; i < flagCount; i++) {
-            console.log(messageReaction.users[i]);
+            console.log(messageReaction.users);
             //console.log(messageReaction.message.guild.members.find("id", messageReaction.users[i]messageReaction.users[i])/*.roles.find("name", "Trusty flagger")*/);
         }
         /*
