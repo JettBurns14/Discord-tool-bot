@@ -142,8 +142,8 @@ client.on("messageReactionAdd", (messageReaction, user) => {
         let flagCount = messageReaction.count;
         // console.log(messageReaction.message.guild.members);
         for (let i = 0; i < flagCount; i++) {
-            //console.log(messageReaction.users);
-            console.log(messageReaction.message.guild.members.find("id", messageReaction.users).roles.find("name", "Trusty flagger"));
+            console.log(messageReaction.users);
+            // console.log(messageReaction.message.guild.members.find("id", messageReaction.users).roles.find("name", "Trusty flagger"));
         }
         /*
         for (let i = 0; i < messageReaction.users.length; i++) {
