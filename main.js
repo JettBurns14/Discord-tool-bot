@@ -142,7 +142,7 @@ client.on("messageReactionAdd", (messageReaction, user) => {
         let flagCount = messageReaction.count;
         //console.log(messageReaction.message.guild.members.map(usr => usr.roles.map(role => role.name)) == messageReaction.users.map(usr => usr.));
         //console.log(messageReaction.message.guild.roles.map(role => role.members));
-            console.log(messageReaction.message.guild.members.find("id", messageReaction.users.map(usr => usr.id)).map(usr => usr.roles).find("name", "Trusty flagger"));
+            console.log(messageReaction.message.guild.members.find("id", messageReaction.users.map(usr => usr.id))/*.map(usr => usr.roles).find("name", "Trusty flagger")*/);
         //if(messageReaction.message.guild.members.find("id", messageReaction.users.map(usr => usr.id).map(usr => usr.roles).find("name", "Trusty flagger")){
             // Delete reaction
             //flagCount --;
