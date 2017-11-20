@@ -140,7 +140,7 @@ client.on('message', (message) => {
 client.on("messageReactionAdd", (messageReaction, user) => {
     if (messageReaction.emoji.name === "🚩") {
         let flagCount = messageReaction.count;
-        console.log(messageReaction.users.map(function(usrs) => {
+        console.log(messageReaction.users.map(function(usrs) {
             return usrs.id;
         }));
         for (let i = 0; i < flagCount; i++) {
