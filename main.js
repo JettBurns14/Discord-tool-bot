@@ -139,17 +139,22 @@ client.on('message', (message) => {
 
 
 client.on("messageReactionAdd", (messageReaction, user) => {
-    if(messageReaction.emoji.name === "🚩"){
-        let flagCount = 0;
-        for(let i = 0; i < messageReaction.users.length; i ++){
-            for(let j = 0; j < whitelistRoles.length; j ++){
-                if(messageReaction.message.guild.members.find("id", messageReaction.users[i]).roles.find("name", whitelistRoles[j])){
-                    flagCount ++;
-                    break;
+    switch(messageReaction.emoji.name){
+        case "🚩":
+            let flagCount = 0;
+            for(let i = 0; i < messageReaction.users.length; i ++){
+                for(let j = 0; j < whitelistRoles.length; j ++){
+                    if(messageReaction.message.guild.members.find("id", messageReaction.users[i]).roles.find("name", whitelistRoles[j])){
+                        flagCount ++;
+                        break;
+                    }
                 }
             }
-        }
-        if(flagCount >= 3) messageReaction.message.delete();
+            if(flagCount >= 3) messageReaction.message.delete();
+            break;
+        case "📌":
+            if(messageReaction.users.length >= 3) messageReaction.message.react("📌");
+            break;
     }
 });
 
