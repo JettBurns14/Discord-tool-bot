@@ -153,7 +153,7 @@ client.on("messageReactionAdd", (messageReaction, user) => {
             if(flagCount >= 3) messageReaction.message.delete();
             break;
         case "📌":
-            if(messageReaction.users.length >= 3) messageReaction.message.react("📌");
+            if(messageReaction.users.length >= 3) messageReaction.message.pin();
             break;
     }
 });
