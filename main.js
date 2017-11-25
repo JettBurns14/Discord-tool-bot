@@ -6,6 +6,7 @@ const client = new Discord.Client();
 const prefix = '?';
 //const bannedRoles = [];
 //var blacklist = require("./bot.json");
+const whitelistRoles = [];
 
 const commands = {
     help: {
@@ -138,41 +139,17 @@ client.on('message', (message) => {
 
 
 client.on("messageReactionAdd", (messageReaction, user) => {
-    if (messageReaction.emoji.name === "🚩") {
-        let flagCount = messageReaction.count;
-        //console.log(messageReaction.message.guild.members.map(usr => usr.roles.map(role => role.name)) == messageReaction.users.map(usr => usr.));
-        //console.log(messageReaction.message.guild.roles.map(role => role.members));
-            console.log(messageReaction.message.guild.members.find("id", messageReaction.users.map(usr => usr.id))/*.map(usr => usr.roles).find("name", "Trusty flagger")*/);
-        //if(messageReaction.message.guild.members.find("id", messageReaction.users.map(usr => usr.id).map(usr => usr.roles).find("name", "Trusty flagger")){
-            // Delete reaction
-            //flagCount --;
-            //break;
-        //}
-        for (let i = 0; i < flagCount; i++) {
-            // console.log(messageReaction.message.guild.members.find("id", messageReaction.users.find('id')));
-            // console.log(messageReaction.message.guild.members.find("id", messageReaction.users).roles.find("name", "Trusty flagger"));
-        }
-        /*
-        for (let i = 0; i < messageReaction.users.length; i++) {
-            if (messageReaction.message.guild.members.find("id", messageReaction.users[i]).roles.find("name", "Trusty flagger")) {
-                //console.log('User without "trusty flagger" flagged a post');
-                console.log("User with \"Trusty flagger\" flagged a post.");
-                //flagCount --;
-                //break;
+    if(messageReaction.emoji.name === "🚩"){
+        let flagCount = 0;
+        for(let i = 0; i < messageReaction.users.length; i ++){
+            for(let j = 0; j < whitelistRoles.length; j ++){
+                if(messageReaction.message.guild.members.find("id", messageReaction.users[i]).roles.find("name", whitelistRoles[j])){
+                    flagCount ++;
+                    break;
+                }
             }
-        }*/    
-        if (flagCount >= 2) {
-            //messageReaction.message.delete();
-            //messageReaction.message.channel.send('Post was removed by: ' + messageReaction.users.find('id', messageReaction.message.users));
-            let embed = new Discord.RichEmbed();
-            embed.setColor([247, 237, 96]);
-            embed.setAuthor(messageReaction.message.author.tag, messageReaction.message.author.avatarURL);
-            embed.addField(`Message flagged in #${messageReaction.message.channel.name} by <someone>`, messageReaction.message.content);
-            embed.setFooter(messageReaction.message.createdTimestamp);
-            // embed.addField('Flagged by:', 'WIP');
-            // messageReaction.message.channel.send({ embed }); // nah
-            client.channels.find('id', '369502585440436236').send({ embed });
         }
+        if(flagCount >= 3) messageReaction.message.delete();
     }
 });
 
