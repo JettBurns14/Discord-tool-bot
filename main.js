@@ -148,19 +148,15 @@ client.on("messageReactionAdd", (messageReaction, user) => {
     switch(messageReaction.emoji.name){
         case "🚩":
             let flagCount = 0;
-            /**for (let i = 0; i < messageReaction.count; i ++) {
+            for (let i = 0; i < messageReaction.count; i ++) {
                 for (let j = 0; j < whitelistRoles.length; j ++) {
-                    if (messageReaction.message.guild.members.find("id", messageReaction.users[i]).roles.find("name", whitelistRoles[j])) {
+                    if (messageReaction.message.guild.members.find("id", messageReaction.users[i]).roles.has(messageReaction.message.guild.roles.find("name", whitelistRoles[j]))) {
                         flagCount ++;
                         break;
                     }
                 }
-            }**/
-            
-            for (let i = 0; i < messageReaction.count; i++) {
-                    console.log(messageReaction.users[i].roles.has(messageReaction.message.guild.roles.find("name", "Trusty flagger")));
-                    //console.log(messageReaction.user.roles.has(messageReaction.message.guild.roles.find("name", "Trusty flagger")));
             }
+            
             //if (flagCount >= 2) messageReaction.message.delete();
             break;
         case "📌":
