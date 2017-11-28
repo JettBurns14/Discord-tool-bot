@@ -173,7 +173,7 @@ client.on("guildMemberAdd", (member) => {
     member.guild.channels.find("name", "general").send(welcomes[Math.floor(Math.random() * welcomes.length)]);
  });
 
-client.on("guildMemberLeave", (member) => {
+client.on("guildMemberRemove", (member) => {
     member.guild.channels.find("name", "general").send(`Aw, ${member.user} just left the server, bye bye...`);
 });
 
