@@ -157,7 +157,7 @@ client.on("messageReactionAdd", (messageReaction, user) => {
                 }
             }**/
             
-            for (let i in messageReaction.users) {
+            for (let i = 0; i < messageReaction.count; i++) {
                     console.log(messageReaction.users[i].roles.has(messageReaction.message.guild.roles.find("name", "Trusty flagger")));
                     //console.log(messageReaction.user.roles.has(messageReaction.message.guild.roles.find("name", "Trusty flagger")));
             }
