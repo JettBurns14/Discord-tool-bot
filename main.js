@@ -170,7 +170,7 @@ client.on("guildMemberAdd", (member) => {
         ` Hi there, stay ahwile`,
         ` Hey everyone, welcome our newest member to **${member.guild.name}**!`
     ];
-    member.guild.channels.find("name", "general").send(member.user + welcomes[floor(random() * welcomes.length)]);
+    member.guild.channels.find("name", "general").send(member.user + welcomes[Math.floor(Math.random() * welcomes.length)]);
  });
 
 client.login(process.env.BOT_TOKEN);
