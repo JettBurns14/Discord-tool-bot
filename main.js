@@ -171,7 +171,7 @@ client.on("guildMemberAdd", (member) => {
         `Hello there ${member.user}, welcome to **${member.guild.name}**!`,
         `Welcome to **${member.guild.name}**, ${member.user}!`,
         `Hi there ${member.user}, stay ahwile!`,
-        `Hey everyone, welcome our newest member to **${member.guild.name}**!`
+        `Hey everyone, welcome our newest member ${member.user} to **${member.guild.name}**!`
     ];
     member.guild.channels.find("name", "general").send(welcomes[Math.floor(Math.random() * welcomes.length)]);
  });
