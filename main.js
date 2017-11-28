@@ -152,6 +152,7 @@ client.on("messageReactionAdd", (messageReaction, user) => {
                 for (let j = 0; j < whitelistRoles.length; j ++) {
                     if (messageReaction.message.guild.members.find("id", messageReaction.users[i]).roles.has(messageReaction.message.guild.roles.find("name", whitelistRoles[j]))) {
                         flagCount ++;
+                        console.log(true);
                         break;
                     }
                 }
