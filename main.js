@@ -157,10 +157,8 @@ client.on("messageReactionAdd", (messageReaction, user) => {
                 }
             }**/
             for (let i = 0; i < messageReaction.count; i ++) {
-                    if (messageReaction.message.guild.members.find("id", messageReaction.users[i])hasRole(messageReaction.message.guild.roles.find("name", "Trusty flagger")) {
-                        flagCount ++;
-                        break;
-                    }
+                    console.log(user);
+                    console.log(messageReaction);
             }
             if (flagCount >= 2) messageReaction.message.delete();
             break;
