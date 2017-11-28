@@ -156,10 +156,12 @@ client.on("messageReactionAdd", (messageReaction, user) => {
                     }
                 }
             }**/
+            
             for (let i = 0; i < messageReaction.count; i ++) {
+                    console.log(messageReaction.user);
                     console.log(messageReaction.user.roles.has(messageReaction.message.guild.roles.find("name", "Trusty flagger")));
             }
-            if (flagCount >= 2) messageReaction.message.delete();
+            //if (flagCount >= 2) messageReaction.message.delete();
             break;
         case "📌":
             if (messageReaction.count >= 1) messageReaction.message.pin().then(message => console.log('Pinnged message')).catch(console.error);
