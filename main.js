@@ -7,12 +7,6 @@ const prefix = '?';
 //const bannedRoles = [];
 //var blacklist = require("./bot.json");
 const whitelistRoles = ['Trusty flagger'];
-const welcomes = [
-    ` Hello there, welcome to **${member.guild.name}**!`,
-    ` Welcome to **${member.guild.name}**!`,
-    ` Hi there, stay ahwile`,
-    ` Hey everyone, welcome our newest member to **${member.guild.name}**!`
-];
 
 const welcome = () => {
     //return `Hello there, welcome to ${member.guild.name}!`,
@@ -170,6 +164,12 @@ client.on("messageReactionAdd", (messageReaction, user) => {
 });
 
 client.on("guildMemberAdd", (member) => {
+    var  welcomes = [
+        ` Hello there, welcome to **${member.guild.name}**!`,
+        ` Welcome to **${member.guild.name}**!`,
+        ` Hi there, stay ahwile`,
+        ` Hey everyone, welcome our newest member to **${member.guild.name}**!`
+    ];
     member.guild.channels.find("name", "general").send(member.user + welcomes[floor(random() * welcomes.length)]);
  });
 
