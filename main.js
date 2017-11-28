@@ -156,7 +156,7 @@ client.on("messageReactionAdd", (messageReaction, user) => {
                     }
                 }
             }
-            if (flagCount >= 3) messageReaction.message.delete();
+            if (flagCount >= 2) messageReaction.message.delete();
             break;
         case "📌":
             if (messageReaction.count >= 1) messageReaction.message.pin().then(message => console.log('Pinnged message')).catch(console.error);
