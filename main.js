@@ -127,6 +127,7 @@ const commands = {
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
+    client.user.setUsername('Helpful Bot');
 });
 
 client.on('message', (message) => {
@@ -147,18 +148,18 @@ client.on("messageReactionAdd", (messageReaction, user) => {
     switch(messageReaction.emoji.name){
         case "🚩":
             let flagCount = 0;
-            for(let i = 0; i < messageReaction.users.length; i ++){
-                for(let j = 0; j < whitelistRoles.length; j ++){
-                    if(messageReaction.message.guild.members.find("id", messageReaction.users[i]).roles.find("name", whitelistRoles[j])){
+            for (let i = 0; i < messageReaction.users.length; i ++) {
+                for (let j = 0; j < whitelistRoles.length; j ++) {
+                    if (messageReaction.message.guild.members.find("id", messageReaction.users[i]).roles.find("name", whitelistRoles[j])) {
                         flagCount ++;
                         break;
                     }
                 }
             }
-            if(flagCount >= 3) messageReaction.message.delete();
+            if (flagCount >= 3) messageReaction.message.delete();
             break;
         case "📌":
-            if(messageReaction.users.length >= 1) messageReaction.message.pin();
+            if (messageReaction.users.length >= 1) messageReaction.message.pin().then(message => console.log('Pinnged message')).catch(console.error);
             break;
     }
 });
