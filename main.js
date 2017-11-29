@@ -132,7 +132,7 @@ client.on('ready', () => {
 
 client.on('message', (message) => {
     if (message.author.bot) return;
-    if (message.content.includes("good night") || message.content.includes("g'night")) message.react(":crescent_moon:"); //message.react(message.guild.emojis.find("name", ":crescent_moon:")); //console.log('gn'); //message.react("🌙");
+    if (message.content.includes("good night") || message.content.includes("g'night")) message.react("🌙");
     //console.log(message.content);
     //console.log(message.content.includes("good night");
     
