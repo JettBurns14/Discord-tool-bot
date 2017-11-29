@@ -140,8 +140,9 @@ client.on('message', (message) => {
             commands[i].do(message, client, args, Discord);
         }
     }
-    if (message.content.includes("good night") || message.content.includes("g'night")) console.log('gn'); //message.react("🌙");
-    
+    //if (message.content.includes("good night") || message.content.includes("g'night")) message.react(message.guild.emojis.find("name", ":crescent_moon:")); //console.log('gn'); //message.react("🌙");
+    console.log(message.content);
+    console.log(message.content.includes("good night");
 });
 
 
