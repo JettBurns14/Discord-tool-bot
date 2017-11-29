@@ -132,9 +132,7 @@ client.on('ready', () => {
 
 client.on('message', (message) => {
     if (message.author.bot) return;
-    if (message.content.includes("good night") || message.content.includes("g'night")) message.react("🌙");
-    //console.log(message.content);
-    //console.log(message.content.includes("good night");
+    if (message.content.toLowerCase().includes("good night") || message.content.toLowerCase().includes("g'night") || message.content.toLowerCase().includes("goodnight")) message.react("🌙");
     
     if (!message.content.startsWith(prefix)) return;
     let args = message.content.split(" ").splice(1);
@@ -164,7 +162,7 @@ client.on("messageReactionAdd", (messageReaction, user) => {
             //if (flagCount >= 2) messageReaction.message.delete();
             break;
         case "📌":
-            if (messageReaction.count >= 1) messageReaction.message.pin().then(message => console.log('Pinnged message')).catch(console.error);
+            if (messageReaction.count >= 1) messageReaction.message.pin();//.then(message => console.log('Pinnged message')).catch(console.error);
             break;
     }
 });
