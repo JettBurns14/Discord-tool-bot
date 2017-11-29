@@ -132,6 +132,10 @@ client.on('ready', () => {
 
 client.on('message', (message) => {
     if (message.author.bot) return;
+    if (message.content.includes("good night") || message.content.includes("g'night")) message.react(":crescent_moon:"); //message.react(message.guild.emojis.find("name", ":crescent_moon:")); //console.log('gn'); //message.react("🌙");
+    //console.log(message.content);
+    //console.log(message.content.includes("good night");
+    
     if (!message.content.startsWith(prefix)) return;
     let args = message.content.split(" ").splice(1);
     let command = message.content.substring(prefix.length).split(' ');
@@ -140,9 +144,6 @@ client.on('message', (message) => {
             commands[i].do(message, client, args, Discord);
         }
     }
-    //if (message.content.includes("good night") || message.content.includes("g'night")) message.react(message.guild.emojis.find("name", ":crescent_moon:")); //console.log('gn'); //message.react("🌙");
-    console.log(message.content);
-    console.log(message.content.includes("good night");
 });
 
 
