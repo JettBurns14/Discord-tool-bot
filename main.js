@@ -140,7 +140,8 @@ client.on('message', (message) => {
             commands[i].do(message, client, args, Discord);
         }
     }
-
+    if (message.content.includes("good night") || message.content.includes("g'night")) message.react(':crescent_moon:'); //message.react(🌙);
+    
 });
 
 
