@@ -112,7 +112,7 @@ const commands = {
                 let embed = new Discord.RichEmbed();
                 embed.addField('Members', message.guild.memberCount);
                 //embed.addField('Online', message.guild.members.find(''));
-                embed.addColor('#6699ff'); // #00ffcc?
+                embed.setColor('#6699ff'); // #00ffcc?
                 message.channel.send({ embed });
                 console.log(message.guild.members.find('bannable', message.guild.members));
             } catch(e) {
