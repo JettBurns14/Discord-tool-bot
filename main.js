@@ -122,11 +122,21 @@ const commands = {
     },
     uptime: {
         name: 'uptime',
-        description: 'How long it has been since the bot last went online.',
+        description: 'Shows how long the bot has been online.',
         usage: `${prefix}uptime`,
         do: (message, client, args, Discord) => {
             try {
-                message.channel.send(':clock230: Bot has been online for ' + client.uptime);
+                millisToTime = function(milliseconds) {
+                  let x = milliseconds / 1000;
+                  let s = Math.floor(x % 60);
+                  x /= 60;
+                  let m = Math.floor(x % 60);
+                  x /= 60;
+                  let h = Math.floor(x % 24);
+
+                  return h + ' Hours\n' + m + ' Minutes\n' + s + " Seconds";
+              };
+                message.channel.send(':clock230: Bot has been online for ' + millisToTime(client.uptime);
             } catch(e) {
                 console.log(e);
             }
