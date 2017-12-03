@@ -118,6 +118,18 @@ const commands = {
             }
         }
     },
+    uptime: {
+        name: 'uptime',
+        description: 'How long it has been since the bot last went online.',
+        usage: `${prefix}uptime`,
+        do: (message, client, args, Discord) => {
+            try {
+                message.channel.send(':clock230: Bot has been online for ' + client.uptime);
+            } catch(e) {
+                console.log(e);
+            }
+        }
+    },
     /*
     blacklist: {
         name: 'User blacklist',
@@ -149,6 +161,9 @@ client.on('ready', () => {
 client.on('message', (message) => {
     if (message.author.bot) return;
     if (message.content.toLowerCase().includes("good night") || message.content.toLowerCase().includes("g'night") || message.content.toLowerCase().includes("goodnight")) message.react("🌙");
+    if (message.content.toLowerCase().includes("jett burns") || message.content.toLowerCase().includes("jett")) {
+        client.channels.find('id', '386537690260176897').send('Jett, your name was mentioned. :P');
+    }
     
     if (!message.content.startsWith(prefix)) return;
     let args = message.content.split(" ").splice(1);
@@ -185,16 +200,16 @@ client.on("messageReactionAdd", (messageReaction, user) => {
 
 client.on("guildMemberAdd", (member) => {
     var  welcomes = [
-        `Hello there ${member.user.tag}, welcome to **${member.guild.name}**!`,
-        `Welcome to **${member.guild.name}**, ${member.user.tag}!`,
-        `Hi there ${member.user.tag}, stay ahwile!`,
-        `Hey everyone, welcome our newest member ${member.user.tag} to **${member.guild.name}**!`
+        `Hello there <@${member.user.tag}>, welcome to **${member.guild.name}**!`,
+        `Welcome to **${member.guild.name}**, <@${member.user.tag}>!`,
+        `Hi there <@${member.user.tag}>, stay ahwile!`,
+        `Hey everyone, welcome our newest member <@${member.user.tag}> to **${member.guild.name}**!`
     ];
     member.guild.channels.find("name", "general").send(welcomes[Math.floor(Math.random() * welcomes.length)]);
  });
 
 client.on("guildMemberRemove", (member) => {
-    member.guild.channels.find("name", "general").send(`Aw, ${member.user.tag} just left the server, bye bye...`);
+    member.guild.channels.find("name", "general").send(`Aw, <@${member.user.tag}> just left the server, bye bye...`);
 });
 
 client.login(process.env.BOT_TOKEN);
