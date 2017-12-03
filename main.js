@@ -22,12 +22,14 @@ const commands = {
             try {
                 if (!args[0]){
                     let embed = new Discord.RichEmbed();
+                    embed.setColor('#00ffcc');
                     embed.setAuthor('My Commands', client.user.avatarURL);
                     embed.setDescription(Object.keys(commands));
                     message.channel.send({ embed });
                 } else {                 
                     let selection = args[0];
                     let embed = new Discord.RichEmbed();
+                    embed.setColor('#00ffcc');
                     embed.addField('Usage:', commands[selection].usage);
                     embed.addField('Description:', commands[selection].description);
                     message.channel.send({ embed });
@@ -162,8 +164,16 @@ client.on('message', (message) => {
     if (message.author.bot) return;
     if (message.content.toLowerCase().includes("good night") || message.content.toLowerCase().includes("g'night") || message.content.toLowerCase().includes("goodnight")) message.react("🌙");
     if (message.content.toLowerCase().includes("jett burns") || message.content.toLowerCase().includes("jett")) {
-        //client.channels.find('id', '386537690260176897').send('Jett, your name was mentioned. :P');
-        client.users.find('id', '218397146049806337').send('Jett, your name was mentioned. :P');
+        let embed = new Discord.RichEmbed();
+        embed.setTitle('You were mentioned!');
+        embed.setColor('#00ffcc');
+        embed.addField('Sender', message.author, true);
+        embed.addField('Server', message.guild, true);
+        embed.addField('Channel', message.channel, true);
+        embed.addField('Sent', message.createdTimestamp, true);
+        //embed.setAuthor('You were mentioned!', message.author.avatarURL);
+        embed.setTimestamp();
+        client.users.find('id', '218397146049806337').send({ embed });
     }
     
     if (!message.content.startsWith(prefix)) return;
