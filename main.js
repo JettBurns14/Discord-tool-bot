@@ -185,16 +185,16 @@ client.on("messageReactionAdd", (messageReaction, user) => {
 
 client.on("guildMemberAdd", (member) => {
     var  welcomes = [
-        `Hello there ${member.user}, welcome to **${member.guild.name}**!`,
-        `Welcome to **${member.guild.name}**, ${member.user}!`,
-        `Hi there ${member.user}, stay ahwile!`,
-        `Hey everyone, welcome our newest member ${member.user} to **${member.guild.name}**!`
+        `Hello there ${member.user.tag}, welcome to **${member.guild.name}**!`,
+        `Welcome to **${member.guild.name}**, ${member.user.tag}!`,
+        `Hi there ${member.user.tag}, stay ahwile!`,
+        `Hey everyone, welcome our newest member ${member.user.tag} to **${member.guild.name}**!`
     ];
     member.guild.channels.find("name", "general").send(welcomes[Math.floor(Math.random() * welcomes.length)]);
  });
 
 client.on("guildMemberRemove", (member) => {
-    member.guild.channels.find("name", "general").send(`Aw, ${member.user} just left the server, bye bye...`);
+    member.guild.channels.find("name", "general").send(`Aw, ${member.user.tag} just left the server, bye bye...`);
 });
 
 client.login(process.env.BOT_TOKEN);
