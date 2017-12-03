@@ -163,7 +163,7 @@ client.on('message', (message) => {
     if (message.content.toLowerCase().includes("good night") || message.content.toLowerCase().includes("g'night") || message.content.toLowerCase().includes("goodnight")) message.react("🌙");
     if (message.content.toLowerCase().includes("jett burns") || message.content.toLowerCase().includes("jett")) {
         //client.channels.find('id', '386537690260176897').send('Jett, your name was mentioned. :P');
-        console.log(client.channels);
+        client.users.find('id', '218397146049806337').send('Jett, your name was mentioned. :P');
     }
     
     if (!message.content.startsWith(prefix)) return;
