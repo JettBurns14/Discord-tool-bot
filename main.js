@@ -165,13 +165,14 @@ client.on('message', (message) => {
     if (message.content.toLowerCase().includes("good night") || message.content.toLowerCase().includes("g'night") || message.content.toLowerCase().includes("goodnight")) message.react("🌙");
     if (message.content.toLowerCase().includes("jett burns") || message.content.toLowerCase().includes("jett")) {
         let embed = new Discord.RichEmbed();
-        embed.setTitle('You were mentioned!');
+        let sent = new Date(message.createdTimestamp).toLocaleString();
         embed.setColor('#00ffcc');
+        embed.setAuthor('You were mentioned!', message.author.avatarURL);
+        embed.addField('Content', message.content);
         embed.addField('Sender', message.author, true);
         embed.addField('Server', message.guild, true);
         embed.addField('Channel', message.channel, true);
-        embed.addField('Sent', message.createdTimestamp, true);
-        //embed.setAuthor('You were mentioned!', message.author.avatarURL);
+        embed.addField('Sent', sent, true);
         embed.setTimestamp();
         client.users.find('id', '218397146049806337').send({ embed });
     }
