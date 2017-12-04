@@ -183,7 +183,7 @@ const otherFunctions = (message) => {
         sendDM({ embed });
     }
     // If bot is mentioned, react with thinking.
-    if (message.mentions.users.exists('id', '372013264453894154')) message.react(":thinking:");
+    if (message.mentions.users.exists('id', '372013264453894154')) message.react("🤔");
 };
 
 client.on('ready', () => {
