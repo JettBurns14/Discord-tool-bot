@@ -184,7 +184,7 @@ const otherFunctions = (message) => {
     }
     // if bot is mentioned, react to it with reaction :thinking:
     if (message.content.includes('test')) {
-        console.log(message.mentions.users.find('id') == '218397146049806337');
+        console.log(message.mentions.users.find('id', '218397146049806337'));
     }
 };
 
