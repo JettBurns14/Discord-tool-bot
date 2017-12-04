@@ -134,7 +134,7 @@ const commands = {
                   x /= 60;
                   let h = Math.floor(x % 24);
 
-                  return h + ' Hours\n' + m + ' Minutes\n' + s + " Seconds";
+                  return h + ' Hours, ' + m + ' Minutes, ' + s + " Seconds";
               };
                 message.channel.send(':clock230: Bot has been online for ' + millisToTime(client.uptime));
             } catch(e) {
