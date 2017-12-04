@@ -169,7 +169,7 @@ const sendDM = (msg) => {
 
 const otherFunctions = (message) => {
     if (message.content.toLowerCase().includes("good night") || message.content.toLowerCase().includes("g'night") || message.content.toLowerCase().includes("goodnight")) message.react("🌙");
-    if (message.content.toLowerCase().includes("jett burns") || message.content.toLowerCase().includes("jett")/* || message.mentions.includes()*/) {
+    if (message.content.toLowerCase().includes("jett burns") || message.content.toLowerCase().includes("jett") || message.mentions.users.exists('id', '218397146049806337')) {
         let embed = new Discord.RichEmbed();
         let sent = new Date(message.createdTimestamp).toLocaleString();
         embed.setColor('#00ffcc');
@@ -182,10 +182,8 @@ const otherFunctions = (message) => {
         embed.setTimestamp();
         sendDM({ embed });
     }
-    // if bot is mentioned, react to it with reaction :thinking:
-    if (message.content.includes('test')) {
-        console.log(message.mentions.users.exists('id', '218397146049806337'));
-    }
+    // If bot is mentioned, react with thinking.
+    if (message.mentions.users.exists('id', '372013264453894154')) message.react(":thinking:");
 };
 
 client.on('ready', () => {
