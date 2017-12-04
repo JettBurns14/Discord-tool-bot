@@ -40,17 +40,17 @@ const commands = {
     },
     purge: {
         name: 'purge',
-        description: 'Remove messages in bulk.',
+        description: 'Remove messages in bulk, 1-100.',
         usage: `${prefix}purge <number>`,
         do: (message, client, args, Discord) => {
             try {
                 if (message.member.hasPermission("MANAGE_MESSAGES")){
-                    if (args[0] <= 99 && args > 1){
+                    if (args[0] <= 100 && args >= 1){
                         message.channel.bulkDelete(parseInt(args[0]) + 1).then(() => {
                             message.reply(`Deleted ${args[0]} messages`);
                         });
                     } else {
-                        message.reply("Please provide a number under 100 and above 1");
+                        message.reply("Please provide a number ≤ 100 and ≥ 1");
                     }
                 } else {
                     message.channel.send("You do not have permissions to use this command.");
@@ -140,6 +140,24 @@ const commands = {
             }
         }
     },
+    userInfo: {
+        name: 'userInfo',
+        description: 'Check info about a given user.',
+        usage: `${prefix}userInfo <member>`,
+        do: (message, client, args, Discord) => {
+            try {
+                /*
+                let embed = new Discord.RichEmbed();
+                embed.addField('Members', message.guild.memberCount);
+                embed.setColor('#00ffcc'); // #00ffcc? #6699ff?
+                message.channel.send({ embed });
+                */
+                message.channel.send('WIP');
+            } catch(e) {
+                console.log(e);
+            }
+        }
+    },
     /*
     blacklist: {
         name: 'User blacklist',
@@ -198,8 +216,8 @@ client.on("guildCreate", guild => {
 });
 
 client.on("guildDelete", guild => {
-  sendDM(`I have been removed from: ${guild.name} (id: ${guild.id})`);
-  client.user.setGame(`on ${client.guilds.size} servers`);
+    sendDM(`I have been removed from: ${guild.name} (id: ${guild.id})`);
+    client.user.setGame(`on ${client.guilds.size} servers`);
 });
 
 client.on('message', (message) => {
