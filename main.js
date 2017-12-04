@@ -1,17 +1,15 @@
-// Write code here, obviously
+/***
+
+    Discord utility bot built mostly by Jett and Jonah. 
+    
+***/
+
 const Discord = require('discord.js');
 const client = new Discord.Client();
 //const fs = require('fs');
 
 const prefix = '?';
-//const bannedRoles = [];
-//var blacklist = require("./bot.json");
 const whitelistRoles = ['Trusty flagger'];
-
-const welcome = () => {
-    //return `Hello there, welcome to ${member.guild.name}!`,
-    //`Welcome to ${member.guild.name}!`
-};
 
 const commands = {
     help: {
@@ -193,7 +191,7 @@ client.on('message', (message) => {
     }
     // if bot is mentioned, react to it with reaction :thinking:
     if (message.content.includes('test')) {
-        message.channel.send(message.mentions.users)
+        message.channel.send(message.mentions.users.find('username', 'Jett'))
     }
     
     if (!message.content.startsWith(prefix)) return;
