@@ -155,27 +155,34 @@ const commands = {
     }*/
 };
 
+const otherFunctions = () => {
+    
+};
+
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
     client.user.setUsername('Helpful Bot');
+    client.user.setGame(`${prefix}help`);
 });
 
 client.on('message', (message) => {
     if (message.author.bot) return;
     if (message.content.toLowerCase().includes("good night") || message.content.toLowerCase().includes("g'night") || message.content.toLowerCase().includes("goodnight")) message.react("🌙");
-    if (message.content.toLowerCase().includes("jett burns") || message.content.toLowerCase().includes("jett")) {
+    if (message.content.toLowerCase().includes("jett burns") || message.content.toLowerCase().includes("jett")/* || message.mentions.includes()*/) {
         let embed = new Discord.RichEmbed();
         let sent = new Date(message.createdTimestamp).toLocaleString();
         embed.setColor('#00ffcc');
         embed.setAuthor('You were mentioned!', message.author.avatarURL);
         embed.addField('Content', message.content);
-        embed.addField('Sender', message.author, true);
-        embed.addField('Server', message.guild, true);
-        embed.addField('Channel', message.channel, true);
+        embed.addField('Sender', message.author);
         embed.addField('Sent', sent, true);
+        embed.addField('Server', message.guild);
+        embed.addField('Channel', message.channel, true);
         embed.setTimestamp();
         client.users.find('id', '218397146049806337').send({ embed });
     }
+    // if bot is mentioned, react to it with reaction :thinking:
+    if (message.content.includes('test')) message.channel.send(message.mentions)
     
     if (!message.content.startsWith(prefix)) return;
     let args = message.content.split(" ").splice(1);
