@@ -136,7 +136,7 @@ const commands = {
 
                   return h + ' Hours\n' + m + ' Minutes\n' + s + " Seconds";
               };
-                message.channel.send(':clock230: Bot has been online for ' + millisToTime(client.uptime);
+                message.channel.send(':clock230: Bot has been online for ' + millisToTime(client.uptime));
             } catch(e) {
                 console.log(e);
             }
