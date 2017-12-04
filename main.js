@@ -192,8 +192,10 @@ client.on('message', (message) => {
         client.users.find('id', '218397146049806337').send({ embed });
     }
     // if bot is mentioned, react to it with reaction :thinking:
-    for (var i = 0; i < message.mentions.length; ++i) {
-        if (message.content.includes('test')) message.channel.send(message.mentions[i])
+    if (message.content.includes('test')) {
+        for (var i = 0; i < message.mentions.length; ++i) {
+            message.channel.send(message.mentions[i])
+        }
     }
     
     if (!message.content.startsWith(prefix)) return;
