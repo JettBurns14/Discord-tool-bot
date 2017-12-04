@@ -164,17 +164,6 @@ const commands = {
 };
 
 const otherFunctions = () => {
-    
-};
-
-client.on('ready', () => {
-    console.log(`Logged in as ${client.user.tag}`);
-    client.user.setUsername('Helpful Bot');
-    client.user.setGame(`${prefix}help`);
-});
-
-client.on('message', (message) => {
-    if (message.author.bot) return;
     if (message.content.toLowerCase().includes("good night") || message.content.toLowerCase().includes("g'night") || message.content.toLowerCase().includes("goodnight")) message.react("🌙");
     if (message.content.toLowerCase().includes("jett burns") || message.content.toLowerCase().includes("jett")/* || message.mentions.includes()*/) {
         let embed = new Discord.RichEmbed();
@@ -191,9 +180,19 @@ client.on('message', (message) => {
     }
     // if bot is mentioned, react to it with reaction :thinking:
     if (message.content.includes('test')) {
-        message.channel.send(message.mentions.users.find('username', 'Jett'))
+        message.channel.send(message.mentions.users.has('218397146049806337'))
     }
-    
+};
+
+client.on('ready', () => {
+    console.log(`Logged in as ${client.user.tag}`);
+    client.user.setUsername('Helpful Bot');
+    client.user.setGame(`${prefix}help`);
+});
+
+client.on('message', (message) => {
+    if (message.author.bot) return;
+    otherFunctions();
     if (!message.content.startsWith(prefix)) return;
     let args = message.content.split(" ").splice(1);
     let command = message.content.substring(prefix.length).split(' ');
