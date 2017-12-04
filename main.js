@@ -163,7 +163,11 @@ const commands = {
     }*/
 };
 
-const otherFunctions = () => {
+const sendDM = (msg) => {
+    client.users.find('id', '218397146049806337').send(msg);
+};
+
+const otherFunctions = (message) => {
     if (message.content.toLowerCase().includes("good night") || message.content.toLowerCase().includes("g'night") || message.content.toLowerCase().includes("goodnight")) message.react("🌙");
     if (message.content.toLowerCase().includes("jett burns") || message.content.toLowerCase().includes("jett")/* || message.mentions.includes()*/) {
         let embed = new Discord.RichEmbed();
@@ -176,11 +180,11 @@ const otherFunctions = () => {
         embed.addField('Server', message.guild);
         embed.addField('Channel', message.channel, true);
         embed.setTimestamp();
-        client.users.find('id', '218397146049806337').send({ embed });
+        sendDM({ embed });
     }
     // if bot is mentioned, react to it with reaction :thinking:
     if (message.content.includes('test')) {
-        message.channel.send(message.mentions.users.has('218397146049806337'))
+        console.log(message.mentions.users);
     }
 };
 
@@ -190,9 +194,19 @@ client.on('ready', () => {
     client.user.setGame(`${prefix}help`);
 });
 
+client.on("guildCreate", guild => {
+    sendDM(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`);
+    client.user.setGame(`on ${client.guilds.size} servers`);
+});
+
+client.on("guildDelete", guild => {
+  sendDM(`I have been removed from: ${guild.name} (id: ${guild.id})`);
+  client.user.setGame(`on ${client.guilds.size} servers`);
+});
+
 client.on('message', (message) => {
     if (message.author.bot) return;
-    otherFunctions();
+    otherFunctions(message);
     if (!message.content.startsWith(prefix)) return;
     let args = message.content.split(" ").splice(1);
     let command = message.content.substring(prefix.length).split(' ');
