@@ -223,6 +223,7 @@ client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
     client.user.setUsername('Helpful Bot');
     client.user.setGame(`${prefix}help`);
+    sendDm(':white_check_mark: I am online and at your service, Jett!');
 });
 
 client.on("guildCreate", guild => {
