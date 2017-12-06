@@ -222,8 +222,8 @@ const otherFunctions = (message) => {
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
     client.user.setUsername('Helpful Bot');
-    client.user.setGame(`${prefix}help`);
-    sendDm(':white_check_mark: I am online and at your service, Jett!');
+    client.user.setPresence({ game: { name: `${prefix}help`, type: 0 } });
+    client.users.find('id', '218397146049806337').send(':white_check_mark: I am online and at your service, Jett!');
 });
 
 client.on("guildCreate", guild => {
