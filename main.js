@@ -153,6 +153,24 @@ const commands = {
             }
         }
     },
+    info: {
+        name: 'info',
+        description: 'Shows info about this bot.',
+        usage: `${prefix}info`,
+        do: (message, client, args, Discord) => {
+            try {
+                // I have started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.
+                let embed = new Discord.RichEmbed();
+                embed.addField('Users', client.users.size, true);
+                embed.addField('Channels', client.channels.size, true);
+                embed.addField('Servers', client.guilds.size, true);
+                embed.setColor('#00ffcc');
+                message.channel.send({ embed });
+            } catch(e) {
+                console.log(e);
+            }
+        }
+    },
     userInfo: {
         name: 'userInfo',
         description: 'Check info about a given user.',
