@@ -217,12 +217,13 @@ const otherFunctions = (message) => {
     if (message.mentions.users.exists('id', '372013264453894154')) message.react("🤔");
 };
 
-client.on('ready', () => {set
+client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
     client.user.setUsername('Helpful Bot');
     client.user.setPresence({ game: { name: `${prefix}help`, type: 0 } });
     
     let embed = new Discord.RichEmbed();
+    embed.setColor('#00ffcc');
     embed.setThumbnail('https://media.discordapp.net/attachments/372916099114729472/388913604377968662/image.png');
     embed.addField('Ready', 'I am online and at your service, Jett!');
     embed.setTimestamp();
