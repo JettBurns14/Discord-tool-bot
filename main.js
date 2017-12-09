@@ -277,13 +277,13 @@ client.on("guildMemberAdd", (member) => {
         `Hi there <@${member.id}>, stay ahwile!`,
         `Hey everyone, welcome our newest member <@${member.id}> to **${member.guild.name}**!`
     ];
-    let channel = getDefaultChannel(member.guild);
-    channel.send(welcomes[Math.floor(Math.random() * welcomes.length)]);
+    //let channel = getDefaultChannel(member.guild);
+    guild.channels.get('name', 'general').send(welcomes[Math.floor(Math.random() * welcomes.length)]);
  });
 
 client.on("guildMemberRemove", (member) => {
-    let channel = getDefaultChannel(member.guild);
-    channel.send(`Aw, ${member.user.tag} just left the server, bye bye...`);
+    //let channel = getDefaultChannel(member.guild);
+    guild.channels.get('name', 'general').send(`Aw, ${member.user.tag} just left the server, bye bye...`);
 });
 
 client.login(process.env.BOT_TOKEN);
