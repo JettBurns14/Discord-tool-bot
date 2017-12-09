@@ -217,11 +217,16 @@ const otherFunctions = (message) => {
     if (message.mentions.users.exists('id', '372013264453894154')) message.react("🤔");
 };
 
-client.on('ready', () => {
+client.on('ready', () => {set
     console.log(`Logged in as ${client.user.tag}`);
     client.user.setUsername('Helpful Bot');
     client.user.setPresence({ game: { name: `${prefix}help`, type: 0 } });
-    client.users.find('id', '218397146049806337').send(':white_check_mark: I am online and at your service, Jett!');
+    
+    let embed = new Discord.RichEmbed();
+    embed.setThumbnail('https://media.discordapp.net/attachments/372916099114729472/388913604377968662/image.png');
+    embed.addField('Ready', 'I am online and at your service, Jett!');
+    embed.setTimestamp();
+    client.users.find('id', '218397146049806337').send({ embed });
 });
 
 client.on("guildCreate", guild => {
