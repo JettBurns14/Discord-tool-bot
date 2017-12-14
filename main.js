@@ -235,7 +235,7 @@ const otherFunctions = (message) => {
     if (message.mentions.users.exists('id', '372013264453894154')) message.react("🤔");
     
     var d = new Date(Date.now());
-    if (d.getMinutes() % 2 == 0) {
+    if (d.getHours() == 10) {
         client.channels.get('id', '372915908730945537').send('Test: ' + d);
     }
 };
