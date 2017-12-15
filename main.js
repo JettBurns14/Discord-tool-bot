@@ -10,6 +10,7 @@ const client = new Discord.Client();
 
 const prefix = '??';
 const whitelistRoles = ['Trusty flagger'];
+const creators = ["<@218397146049806337>", "<@309845156696424458>"];
 
 const getDefaultChannel = async (guild) => {
 
@@ -159,11 +160,12 @@ const commands = {
         usage: `${prefix}info`,
         do: (message, client, args, Discord) => {
             try {
-                // I have started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.
                 let embed = new Discord.RichEmbed();
+                embed.setThumbnail(client.user.avatarURL);
                 embed.addField('Users', client.users.size, true);
-                embed.addField('Channels', client.channels.size, true);
+                // embed.addField('Channels', client.channels.size, true); 
                 embed.addField('Servers', client.guilds.size, true);
+                embed.addField('Creators', creators[0] + ', ' + creators[1], true);
                 embed.setColor('#00ffcc');
                 message.channel.send({ embed });
             } catch(e) {
