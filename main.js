@@ -193,7 +193,7 @@ const commands = {
                 embed.addField('Joined', joined, true);
                 embed.addField('Registered', registered, true);
                 embed.addField('Roles', member.roles.map(x => x.name).join(', '), true);
-                //embed.addField('Permissions', perms, true);
+                embed.addField('Permissions', member.permissions, true);
                 embed.setColor('#00ffcc');
                 message.channel.send({ embed });
             } catch(e) {
