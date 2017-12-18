@@ -182,6 +182,7 @@ const commands = {
                 let member = message.mentions.members.first();
                 let joined = new Date(member.joinedAt);
                 let registered = new Date(member.user.createdAt);
+                //let perms = new Discord.Permissions(member);
                 let embed = new Discord.RichEmbed();
                 embed.setAuthor(member.user.tag, member.user.avatarURL);
                 embed.setThumbnail(member.user.avatarURL);
@@ -191,8 +192,8 @@ const commands = {
                 embed.addField('Game', (member.presence.game != null ? member.presence.game : 'None'), true);
                 embed.addField('Joined', joined, true);
                 embed.addField('Registered', registered, true);
-                embed.addField('Roles', member.roles.map(x => x.name), true);
-                embed.addField('Permissions', member.permissions.FLAGS, true);
+                embed.addField('Roles', member.roles.map(x => x.name).join(', '), true);
+                //embed.addField('Permissions', perms, true);
                 embed.setColor('#00ffcc');
                 message.channel.send({ embed });
             } catch(e) {
@@ -307,7 +308,8 @@ client.on('message', (message) => {
 
 
 client.on("messageReactionAdd", (messageReaction, user) => {
-    switch(messageReaction.emoji.name){
+    switch(messageReaction.emoji.name) {
+            // Look for log sending messages
         case "🚩":
             let flagCount = 0;
             for (let i = 0; i < messageReaction.count; i ++) {
