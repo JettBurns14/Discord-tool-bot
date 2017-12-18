@@ -191,8 +191,6 @@ const commands = {
                         continue;
                     }
                 }
-                console.log(perms);
-
                 embed.setAuthor(member.user.tag, member.user.avatarURL);
                 embed.setThumbnail(member.user.avatarURL);
                 embed.addField('ID', member.id, true);
@@ -202,7 +200,7 @@ const commands = {
                 embed.addField('Joined', joined, true);
                 embed.addField('Registered', registered, true);
                 embed.addField('Roles', member.roles.map(x => x.name).join(', '), true);
-                embed.addField('Permissions', perms, true);
+                embed.addField('Permissions', perms.join(', '), true);
                 embed.setColor('#00ffcc');
                 message.channel.send({ embed });
                 //console.log(Object.entries(Object.values(member.permissions.serialize()).filter(x => x == true)));
