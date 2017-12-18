@@ -183,6 +183,16 @@ const commands = {
                 let joined = new Date(member.joinedAt);
                 let registered = new Date(member.user.createdAt);
                 let embed = new Discord.RichEmbed();
+                let perms = [];
+                for (let [key, value] of Object.entries(member.permissions.serialize())) {
+                    if (value == true) {
+                        perms.push(key);
+                    } else {
+                        continue;
+                    }
+                }
+                console.log(perms);
+
                 embed.setAuthor(member.user.tag, member.user.avatarURL);
                 embed.setThumbnail(member.user.avatarURL);
                 embed.addField('ID', member.id, true);
@@ -192,18 +202,10 @@ const commands = {
                 embed.addField('Joined', joined, true);
                 embed.addField('Registered', registered, true);
                 embed.addField('Roles', member.roles.map(x => x.name).join(', '), true);
-                embed.addField('Permissions', member.permissions.serialize(), true);
+                embed.addField('Permissions', perms, true);
                 embed.setColor('#00ffcc');
                 message.channel.send({ embed });
                 //console.log(Object.entries(Object.values(member.permissions.serialize()).filter(x => x == true)));
-                for (let [key, value] of Object.entries(member.permissions.serialize())) {
-                    //console.log(`${key} ${value}`);
-                    if (value == true) {
-                        console.log(key);
-                    } else {
-                        continue;
-                    }
-                }
             } catch(e) {
                 console.log(e);
             }
