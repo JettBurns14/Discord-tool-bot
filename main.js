@@ -225,7 +225,29 @@ const commands = {
                 console.log(e);
             }
         }
+    },
+    bans: {
+        name: 'bans',
+        description: 'View bans for this server',
+        usage: `${prefix}bans`,
+        do: (message, client, args, Discord) => {
+            try {
+                if (message.member.hasPermission("MANAGE_GUILD")) {
+                    let embed = new Discord.RichEmbed();
+                    //embed.setThumbnail(client.user.avatarURL);
+                    embed.setColor('#00ffcc');
+                    embed.addField('Bans', message.guild.fetchBans().map(x => x.tag));
+                    message.channel.send({ embed });
+                } else {
+                    message.channel.send(':x: You don\'t have permission to use this command!');
+                }
+            } catch(e) {
+                console.log(e);
+            }
+        }
     }
+    
+    
     // messageHistory: {
     /*
     blacklist: {
