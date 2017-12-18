@@ -191,6 +191,18 @@ const commands = {
             }
         }
     },
+    setGame: {
+        name: 'setGame',
+        description: 'Set game of the bot.',
+        usage: `${prefix}setGame <game>`,
+        do: (message, client, args, Discord) => {
+            try {
+                client.user.setPresence({ game: { name: args[0], type: 0 } });
+            } catch(e) {
+                console.log(e);
+            }
+        }
+    }
     /*
     blacklist: {
         name: 'User blacklist',
