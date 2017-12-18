@@ -201,7 +201,7 @@ const commands = {
                     client.user.setPresence({ game: { name: args[0], type: 0 } });
                     message.channel.send(':white_check_mark: Game set to: ' + args[0]);
                 } else {
-                    message.channel.send('You don\'t have permission to use this command!');
+                    message.channel.send(':x: You don\'t have permission to use this command!');
                 }
             } catch(e) {
                 console.log(e);
