@@ -183,7 +183,7 @@ const commands = {
                 let member = message.mentions.members.first();
                 
                 let embed = new Discord.RichEmbed();
-                embed.setAuthor(member.nickname, member.user.avatarURL);
+                embed.setAuthor(member.user.discriminator, member.user.avatarURL);
                 embed.addField('ID', member.id);
                 embed.setColor('#00ffcc');
                 message.channel.send({ embed });
@@ -211,6 +211,7 @@ const commands = {
             }
         }
     }
+    // messageHistory: {
     /*
     blacklist: {
         name: 'User blacklist',
