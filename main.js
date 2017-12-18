@@ -254,6 +254,36 @@ const commands = {
                 console.log(e);
             }
         }
+    },
+    eval: {
+        name: 'eval',
+        description: 'Evaluates JavaScript code.',
+        usage: `${prefix}eval <code>`,
+        do: (message, client, args, Discord) => {
+            try {
+                  if (message.author.id === "218397146049806337" || message.author.id === "309845156696424458") {
+
+                    try {
+                        const code = args.join(" ");
+                        let evaled = eval(code);
+
+                        if (typeof evaled !== "string")
+                            evaled = require("util").inspect(evaled);
+
+                        message.channel.send(clean(evaled), { code: "xl" });
+                    } catch (err) {
+                        message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
+                    }
+                  } else {
+                      message.reply("Only the bot owners can use this command.")
+                      return;
+                  }
+                
+
+            } catch (e) {
+                console.log(e);
+            }
+        }
     }
     
     
