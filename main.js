@@ -271,12 +271,13 @@ const otherFunctions = (message) => {
     }
     // If bot is mentioned, react with thinking.
     if (message.mentions.users.exists('id', '372013264453894154')) message.react("🤔");
-    
-    var d = new Date(Date.now());
-    if (d.getHours() == 10) {
-        client.channels.get('id', '372915908730945537').send('Test: ' + d);
-    }
 };
+
+var d = new Date(Date.now());
+console.log(d);
+if (d.getMinutes() == 20) {
+    client.channels.get('id', '372915908730945537').send('Test: ' + d);
+}
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
