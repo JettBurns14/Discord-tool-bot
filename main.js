@@ -180,11 +180,11 @@ const commands = {
         do: (message, client, args, Discord) => {
             try {
                 // If args[0] is a real member
-                let user = message.mentions.members.first();
+                let member = message.mentions.members.first();
                 
                 let embed = new Discord.RichEmbed();
-                embed.setAuthor(user.username, user.avatarURL);
-                embed.addField('ID', user.id);
+                embed.setAuthor(member.nickname, member.user.avatarURL);
+                embed.addField('ID', member.id);
                 embed.setColor('#00ffcc');
                 message.channel.send({ embed });
                 
