@@ -273,11 +273,12 @@ const otherFunctions = (message) => {
     if (message.mentions.users.exists('id', '372013264453894154')) message.react("🤔");
 };
 
+/*
 var d = new Date(Date.now());
 console.log(d);
 if (d.getMinutes() == 20) {
     client.channels.get('id', '372915908730945537').send('Test: ' + d);
-}
+}*/
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
@@ -331,7 +332,17 @@ client.on("messageReactionAdd", (messageReaction, user) => {
                 }
             }
             
-            //if (flagCount >= 2) messageReaction.message.delete();
+            if (flagCount >= 3) {
+                //messageReaction.message.delete();
+            } else {
+                let embed = new Discord.RichEmbed();
+                embed.setColor([247, 237, 96]);
+                embed.setAuthor(messageReaction.message.author.tag, messageReaction.message.author.avatarURL);
+                embed.addField(`Message flagged in #${messageReaction.message.channel.name} by <someone>`, messageReaction.message.content);
+                embed.setFooter(messageReaction.message.createdTimestamp);
+                // embed.addField('Flagged by:', 'WIP');
+                client.channels.find('id', '369502585440436236').send({ embed });
+            }
             break;
         case "📌":
             if (messageReaction.count >= 10) messageReaction.message.pin();
