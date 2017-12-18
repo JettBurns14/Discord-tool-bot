@@ -179,13 +179,15 @@ const commands = {
         usage: `${prefix}userInfo <member>`,
         do: (message, client, args, Discord) => {
             try {
-                /*
+                // If args[0] is a real member
+                let user = message.mentions.members.first();
+                
                 let embed = new Discord.RichEmbed();
-                embed.addField('Members', message.guild.memberCount);
-                embed.setColor('#00ffcc'); // #00ffcc? #6699ff?
+                embed.addField(user, user);
+                embed.setColor('#00ffcc');
                 message.channel.send({ embed });
-                */
-                message.channel.send('WIP');
+                
+                //message.channel.send('WIP');
             } catch(e) {
                 console.log(e);
             }
