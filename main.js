@@ -58,7 +58,7 @@ const commands = {
         usage: `${prefix}purge <number>`,
         do: (message, client, args, Discord) => {
             try {
-                if (message.member.hasPermission("MANAGE_MESSAGES")){
+                if (message.member.hasPermission("MANAGE_MESSAGES")) {
                     if (args[0] <= 100 && args >= 1){
                         message.channel.bulkDelete(parseInt(args[0]) + 1).then(() => {
                             message.reply(`Deleted ${args[0]} messages`);
@@ -191,8 +191,8 @@ const commands = {
                 embed.addField('Game', (member.presence.game != null ? member.presence.game : 'None'), true);
                 embed.addField('Joined', joined, true);
                 embed.addField('Registered', registered, true);
-                embed.addField('Roles', member.roles.keyArray(), true);
-                embed.addField('Permissions', member.permissions.keyArray(), true);
+                embed.addField('Roles', member.roles.FLAGS, true);
+                embed.addField('Permissions', member.permissions.FLAGS, true);
                 embed.setColor('#00ffcc');
                 message.channel.send({ embed });
             } catch(e) {
