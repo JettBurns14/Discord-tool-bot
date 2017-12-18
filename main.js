@@ -197,7 +197,12 @@ const commands = {
         usage: `${prefix}setGame <game>`,
         do: (message, client, args, Discord) => {
             try {
-                client.user.setPresence({ game: { name: args[0], type: 0 } });
+                if (message.author.id == '218397146049806337') {
+                    client.user.setPresence({ game: { name: args[0], type: 0 } });
+                    message.channel.send(':white_check_mark: Game set to: ' + args[0]);
+                } else {
+                    message.channel.send('You don\'t have permission to use this command!');
+                }
             } catch(e) {
                 console.log(e);
             }
