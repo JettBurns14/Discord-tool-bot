@@ -237,9 +237,9 @@ const commands = {
                     //embed.setThumbnail(client.user.avatarURL);
                     embed.setColor('#00ffcc');
                     message.guild.fetchBans().then(promise => {
-                        let resolvedBans = Promise.resolve(promise);
+                        let resolvedBans = Promise.resolve(promise).map(x => x.username);
                         //embed.addField('Bans', resolvedBans.map(x => x.tag));
-                        console.log(resolvedBans.map(x => x.username));
+                        console.log(resolvedBans);
                     }).catch(reason => {
                         console.log(reason);
                     });
