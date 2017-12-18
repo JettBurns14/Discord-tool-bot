@@ -191,8 +191,8 @@ const commands = {
                 embed.addField('Game', (member.presence.game != null ? member.presence.game : 'None'), true);
                 embed.addField('Joined', joined, true);
                 embed.addField('Registered', registered, true);
-                embed.addField('Roles', member.roles.array(), true);
-                embed.addField('Permissions', member.permissions.array(), true);
+                embed.addField('Roles', member.roles.keyArray, true);
+                embed.addField('Permissions', member.permissions.keyArray, true);
                 embed.setColor('#00ffcc');
                 message.channel.send({ embed });
             } catch(e) {
