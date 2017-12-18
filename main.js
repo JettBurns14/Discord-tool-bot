@@ -322,6 +322,7 @@ client.on("messageReactionAdd", (messageReaction, user) => {
             // Look for log sending messages
         case "🚩":
             let flagCount = 0;
+            /*
             for (let i = 0; i < messageReaction.count; i ++) {
                 for (let j = 0; j < whitelistRoles.length; j ++) {
                     if (messageReaction.message.guild.members.find("id", messageReaction.users[i]).roles.has(messageReaction.message.guild.roles.find("name", whitelistRoles[j]))) {
@@ -330,7 +331,7 @@ client.on("messageReactionAdd", (messageReaction, user) => {
                         break;
                     }
                 }
-            }
+            }*/
             
             if (flagCount >= 3) {
                 //messageReaction.message.delete();
