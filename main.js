@@ -239,14 +239,12 @@ const commands = {
                     message.guild.fetchBans().then(promise => {
                         let resolvedBans = Promise.resolve(promise);
                         resolvedBans.then((u) => {
-                            //console.log(u.map(x => x.username));
                             embed.addField('Bans', u.map(x => x.username));
+                            message.channel.send({ embed });
                         });
-                        //console.log(resolvedBans);
                     }).catch(reason => {
                         console.log(reason);
                     });
-                    message.channel.send({ embed });
                 } else {
                     message.channel.send(':x: You don\'t have permission to use this command!');
                 }
