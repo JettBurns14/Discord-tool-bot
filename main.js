@@ -238,7 +238,10 @@ const commands = {
                     embed.setColor('#00ffcc');
                     message.guild.fetchBans().then(promise => {
                         let resolvedBans = Promise.resolve(promise);
-                        embed.addField('Bans', resolvedBans.map(x => x.tag));
+                        //embed.addField('Bans', resolvedBans.map(x => x.tag));
+                        console.log(resolvedBans);
+                    }).catch(reason => {
+                        console.log(reason);
                     });
                     message.channel.send({ embed });
                 } else {
