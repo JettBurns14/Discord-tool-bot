@@ -180,16 +180,21 @@ const commands = {
         do: (message, client, args, Discord) => {
             try {
                 let member = message.mentions.members.first();
+                let joined = new Date(member.joinedAt);
+                let registered = new Date(member.user.createdAt);
                 let embed = new Discord.RichEmbed();
                 embed.setAuthor(member.user.tag, member.user.avatarURL);
                 embed.setThumbnail(member.user.avatarURL);
                 embed.addField('ID', member.id, true);
-                embed.addField('Joined', member.joinedAt, true);
-                embed.addField('Registered', member.user.createdAt, true);
+                embed.addField('Nickname', (member.nickname != null ? member.nickname : 'None'), true);
+                embed.addField('Status', member.presence.status, true);
+                embed.addField('Game', member.presence.game, true);
+                embed.addField('Joined', joined, true);
+                embed.addField('Registered', registered, true);
+                embed.addField('Roles', member.roles, true);
+                embed.addField('Permissions', member.permissions, true);
                 embed.setColor('#00ffcc');
                 message.channel.send({ embed });
-                
-                //message.channel.send('WIP');
             } catch(e) {
                 console.log(e);
             }
@@ -203,7 +208,7 @@ const commands = {
             try {
                 if (message.author.id == '218397146049806337') {
                     client.user.setPresence({ game: { name: args[0], type: 0 } });
-                    message.channel.send(':white_check_mark: Game set to: ' + args[0]);
+                    message.channel.send(':white_check_mark: Game set to: `' + args[0] + '`');
                 } else {
                     message.channel.send(':x: You don\'t have permission to use this command!');
                 }
