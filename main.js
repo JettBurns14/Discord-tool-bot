@@ -236,7 +236,10 @@ const commands = {
                     let embed = new Discord.RichEmbed();
                     //embed.setThumbnail(client.user.avatarURL);
                     embed.setColor('#00ffcc');
-                    embed.addField('Bans', message.guild.fetchBans().map(x => x.tag));
+                    message.guild.fetchBans().then(promise => {
+                        let resolvedBans = Promise.resolve(promise);
+                        embed.addField('Bans', resolvedBans.map(x => x.tag));
+                    });
                     message.channel.send({ embed });
                 } else {
                     message.channel.send(':x: You don\'t have permission to use this command!');
