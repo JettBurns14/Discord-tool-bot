@@ -195,7 +195,7 @@ const commands = {
                 embed.addField('Permissions', member.permissions.serialize(), true);
                 embed.setColor('#00ffcc');
                 message.channel.send({ embed });
-                console.log(Object.keys(member.permissions.serialize()).filter(x => x == true));
+                console.log(Object.keys(Object.values(member.permissions.serialize()).filter(x => x == true)));
             } catch(e) {
                 console.log(e);
             }
