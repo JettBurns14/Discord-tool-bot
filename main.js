@@ -182,7 +182,6 @@ const commands = {
                 let member = message.mentions.members.first();
                 let joined = new Date(member.joinedAt);
                 let registered = new Date(member.user.createdAt);
-                //let perms = new Discord.Permissions(member);
                 let embed = new Discord.RichEmbed();
                 embed.setAuthor(member.user.tag, member.user.avatarURL);
                 embed.setThumbnail(member.user.avatarURL);
@@ -193,7 +192,7 @@ const commands = {
                 embed.addField('Joined', joined, true);
                 embed.addField('Registered', registered, true);
                 embed.addField('Roles', member.roles.map(x => x.name).join(', '), true);
-                embed.addField('Permissions', member.permissions, true);
+                embed.addField('Permissions', member.permissions.serialize().filter(false), true);
                 embed.setColor('#00ffcc');
                 message.channel.send({ embed });
             } catch(e) {
