@@ -183,7 +183,7 @@ const commands = {
                 let member = message.mentions.members.first();
                 
                 let embed = new Discord.RichEmbed();
-                embed.setAuthor(member.user.discriminator, member.user.avatarURL);
+                embed.setAuthor(member.user.tag, member.user.avatarURL);
                 embed.addField('ID', member.id);
                 embed.setColor('#00ffcc');
                 message.channel.send({ embed });
