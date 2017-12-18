@@ -358,8 +358,13 @@ client.on("guildMemberAdd", (member) => {
         `Hi there <@${member.id}>, stay ahwile!`,
         `Hey everyone, welcome our newest member <@${member.id}> to **${member.guild.name}**!`
     ];
+    var welcome = `Welcome to the ${member.guild.name}, <@${member.id}>! 
+        Please provide us with your Khan Academy __name__ and __username__ so we can verify you. 
+        Also, let us know what roles you'd like, which are all explained in <#372915117060522007>.`
+
     //let channel = getDefaultChannel(member.guild);
     member.guild.channels.find("name", "general").send(welcomes[Math.floor(Math.random() * welcomes.length)]);
+    member.guild.channels.find("id", "380202012077457409").send(welcome);
  });
 
 client.on("guildMemberRemove", (member) => {
