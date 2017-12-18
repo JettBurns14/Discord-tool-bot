@@ -237,9 +237,12 @@ const commands = {
                     //embed.setThumbnail(client.user.avatarURL);
                     embed.setColor('#00ffcc');
                     message.guild.fetchBans().then(promise => {
-                        let resolvedBans = Promise.resolve(promise).map(x => x.username);
+                        let resolvedBans = Promise.resolve(promise);
+                        resolvedBans.then((u) => {
+                            console.log(u.usernames);
+                        });
                         //embed.addField('Bans', resolvedBans.map(x => x.tag));
-                        console.log(resolvedBans);
+                        //console.log(resolvedBans);
                     }).catch(reason => {
                         console.log(reason);
                     });
