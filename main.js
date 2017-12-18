@@ -239,7 +239,7 @@ const commands = {
                     message.guild.fetchBans().then(promise => {
                         let resolvedBans = Promise.resolve(promise);
                         //embed.addField('Bans', resolvedBans.map(x => x.tag));
-                        console.log(resolvedBans);
+                        console.log(resolvedBans.map(x => x.username));
                     }).catch(reason => {
                         console.log(reason);
                     });
