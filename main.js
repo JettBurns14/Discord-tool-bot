@@ -191,8 +191,8 @@ const commands = {
                 embed.addField('Game', (member.presence.game != null ? member.presence.game : 'None'), true);
                 embed.addField('Joined', joined, true);
                 embed.addField('Registered', registered, true);
-                embed.addField('Roles', member.roles, true);
-                embed.addField('Permissions', member.permissions, true);
+                embed.addField('Roles', member.roles.map(x => x.name), true);
+                embed.addField('Permissions', member.permissions.FLAGS, true);
                 embed.setColor('#00ffcc');
                 message.channel.send({ embed });
             } catch(e) {
@@ -276,7 +276,7 @@ client.on('ready', () => {
     
     let embed = new Discord.RichEmbed();
     embed.setColor('#00ffcc');
-    embed.setThumbnail('https://media.discordapp.net/attachments/372916099114729472/388913604377968662/image.png');
+    embed.setThumbnail('https://media.discordapp.net/attachments/307975805357522944/392142646618882060/image.png');
     embed.addField('Ready', 'I am online and at your service, Jett!');
     embed.setTimestamp();
     client.users.find('id', '218397146049806337').send({ embed });
