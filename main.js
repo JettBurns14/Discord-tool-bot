@@ -188,11 +188,11 @@ const commands = {
                 embed.addField('ID', member.id, true);
                 embed.addField('Nickname', (member.nickname != null ? member.nickname : 'None'), true);
                 embed.addField('Status', member.presence.status, true);
-                embed.addField('Game', member.presence.game, true);
+                embed.addField('Game', (member.presence.game != null ? member.presence.game : 'None'), true);
                 embed.addField('Joined', joined, true);
                 embed.addField('Registered', registered, true);
-                embed.addField('Roles', member.roles, true);
-                embed.addField('Permissions', member.permissions, true);
+                embed.addField('Roles', member.roles.array(), true);
+                embed.addField('Permissions', member.permissions.array(), true);
                 embed.setColor('#00ffcc');
                 message.channel.send({ embed });
             } catch(e) {
