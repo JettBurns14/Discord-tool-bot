@@ -196,7 +196,7 @@ const commands = {
                 embed.addField('ID', member.id, true);
                 embed.addField('Nickname', (member.nickname != null ? member.nickname : 'None'), true);
                 embed.addField('Status', member.presence.status, true);
-                embed.addField('Game', (member.presence.game != null ? member.presence.game : 'None'), true);
+                embed.addField('Game', (member.presence.game != null ? member.presence.game.name : 'None'), true);
                 embed.addField('Joined', joined, true);
                 embed.addField('Registered', registered, true);
                 embed.addField('Roles', member.roles.map(x => x.name).join(', '), true);
@@ -239,7 +239,7 @@ const commands = {
                     message.guild.fetchBans().then(promise => {
                         let resolvedBans = Promise.resolve(promise);
                         resolvedBans.then((u) => {
-                            embed.addField('Bans', u.map(x => x.username));
+                            embed.addField('Bans', '<@' + u.map(x => x.id) + '>');
                             message.channel.send({ embed });
                         });
                     }).catch(reason => {
@@ -252,10 +252,22 @@ const commands = {
                 console.log(e);
             }
         }
+    },
+    msgHistory: {
+        name: 'msgHistory',
+        description: 'View edit history of a given message.',
+        usage: `${prefix} <messageID>`,
+        do: (message, client, args, Discord) => {
+            try {
+                message.channel.fetchMessage(args[0])
+                    .then(msg => message.channel.send(msg.content))
+                    .catch(console.error);
+            } catch(e) {
+                console.log(e);
+            }
+        })
     }
-    
-    
-    // messageHistory: {
+        
     /*
     blacklist: {
         name: 'User blacklist',
