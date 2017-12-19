@@ -410,7 +410,7 @@ client.on("guildMemberAdd", (member) => {
 
     //let channel = getDefaultChannel(member.guild);
     member.guild.channels.find("name", "general").send(welcomes[Math.floor(Math.random() * welcomes.length)]);
-    member.guild.channels.find("id", "380202012077457409").send(welcome);
+    if (member.guild.channels.find("id", "380202012077457409")) member.guild.channels.find("id", "380202012077457409").send(welcome);
  });
 
 client.on("guildMemberRemove", (member) => {
