@@ -259,9 +259,14 @@ const commands = {
         usage: `${prefix} <messageID>`,
         do: (message, client, args, Discord) => {
             try {
+                let embed = new Discord.RichEmbed();
+                //embed.setThumbnail(client.user.avatarURL);
+                embed.setColor('#00ffcc');
                 message.channel.fetchMessage(args[0])
-                    .then(msg => message.channel.send(msg.content))
-                    .catch(console.error);
+                    .then(msg => {
+                        embed.addField('Content', msg.content) 
+                        message.channel.send({ embed });
+                }).catch(console.error);
             } catch(e) {
                 console.log(e);
             }
