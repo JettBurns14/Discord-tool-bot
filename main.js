@@ -388,7 +388,9 @@ client.on("messageReactionAdd", (messageReaction, user) => {
                 embed.addField(`Message flagged in #${messageReaction.message.channel.name} by <someone>`, messageReaction.message.content);
                 embed.setFooter(messageReaction.message.createdTimestamp);
                 // embed.addField('Flagged by:', 'WIP');
-                client.channels.find('id', '369502585440436236').send({ embed });
+                if (messageReaction.message.guild.channels.exists('name', 'staff-logs')) {
+                    client.channels.find('name', 'staff-logs').send({ embed });
+                }
             }
             break;
         case "📌":
@@ -404,9 +406,10 @@ client.on("guildMemberAdd", (member) => {
         `Hi there <@${member.id}>, stay ahwile!`,
         `Hey everyone, welcome our newest member <@${member.id}> to **${member.guild.name}**!`
     ];
-    var welcome = `Welcome to the ${member.guild.name}, <@${member.id}>! 
-    Please provide us with your Khan Academy __name__ and __username__ so we can verify you. 
-    Also, let us know what roles you'd like, which are all explained in <#372915117060522007>.`
+    var welcome = `Welcome to the ${member.guild.name}, <@${member.id}>!
+Please provide us with your Khan Academy __name__ and __username__ so we can verify you. 
+Also, let us know what roles you'd like, which are all explained in <#372915117060522007>.
+@Moderator`
 
     //let channel = getDefaultChannel(member.guild);
     member.guild.channels.find("name", "general").send(welcomes[Math.floor(Math.random() * welcomes.length)]);
