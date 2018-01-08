@@ -253,18 +253,23 @@ const commands = {
             }
         }
     },
-    msgHistory: {
+    msgEdits: {
         name: 'msgHistory',
         description: 'View edit history of a given message.',
         usage: `${prefix} <messageID>`,
         do: (message, client, args, Discord) => {
             try {
+                var edits = '';
                 let embed = new Discord.RichEmbed();
                 //embed.setThumbnail(client.user.avatarURL);
                 embed.setColor('#00ffcc');
                 message.channel.fetchMessage(args[0])
                     .then(msg => {
-                        embed.addField('Content', msg.content) 
+                        for (var i = 0; i < msg.edits.length; ++i) {
+                            edits += msg.edits[i];
+                        }
+                        embed.addField('Content', msg.content);
+                        embed.addField('Edits', edits);
                         message.channel.send({ embed });
                 }).catch(console.error);
             } catch(e) {
