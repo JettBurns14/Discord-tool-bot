@@ -234,14 +234,12 @@ const commands = {
             try {
                 if (message.member.hasPermission("MANAGE_GUILD")) {
                     let embed = new Discord.RichEmbed();
-                    var bans = '';
                     //embed.setThumbnail(client.user.avatarURL);
                     embed.setColor('#00ffcc');
                     message.guild.fetchBans().then(promise => {
                         let resolvedBans = Promise.resolve(promise);
                         resolvedBans.then((u) => {
-                            bans += '<@' + u.map(x => x.id) + '>, ';
-                            embed.addField('Bans', bans);
+                            embed.addField('Bans', u.map(x => x.tag));
                             message.channel.send({ embed });
                         });
                     }).catch(reason => {
