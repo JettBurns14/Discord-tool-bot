@@ -254,9 +254,9 @@ const commands = {
         }
     },
     msgEdits: {
-        name: 'msgHistory',
+        name: 'msgEdits',
         description: 'View edit history of a given message.',
-        usage: `${prefix} <messageID>`,
+        usage: `${prefix}msgEdits <messageID>`,
         do: (message, client, args, Discord) => {
             try {
                 var edits = '';
@@ -266,7 +266,7 @@ const commands = {
                 message.channel.fetchMessage(args[0])
                     .then(msg => {
                         for (var i = 0; i < msg.edits.length; ++i) {
-                            edits += msg.edits[i];
+                            edits += msg.edits[i] + ', ';
                         }
                         embed.addField('Content', msg.content);
                         embed.addField('Edits', edits);
