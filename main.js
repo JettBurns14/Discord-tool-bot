@@ -240,8 +240,8 @@ const commands = {
                     message.guild.fetchBans().then(promise => {
                         let resolvedBans = Promise.resolve(promise);
                         resolvedBans.then((u) => {
-                            console.log(u);
-                            embed.addField('Bans', u.map(x => x.id));
+                            bans += '<@' + u.map(x => x.id)) + '>, ';
+                            embed.addField('Bans', bans);
                             message.channel.send({ embed });
                         });
                     }).catch(reason => {
