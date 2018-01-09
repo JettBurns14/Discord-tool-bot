@@ -196,7 +196,7 @@ const commands = {
                 embed.addField('ID', member.id, true);
                 embed.addField('Nickname', (member.nickname != null ? member.nickname : 'None'), true);
                 embed.addField('Status', member.presence.status, true);
-                embed.addField('Game', (member.presence.game != null ? member.presence.game : 'None'), true);
+                embed.addField('Game', (member.presence.game != null ? member.presence.game.name : 'None'), true);
                 embed.addField('Joined', joined, true);
                 embed.addField('Registered', registered, true);
                 embed.addField('Roles', member.roles.map(x => x.name).join(', '), true);
@@ -239,14 +239,12 @@ const commands = {
                     message.guild.fetchBans().then(promise => {
                         let resolvedBans = Promise.resolve(promise);
                         resolvedBans.then((u) => {
-                            //console.log(u.map(x => x.username));
-                            embed.addField('Bans', u.map(x => x.username));
+                            embed.addField('Bans', u.map(x => x.tag));
+                            message.channel.send({ embed });
                         });
-                        //console.log(resolvedBans);
                     }).catch(reason => {
                         console.log(reason);
                     });
-                    message.channel.send({ embed });
                 } else {
                     message.channel.send(':x: You don\'t have permission to use this command!');
                 }
@@ -261,33 +259,53 @@ const commands = {
         usage: `${prefix}eval <code>`,
         do: (message, client, args, Discord) => {
             try {
-                  if (message.author.id === "218397146049806337" || message.author.id === "309845156696424458") {
-
+                if (message.author.id === "218397146049806337" || message.author.id === "309845156696424458") {
                     try {
                         const code = args.join(" ");
                         let evaled = eval(code);
 
-                        if (typeof evaled !== "string")
+                        if (typeof evaled !== "string") {
                             evaled = require("util").inspect(evaled);
+                        }
 
                         message.channel.send(clean(evaled), { code: "xl" });
-                    } catch (err) {
-                        message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
-                    }
-                  } else {
-                      message.reply("Only the bot owners can use this command.")
-                      return;
+                  } catch (err) {
+                      message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
                   }
-                
-
+                } else {
+                    message.reply("Only the bot owners can use this command.")
+                    return;
+                }                
             } catch (e) {
+              console.log(e);
+            }
+        }
+    },
+    msgEdits: {
+        name: 'msgEdits',
+        description: 'View edit history of a given message.',
+        usage: `${prefix}msgEdits <messageID>`,
+        do: (message, client, args, Discord) => {
+            try {
+                var edits = '';
+                let embed = new Discord.RichEmbed();
+                //embed.setThumbnail(client.user.avatarURL);
+                embed.setColor('#00ffcc');
+                message.channel.fetchMessage(args[0])
+                    .then(msg => {
+                        for (var i = 0; i < msg.edits.length; ++i) {
+                            edits += msg.edits[i] + ', ';
+                        }
+                        embed.addField('Content', msg.content);
+                        embed.addField('Edits', edits);
+                        message.channel.send({ embed });
+                }).catch(console.error);
+            } catch(e) {
                 console.log(e);
             }
         }
     }
-    
-    
-    // messageHistory: {
+        
     /*
     blacklist: {
         name: 'User blacklist',
@@ -403,7 +421,9 @@ client.on("messageReactionAdd", (messageReaction, user) => {
                 embed.addField(`Message flagged in #${messageReaction.message.channel.name} by <someone>`, messageReaction.message.content);
                 embed.setFooter(messageReaction.message.createdTimestamp);
                 // embed.addField('Flagged by:', 'WIP');
-                client.channels.find('id', '369502585440436236').send({ embed });
+                if (messageReaction.message.guild.channels.exists('name', 'staff-logs')) {
+                    client.channels.find('name', 'staff-logs').send({ embed });
+                }
             }
             break;
         case "📌":
@@ -419,13 +439,14 @@ client.on("guildMemberAdd", (member) => {
         `Hi there <@${member.id}>, stay ahwile!`,
         `Hey everyone, welcome our newest member <@${member.id}> to **${member.guild.name}**!`
     ];
-    var welcome = `Welcome to the ${member.guild.name}, <@${member.id}>! 
-    Please provide us with your Khan Academy __name__ and __username__ so we can verify you. 
-    Also, let us know what roles you'd like, which are all explained in <#372915117060522007>.`
+    var welcome = `Welcome to the ${member.guild.name}, <@${member.id}>!
+Please provide us with your Khan Academy __name__ and __username__ so we can verify you. 
+Also, let us know what roles you'd like, which are all explained in <#372915117060522007>.
+<@&380569987242393610>`
 
     //let channel = getDefaultChannel(member.guild);
     member.guild.channels.find("name", "general").send(welcomes[Math.floor(Math.random() * welcomes.length)]);
-    member.guild.channels.find("id", "380202012077457409").send(welcome);
+    if (member.guild.channels.find("id", "380202012077457409")) member.guild.channels.find("id", "380202012077457409").send(welcome);
  });
 
 client.on("guildMemberRemove", (member) => {
