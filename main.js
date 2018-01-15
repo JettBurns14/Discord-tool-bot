@@ -292,7 +292,7 @@ const commands = {
                     message.channel.fetchMessage(args[0]).then(msg => {
                         msg.clearReactions();
                         embed.addField('Success', ':white_check_mark: Reactions cleared.');
-                        message.channel.send({embed});
+                        message.channel.send({embed}).delete(4000);
                     }).catch(console.error);
                 } else {
                     message.channel.send(':x: You don\'t have permission to use this command!');
