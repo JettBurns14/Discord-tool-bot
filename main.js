@@ -2,6 +2,9 @@
 
     Discord utility bot built mostly by Jett and Jonah. 
     
+    
+    Add a category property for each cmd, since some are for moderation.
+    
 ***/
 
 const Discord = require('discord.js');
@@ -272,6 +275,28 @@ const commands = {
                         embed.addField('Edits', edits);
                         message.channel.send({ embed });
                 }).catch(console.error);
+            } catch(e) {
+                console.log(e);
+            }
+        }
+    },
+    clearReactions: {
+        name: 'clearReactions',
+        description: 'Clear reactions for a given message.',
+        usage: `${prefix}clearReactions <messageId>`,
+        do: (message, client, args, Discord) => {
+            try {
+                if (message.member.hasPermission("MANAGE_MESSAGES")) {
+                    let embed = new Discord.RichEmbed();
+                    embed.setColor('#00ffcc');
+                    message.channel.fetchMessage(args[0]).then(msg => {
+                        msg.clearReactions();
+                        embed.addField('Success', ':white_check_mark: Reactions cleared.');
+                        message.channel.send({embed});
+                    }).catch(console.error);
+                } else {
+                    message.channel.send(':x: You don\'t have permission to use this command!');
+                }
             } catch(e) {
                 console.log(e);
             }
