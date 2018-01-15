@@ -4,6 +4,7 @@
     
     
     Add a category property for each cmd, since some are for moderation.
+    Auto delete mod cmds
     
 ***/
 
@@ -292,7 +293,7 @@ const commands = {
                     message.channel.fetchMessage(args[0]).then(msg => {
                         msg.clearReactions();
                         embed.addField('Success', ':white_check_mark: Reactions cleared.');
-                        message.channel.send({embed}).delete(4000);
+                        message.channel.send({embed}).then(msg => msg.delete(4000));
                     }).catch(console.error);
                 } else {
                     message.channel.send(':x: You don\'t have permission to use this command!');
