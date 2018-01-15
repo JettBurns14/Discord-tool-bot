@@ -308,7 +308,7 @@ const sendDM = (msg) => {
 const otherFunctions = (message) => {
     var content = message.content.toLowerCase();
     if (content.includes("good night") || content.includes("g'night") || content.includes("goodnight")) message.react("🌙");
-    if (content.includes("yay")) message.react("402289443593125888");
+    //if (content.includes("yay")) message.react("402289443593125888");
     if (content.includes("jett burns") || content.includes("jett") || message.mentions.users.exists('id', '218397146049806337')) {
         let embed = new Discord.RichEmbed();
         let sent = new Date(message.createdTimestamp).toLocaleString();
