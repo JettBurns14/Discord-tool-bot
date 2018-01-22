@@ -69,13 +69,13 @@ const commands = {
                 if (message.member.hasPermission("MANAGE_MESSAGES")) {
                     if (args[0] <= 100 && args >= 1){
                         message.channel.bulkDelete(parseInt(args[0]) + 1).then(() => {
-                            message.reply(`Deleted ${args[0]} messages`).delete(deleteDelay);
+                            message.reply(`Deleted ${args[0]} messages`).then(msg => msg.delete(deleteDelay));
                         });
                     } else {
-                        message.reply("Please provide a number ≤ 100 and ≥ 1").delete(deleteDelay);
+                        message.reply("Please provide a number ≤ 100 and ≥ 1").then(msg => msg.delete(deleteDelay));
                     }
                 } else {
-                    message.channel.send("You do not have permissions to use this command.").delete(deleteDelay);
+                    message.channel.send("You do not have permissions to use this command.").then(msg => msg.delete(deleteDelay));
                 }
             } catch (e) {
                 console.log(e);
@@ -96,10 +96,10 @@ const commands = {
                         message.channel.send(`<@${message.mentions.users.first().id}> has been kicked by <@${message.author.id}> because: ${reason}`);
                        
                     } else {
-                        message.channel.send("You didn't identify a valid user").delete(deleteDelay);
+                        message.channel.send("You didn't identify a valid user").then(msg => msg.delete(deleteDelay));
                     }
                 } else {
-                    message.channel.send("You do not have permissions to use this command.").delete(deleteDelay);
+                    message.channel.send("You do not have permissions to use this command.").then(msg => msg.delete(deleteDelay));
                 }
             } catch(e) {
                 console.log(e);
@@ -119,7 +119,7 @@ const commands = {
                         message.mentions.members.first().ban(reason);
                         message.channel.send(`<@${message.mentions.users.first().id}> has been banned by <@${message.author.id}> because: ${reason}`);
                     } else {
-                        message.channel.send("You didn't identify a valid user").delete(deleteDelay);
+                        message.channel.send("You didn't identify a valid user").then(msg => msg.delete(deleteDelay));
                     }
                 }
             } catch(e) {
@@ -237,7 +237,7 @@ const commands = {
                     message.channel.send({embed}).then(msg => msg.delete(deleteDelay));
                     message.pin();
                 } else {
-                    message.channel.send(':x: You don\'t have permission to use this command!').delete(deleteDelay);
+                    message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
                 }
             } catch(e) {
                 console.log(e);
@@ -253,9 +253,9 @@ const commands = {
             try {
                 if (message.author.id == '218397146049806337') {
                     client.user.setPresence({ game: { name: args[0], type: 0 } });
-                    message.channel.send(':white_check_mark: Game set to: `' + args[0] + '`').delete(deleteDelay);
+                    message.channel.send(':white_check_mark: Game set to: `' + args[0] + '`').then(msg => msg.delete(deleteDelay));
                 } else {
-                    message.channel.send(':x: You don\'t have permission to use this command!').delete(deleteDelay);
+                    message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
                 }
             } catch(e) {
                 console.log(e);
@@ -283,7 +283,7 @@ const commands = {
                         console.log(reason);
                     });
                 } else {
-                    message.channel.send(':x: You don\'t have permission to use this command!').delete(deleteDelay);
+                    message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
                 }
             } catch(e) {
                 console.log(e);
@@ -428,7 +428,7 @@ client.on('message', (message) => {
             if (commands[i].category == 'General') {
                 commands[i].do(message, client, args, Discord);
             } else {
-                message.channel.send(':x: You don\'t have permission to use this command!').delete(deleteDelay);
+                message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
             }
         }
     }
