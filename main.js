@@ -399,9 +399,9 @@ const otherFunctions = (message) => {
 
 setInterval(() => {
     var d = new Date(Date.now());
-    console.log(d);
-    if (d.getMinutes() == 8) {
-        client.channels.get('id', '307975805357522944').send('Test: ' + d);
+    if (d.getMinutes() == 36) {
+        console.log(d);
+        client.channels.find('id', '307975805357522944').send('Test: ' + d);
     }
 }, 1000 * 60);
 
