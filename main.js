@@ -43,15 +43,15 @@ const commands = {
                     let embed = new Discord.RichEmbed();
                     embed.setColor('#00ffcc');
                     embed.setAuthor('My Commands', client.user.avatarURL);
-                    embed.addField('General', Object.keys(cmds).filter(function(key) {
-                        return cmds[key].category === 'General';
+                    embed.addField('General', Object.keys(commands).filter(function(key) {
+                        return commands[key].category === 'General';
                     }).map(function(key) {
-                        return cmds[key].name;
+                        return commands[key].name;
                     }));
-                    embed.addField('Moderation', Object.keys(cmds).filter(function(key) {
-                        return cmds[key].category === 'Moderation';
+                    embed.addField('Moderation', Object.keys(commands).filter(function(key) {
+                        return commands[key].category === 'Moderation';
                     }).map(function(key) {
-                        return cmds[key].name;
+                        return commands[key].name;
                     }));
                     message.channel.send({ embed });
                 } else {                 
