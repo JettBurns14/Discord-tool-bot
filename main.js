@@ -395,22 +395,6 @@ const commands = {
             }
         }
     },
-    blob: {
-        name: 'blob',
-        description: 'Send an animated Rainbow Emoji.',
-        category: 'Moderation',
-        usage: `${prefix}blob`,
-        do: (message, client, args, Discord) => {
-            try {
-                if (message.author.id === '218397146049806337') {
-                    message.delete();
-                    message.channel.send("<a:rainbowBlob:402289443593125888>");
-                }
-            } catch(e) {
-                console.log(e);
-            }
-        }
-    },
     say: {
         name: 'say',
         description: 'Send a message with given content',
@@ -419,8 +403,9 @@ const commands = {
         do: (message, client, args, Discord) => {
             try {
                 if (message.author.id === '218397146049806337') {
-                    message.delete();
-                    message.channel.send(message.content.split(`${prefix}say`).join());
+                    message.delete().then(msg => {
+                        message.channel.send(args.join(' '));
+                    });
                 }
             } catch(e) {
                 console.log(e);
@@ -458,6 +443,10 @@ const sendDM = (msg) => {
 const otherFunctions = (message) => {
     var content = message.content.toLowerCase();
     if (content.includes("good night") || content.includes("g'night") || content.includes("goodnight")) message.react("🌙");
+    if (content == 'blob' && message.author.id === '218397146049806337') {
+        message.delete();
+        message.channel.send("<a:rainbowBlob:402289443593125888>");
+    }
     //if (content.includes("yay")) message.react("402289443593125888");
     if (content.includes("jett burns") || content.includes("jett") || message.mentions.users.exists('id', '218397146049806337')) {
         if (message.author.id != '218397146049806337') {
