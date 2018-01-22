@@ -328,7 +328,7 @@ const commands = {
     },
     pin: {
         name: 'pin',
-        description: 'Pin a given message',
+        description: 'Pin a given message.',
         category: 'Moderation',
         usage: `${prefix}pin <messageId>`,
         do: (message, client, args, Discord) => {
@@ -336,9 +336,34 @@ const commands = {
                 if (message.member.hasPermission("MANAGE_GUILD")) {
                     let embed = new Discord.RichEmbed();
                     embed.setColor('#00ffcc');
-                    embed.addField('Success', ':white_check_mark: Reactions cleared.');
-                    message.channel.send({embed}).then(msg => msg.delete(deleteDelay));
-                    message.pin();
+                    message.channel.fetchMessage(args[0]).then(msg => {
+                        msg.pin();
+                        embed.addField('Success', ':white_check_mark: Message pinned.');
+                        message.channel.send({ embed }).then(msg => msg.delete(deleteDelay));
+                    }).catch(console.error);
+                } else {
+                    message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
+                }
+            } catch(e) {
+                console.log(e);
+            }
+        }
+    },
+    unpin: {
+        name: 'unpin',
+        description: 'Unpin a given message.',
+        category: 'Moderation',
+        usage: `${prefix}unpin <messageId>`,
+        do: (message, client, args, Discord) => {
+            try {
+                if (message.member.hasPermission("MANAGE_GUILD")) {
+                    let embed = new Discord.RichEmbed();
+                    embed.setColor('#00ffcc');
+                    message.channel.fetchMessage(args[0]).then(msg => {
+                        msg.unpin();
+                        embed.addField('Success', ':white_check_mark: Message unpinned.');
+                        message.channel.send({ embed }).then(msg => msg.delete(deleteDelay));
+                    }).catch(console.error);
                 } else {
                     message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
                 }
@@ -357,12 +382,45 @@ const commands = {
                 if (message.author.id === '218397146049806337') {
                     let embed = new Discord.RichEmbed();
                     embed.setColor('#00ffcc');
-                    embed.addField('Servers', client.guilds);
+                    embed.addField('Servers', client.guilds.map(guild => guild.name));
+                    embed.addField('IDs', client.guilds.map(guild => guild.id));
+                    embed.addField('Owners', client.guilds.map(guild => guild.owner));
                     message.channel.send({ embed });
                     
-                    console.log(`${client.guilds.map(guild => guild.name)} - ${client.guilds.map(guild => guild.id)} - ${client.guilds.map(guild => guild.owner)}`);
                 } else {
                     message.channel.send(':x: You don\'t have permission to use this command!').delete(deleteDelay);
+                }
+            } catch(e) {
+                console.log(e);
+            }
+        }
+    },
+    blob: {
+        name: 'blob',
+        description: 'Send an animated Rainbow Emoji.',
+        category: 'Moderation',
+        usage: `${prefix}blob`,
+        do: (message, client, args, Discord) => {
+            try {
+                if (message.author.id === '218397146049806337') {
+                    message.delete();
+                    message.channel.send("<a:rainbowBlob:402289443593125888>");
+                }
+            } catch(e) {
+                console.log(e);
+            }
+        }
+    },
+    say: {
+        name: 'say',
+        description: 'Send a message with given content',
+        category: 'Moderation',
+        usage: `${prefix}say <content>`,
+        do: (message, client, args, Discord) => {
+            try {
+                if (message.author.id === '218397146049806337') {
+                    message.delete();
+                    message.channel.send(message.content.split(`${prefix}say`).join());
                 }
             } catch(e) {
                 console.log(e);
