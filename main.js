@@ -43,7 +43,16 @@ const commands = {
                     let embed = new Discord.RichEmbed();
                     embed.setColor('#00ffcc');
                     embed.setAuthor('My Commands', client.user.avatarURL);
-                    embed.setDescription(Object.keys(commands));
+                    embed.addField('General', Object.keys(cmds).filter(function(key) {
+                        return cmds[key].category === 'General';
+                    }).map(function(key) {
+                        return cmds[key].name;
+                    }));
+                    embed.addField('Moderation', Object.keys(cmds).filter(function(key) {
+                        return cmds[key].category === 'Moderation';
+                    }).map(function(key) {
+                        return cmds[key].name;
+                    }));
                     message.channel.send({ embed });
                 } else {                 
                     let selection = args[0];
@@ -387,12 +396,14 @@ const otherFunctions = (message) => {
     if (message.mentions.users.exists('id', '372013264453894154')) message.react("🤔");
 };
 
-/*
-var d = new Date(Date.now());
-console.log(d);
-if (d.getMinutes() == 20) {
-    client.channels.get('id', '372915908730945537').send('Test: ' + d);
-}*/
+
+setInterval(() => {
+    var d = new Date(Date.now());
+    console.log(d);
+    if (d.getMinutes() == 8) {
+        client.channels.get('id', '307975805357522944').send('Test: ' + d);
+    }
+}, 1000 * 60);
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
@@ -425,11 +436,7 @@ client.on('message', (message) => {
     let command = message.content.substring(prefix.length).split(' ');
     for (let i in commands){
         if (command[0] === commands[i].name) {
-            if (commands[i].category == 'General') {
-                commands[i].do(message, client, args, Discord);
-            } else {
-                message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
-            }
+            commands[i].do(message, client, args, Discord);
         }
     }
 });
