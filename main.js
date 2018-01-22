@@ -2,10 +2,11 @@
 
     Discord utility bot built mostly by Jett and Jonah. 
     
-    
+    TODO:
     Add a category property for each cmd, since some are for moderation.
     Auto delete mod cmds
     DM me errors
+    Management category
     
 ***/
 
@@ -14,12 +15,11 @@ const client = new Discord.Client();
 //const fs = require('fs');
 
 const prefix = '=';
-const deleteDelay = 4000; // 4 second delete delay.
+const deleteDelay = 5000; // 5 second delete delay.
 const whitelistRoles = ['Trusty flagger'];
 const creators = ["<@218397146049806337>", "<@309845156696424458>"];
 
 const getDefaultChannel = async (guild) => {
-
     if(guild.channels.has(guild.id))
         return guild.channels.get(guild.id)
 
@@ -232,27 +232,6 @@ const commands = {
             }
         }
     },
-    pin: {
-        name: 'pin',
-        description: 'Pin a given message',
-        category: 'Moderation',
-        usage: `${prefix}pin <messageId>`,
-        do: (message, client, args, Discord) => {
-            try {
-                if (message.member.hasPermission("MANAGE_GUILD")) {
-                    let embed = new Discord.RichEmbed();
-                    embed.setColor('#00ffcc');
-                    embed.addField('Success', ':white_check_mark: Reactions cleared.');
-                    message.channel.send({embed}).then(msg => msg.delete(deleteDelay));
-                    message.pin();
-                } else {
-                    message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
-                }
-            } catch(e) {
-                console.log(e);
-            }
-        }
-    },
     setGame: {
         name: 'setGame',
         description: 'Set game of the bot.',
@@ -337,10 +316,53 @@ const commands = {
                     message.channel.fetchMessage(args[0]).then(msg => {
                         msg.clearReactions();
                         embed.addField('Success', ':white_check_mark: Reactions cleared.');
-                        message.channel.send({embed}).then(msg => msg.delete(deleteDelay));
+                        message.channel.send({ embed }).then(msg => msg.delete(deleteDelay));
                     }).catch(console.error);
                 } else {
                     //message.channel.send(':x: You don\'t have permission to use this command!').delete(deleteDelay);
+                }
+            } catch(e) {
+                console.log(e);
+            }
+        }
+    },
+    pin: {
+        name: 'pin',
+        description: 'Pin a given message',
+        category: 'Moderation',
+        usage: `${prefix}pin <messageId>`,
+        do: (message, client, args, Discord) => {
+            try {
+                if (message.member.hasPermission("MANAGE_GUILD")) {
+                    let embed = new Discord.RichEmbed();
+                    embed.setColor('#00ffcc');
+                    embed.addField('Success', ':white_check_mark: Reactions cleared.');
+                    message.channel.send({embed}).then(msg => msg.delete(deleteDelay));
+                    message.pin();
+                } else {
+                    message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
+                }
+            } catch(e) {
+                console.log(e);
+            }
+        }
+    },
+    servers: {
+        name: 'servers',
+        description: 'Get names and IDs of servers this bot is handling.',
+        category: 'Moderation',
+        usage: `${prefix}servers`,
+        do: (message, client, args, Discord) => {
+            try {
+                if (message.author.id === '218397146049806337') {
+                    let embed = new Discord.RichEmbed();
+                    embed.setColor('#00ffcc');
+                    embed.addField('Servers', client.guilds);
+                    message.channel.send({ embed });
+                    
+                    console.log(`${client.guilds.map(guild => guild.name)} - ${client.guilds.map(guild => guild.id)} - ${client.guilds.map(guild => guild.owner}`);
+                } else {
+                    message.channel.send(':x: You don\'t have permission to use this command!').delete(deleteDelay);
                 }
             } catch(e) {
                 console.log(e);
@@ -379,18 +401,20 @@ const otherFunctions = (message) => {
     var content = message.content.toLowerCase();
     if (content.includes("good night") || content.includes("g'night") || content.includes("goodnight")) message.react("🌙");
     //if (content.includes("yay")) message.react("402289443593125888");
-    if (content.includes("jett burns") || content.includes("jett") || message.mentions.users.exists('id', '218397146049806337') && message.author.id != '218397146049806337') {
-        let embed = new Discord.RichEmbed();
-        let sent = new Date(message.createdTimestamp).toLocaleString();
-        embed.setColor('#00ffcc');
-        embed.setAuthor('You were mentioned!', message.author.avatarURL);
-        embed.addField('Content', message.content);
-        embed.addField('Sender', message.author);
-        embed.addField('Sent', sent, true);
-        embed.addField('Server', message.guild);
-        embed.addField('Channel', message.channel, true);
-        embed.setTimestamp();
-        sendDM({ embed });
+    if (content.includes("jett burns") || content.includes("jett") || message.mentions.users.exists('id', '218397146049806337')) {
+        if (message.author.id != '218397146049806337') {
+            let embed = new Discord.RichEmbed();
+            let sent = new Date(message.createdTimestamp).toLocaleString();
+            embed.setColor('#00ffcc');
+            embed.setAuthor('You were mentioned!', message.author.avatarURL);
+            embed.addField('Content', message.content);
+            embed.addField('Sender', message.author);
+            embed.addField('Sent', sent, true);
+            embed.addField('Server', message.guild);
+            embed.addField('Channel', message.channel, true);
+            embed.setTimestamp();
+            sendDM({ embed });
+        }
     }
     // If bot is mentioned, react with thinking.
     if (message.mentions.users.exists('id', '372013264453894154')) message.react("🤔");
