@@ -5,6 +5,7 @@
     
     Add a category property for each cmd, since some are for moderation.
     Auto delete mod cmds
+    DM me errors
     
 ***/
 
@@ -12,7 +13,8 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 //const fs = require('fs');
 
-const prefix = '??';
+const prefix = '_';
+const deleteDelay = 4000; // 4 second delete delay.
 const whitelistRoles = ['Trusty flagger'];
 const creators = ["<@218397146049806337>", "<@309845156696424458>"];
 
@@ -32,6 +34,7 @@ const getDefaultChannel = async (guild) => {
 const commands = {
     help: {
         name: 'help',
+        category: 'General',
         description: 'Returns all of my commands.',
         usage: `${prefix}help`,
         do: (message, client, args, Discord) => {
@@ -58,6 +61,7 @@ const commands = {
     },
     purge: {
         name: 'purge',
+        category: 'Moderation',
         description: 'Remove messages in bulk, 1-100.',
         usage: `${prefix}purge <number>`,
         do: (message, client, args, Discord) => {
@@ -65,13 +69,13 @@ const commands = {
                 if (message.member.hasPermission("MANAGE_MESSAGES")) {
                     if (args[0] <= 100 && args >= 1){
                         message.channel.bulkDelete(parseInt(args[0]) + 1).then(() => {
-                            message.reply(`Deleted ${args[0]} messages`);
+                            message.reply(`Deleted ${args[0]} messages`).delete(deleteDelay);
                         });
                     } else {
-                        message.reply("Please provide a number ≤ 100 and ≥ 1");
+                        message.reply("Please provide a number ≤ 100 and ≥ 1").delete(deleteDelay);
                     }
                 } else {
-                    message.channel.send("You do not have permissions to use this command.");
+                    message.channel.send("You do not have permissions to use this command.").delete(deleteDelay);
                 }
             } catch (e) {
                 console.log(e);
@@ -81,20 +85,21 @@ const commands = {
     kick: {
         name: 'kick',
         description: 'Kick a member.',
+        category: 'Moderation',
         usage: `${prefix}kick <member> [reason]`,
         do: (message, client, args, Discord) => {
             try {
                 if (message.member.hasPermission("KICK_MEMBERS")){
                     let reason = args.slice(1).join(' ');
                     if(message.mentions.members.size !== 0){
-                        message.mentions.members.first().kick(reason)
+                        message.mentions.members.first().kick(reason);
                         message.channel.send(`<@${message.mentions.users.first().id}> has been kicked by <@${message.author.id}> because: ${reason}`);
                        
                     } else {
-                        message.channel.send("You didn't identify a valid user");
+                        message.channel.send("You didn't identify a valid user").delete(deleteDelay);
                     }
                 } else {
-                    message.channel.send("You do not have permissions to use this command.");
+                    message.channel.send("You do not have permissions to use this command.").delete(deleteDelay);
                 }
             } catch(e) {
                 console.log(e);
@@ -104,16 +109,17 @@ const commands = {
     ban: {
         name: 'ban',
         description: 'Ban a member.',
+        category: 'Moderation',
         usage: `${prefix}ban <member> [reason]`,
         do: (message, client, args, Discord) => {
             try {
                 if (message.member.hasPermission("BAN_MEMBERS")) {
                     let reason = args.slice(1).join(' ');
                     if(message.mentions.members.size !== 0){
-                        message.mentions.members.first().ban(reason)
+                        message.mentions.members.first().ban(reason);
                         message.channel.send(`<@${message.mentions.users.first().id}> has been banned by <@${message.author.id}> because: ${reason}`);
                     } else {
-                        message.channel.send("You didn't identify a valid user");
+                        message.channel.send("You didn't identify a valid user").delete(deleteDelay);
                     }
                 }
             } catch(e) {
@@ -124,6 +130,7 @@ const commands = {
     memberCount: {
         name: 'memberCount',
         description: 'Check how many members are in the server.',
+        category: 'General',
         usage: `${prefix}memberCount`,
         do: (message, client, args, Discord) => {
             try {
@@ -139,6 +146,7 @@ const commands = {
     uptime: {
         name: 'uptime',
         description: 'Shows how long the bot has been online.',
+        category: 'General',
         usage: `${prefix}uptime`,
         do: (message, client, args, Discord) => {
             try {
@@ -161,6 +169,7 @@ const commands = {
     info: {
         name: 'info',
         description: 'Shows info about this bot.',
+        category: 'General',
         usage: `${prefix}info`,
         do: (message, client, args, Discord) => {
             try {
@@ -180,6 +189,7 @@ const commands = {
     userInfo: {
         name: 'userInfo',
         description: 'Check info about a given user.',
+        category: 'General',
         usage: `${prefix}userInfo <member>`,
         do: (message, client, args, Discord) => {
             try {
@@ -213,17 +223,39 @@ const commands = {
             }
         }
     },
+    pin: {
+        name: 'pin',
+        description: 'Pin a given message',
+        category: 'Moderation',
+        usage: `${prefix}pin <messageId>`,
+        do: (message, client, args, Discord) => {
+            try {
+                if (message.member.hasPermission("MANAGE_GUILD")) {
+                    let embed = new Discord.RichEmbed();
+                    embed.setColor('#00ffcc');
+                    embed.addField('Success', ':white_check_mark: Reactions cleared.');
+                    message.channel.send({embed}).then(msg => msg.delete(deleteDelay));
+                    message.pin();
+                } else {
+                    message.channel.send(':x: You don\'t have permission to use this command!').delete(deleteDelay);
+                }
+            } catch(e) {
+                console.log(e);
+            }
+        }
+    },
     setGame: {
         name: 'setGame',
         description: 'Set game of the bot.',
+        category: 'Moderation',
         usage: `${prefix}setGame <game>`,
         do: (message, client, args, Discord) => {
             try {
                 if (message.author.id == '218397146049806337') {
                     client.user.setPresence({ game: { name: args[0], type: 0 } });
-                    message.channel.send(':white_check_mark: Game set to: `' + args[0] + '`');
+                    message.channel.send(':white_check_mark: Game set to: `' + args[0] + '`').delete(deleteDelay);
                 } else {
-                    message.channel.send(':x: You don\'t have permission to use this command!');
+                    message.channel.send(':x: You don\'t have permission to use this command!').delete(deleteDelay);
                 }
             } catch(e) {
                 console.log(e);
@@ -233,6 +265,7 @@ const commands = {
     bans: {
         name: 'bans',
         description: 'View bans for this server',
+        category: 'Moderation',
         usage: `${prefix}bans`,
         do: (message, client, args, Discord) => {
             try {
@@ -250,7 +283,7 @@ const commands = {
                         console.log(reason);
                     });
                 } else {
-                    message.channel.send(':x: You don\'t have permission to use this command!');
+                    message.channel.send(':x: You don\'t have permission to use this command!').delete(deleteDelay);
                 }
             } catch(e) {
                 console.log(e);
@@ -260,6 +293,7 @@ const commands = {
     msgEdits: {
         name: 'msgEdits',
         description: 'View edit history of a given message.',
+        category: 'Moderation',
         usage: `${prefix}msgEdits <messageID>`,
         do: (message, client, args, Discord) => {
             try {
@@ -284,6 +318,7 @@ const commands = {
     clearReactions: {
         name: 'clearReactions',
         description: 'Clear reactions for a given message.',
+        category: 'Moderation',
         usage: `${prefix}clearReactions <messageId>`,
         do: (message, client, args, Discord) => {
             try {
@@ -293,10 +328,10 @@ const commands = {
                     message.channel.fetchMessage(args[0]).then(msg => {
                         msg.clearReactions();
                         embed.addField('Success', ':white_check_mark: Reactions cleared.');
-                        message.channel.send({embed}).then(msg => msg.delete(4000));
+                        message.channel.send({embed}).then(msg => msg.delete(deleteDelay));
                     }).catch(console.error);
                 } else {
-                    message.channel.send(':x: You don\'t have permission to use this command!');
+                    //message.channel.send(':x: You don\'t have permission to use this command!').delete(deleteDelay);
                 }
             } catch(e) {
                 console.log(e);
@@ -335,7 +370,7 @@ const otherFunctions = (message) => {
     var content = message.content.toLowerCase();
     if (content.includes("good night") || content.includes("g'night") || content.includes("goodnight")) message.react("🌙");
     //if (content.includes("yay")) message.react("402289443593125888");
-    if (content.includes("jett burns") || content.includes("jett") || message.mentions.users.exists('id', '218397146049806337')) {
+    if (content.includes("jett burns") || content.includes("jett") || message.mentions.users.exists('id', '218397146049806337') && message.author.id != '218397146049806337') {
         let embed = new Discord.RichEmbed();
         let sent = new Date(message.createdTimestamp).toLocaleString();
         embed.setColor('#00ffcc');
@@ -389,8 +424,12 @@ client.on('message', (message) => {
     let args = message.content.split(" ").splice(1);
     let command = message.content.substring(prefix.length).split(' ');
     for (let i in commands){
-        if (command[0] === commands[i].name){
-            commands[i].do(message, client, args, Discord);
+        if (command[0] === commands[i].name) {
+            if (commands[i].category === 'General') {
+                commands[i].do(message, client, args, Discord);
+            } else {
+                message.channel.send(':x: You don\'t have permission to use this command!').delete(deleteDelay);
+            }
         }
     }
 });
