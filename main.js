@@ -360,7 +360,7 @@ const commands = {
                     embed.addField('Servers', client.guilds);
                     message.channel.send({ embed });
                     
-                    console.log(`${client.guilds.map(guild => guild.name)} - ${client.guilds.map(guild => guild.id)} - ${client.guilds.map(guild => guild.owner}`);
+                    console.log(`${client.guilds.map(guild => guild.name)} - ${client.guilds.map(guild => guild.id)} - ${client.guilds.map(guild => guild.owner)}`);
                 } else {
                     message.channel.send(':x: You don\'t have permission to use this command!').delete(deleteDelay);
                 }
