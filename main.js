@@ -13,7 +13,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 //const fs = require('fs');
 
-const prefix = '_';
+const prefix = '=';
 const deleteDelay = 4000; // 4 second delete delay.
 const whitelistRoles = ['Trusty flagger'];
 const creators = ["<@218397146049806337>", "<@309845156696424458>"];
@@ -425,7 +425,7 @@ client.on('message', (message) => {
     let command = message.content.substring(prefix.length).split(' ');
     for (let i in commands){
         if (command[0] === commands[i].name) {
-            if (commands[i].category === 'General') {
+            if (commands[i].category == 'General') {
                 commands[i].do(message, client, args, Discord);
             } else {
                 message.channel.send(':x: You don\'t have permission to use this command!').delete(deleteDelay);
