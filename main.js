@@ -447,7 +447,7 @@ const otherFunctions = (message) => {
         if (content == 'blob') {
             message.delete();
             message.channel.send("<a:rainbowBlob:402289443593125888>").then((m) => {
-                m.react("<a:rainbowBlob:402289443593125888>");
+                m.react("402289443593125888");
             });
         }
     }
