@@ -188,6 +188,7 @@ const commands = {
                 // embed.addField('Channels', client.channels.size, true); 
                 embed.addField('Servers', client.guilds.size, true);
                 embed.addField('Creators', creators[0] + ', ' + creators[1], true);
+                embed.addField('Invite', 'http://bit.ly/InviteToolbot', true);
                 embed.setColor('#00ffcc');
                 message.channel.send({ embed });
             } catch(e) {
