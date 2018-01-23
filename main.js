@@ -446,7 +446,9 @@ const otherFunctions = (message) => {
     if (message.author.id === '309845156696424458' || message.author.id === '218397146049806337') {
         if (content == 'blob') {
             message.delete();
-            message.channel.send("<a:rainbowBlob:402289443593125888>");
+            message.channel.send("<a:rainbowBlob:402289443593125888>").then((m) => {
+                m.react("<a:rainbowBlob:402289443593125888>");
+            });
         }
     }
     //if (content.includes("yay")) message.react("402289443593125888");
