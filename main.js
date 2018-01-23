@@ -252,14 +252,19 @@ const commands = {
                 console.log(e);
             }
         }
-    },
-    eval: {
+    },eval: {
         name: 'eval',
         description: 'Evaluates JavaScript code.',
         usage: `${prefix}eval <code>`,
         do: (message, client, args, Discord) => {
             try {
                 if (message.author.id === "218397146049806337" || message.author.id === "309845156696424458") {
+                    function clean(text) {
+                        if (typeof(text) === "string")
+                            return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
+                        else
+                            return text;
+                    }
                     try {
                         const code = args.join(" ");
                         let evaled = eval(code);
