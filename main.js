@@ -444,7 +444,7 @@ const sendDM = (msg) => {
 const otherFunctions = (message) => {
     var content = message.content.toLowerCase();
     if (content.includes("good night") || content.includes("g'night") || content.includes("goodnight")) message.react("🌙");
-    if (message.author.id === '309845156696424458' || message.author.id === '218397146049806337') {
+    if (message.author.id === '309845156696424458' || message.author.id === '218397146049806337' || message.author.id === "221285118608801802") {
         if (content == 'blob') {
             message.delete();
             message.channel.send("<a:rainbowBlob:402289443593125888>").then((m) => {
