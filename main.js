@@ -189,6 +189,8 @@ const commands = {
                 embed.addField('Servers', client.guilds.size, true);
                 embed.addField('Creators', creators[0] + ', ' + creators[1], true);
                 embed.addField('Invite', 'http://bit.ly/InviteToolbot', true);
+                embed.addField('GitHub', 'https://github.com/JettBurns14/Discord-tool-bot', true);
+
                 embed.setColor('#00ffcc');
                 message.channel.send({ embed });
             } catch(e) {
@@ -278,7 +280,8 @@ const commands = {
                 console.log(e);
             }
         }
-    },eval: {
+    },
+    eval: {
         name: 'eval',
         description: 'Evaluates JavaScript code.',
         usage: `${prefix}eval <code>`,
@@ -353,7 +356,7 @@ const commands = {
                         message.channel.send({ embed }).then(msg => msg.delete(deleteDelay));
                     }).catch(console.error);
                 } else {
-                    //message.channel.send(':x: You don\'t have permission to use this command!').delete(deleteDelay);
+                    message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
                 }
             } catch(e) {
                 console.log(e);
@@ -422,7 +425,7 @@ const commands = {
                     message.channel.send({ embed });
                     
                 } else {
-                    message.channel.send(':x: You don\'t have permission to use this command!').delete(deleteDelay);
+                    message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));;
                 }
             } catch(e) {
                 console.log(e);
@@ -489,14 +492,13 @@ const otherFunctions = (message) => {
     if (content.includes("jett burns") || content.includes("jett") || message.mentions.users.exists('id', '218397146049806337')) {
         if (message.author.id != '218397146049806337') {
             let embed = new Discord.RichEmbed();
-            let sent = new Date(message.createdTimestamp).toLocaleString();
             embed.setColor('#00ffcc');
             embed.setAuthor('You were mentioned!', message.author.avatarURL);
             embed.addField('Content', message.content);
             embed.addField('Sender', message.author);
-            embed.addField('Sent', sent, true);
             embed.addField('Server', message.guild);
             embed.addField('Channel', message.channel, true);
+            embed.addField('Link', `https://discordapp.com/channels/${message.guild.id}/${message.channel.id}?jump=${message.id}', true);
             embed.setTimestamp();
             sendDM({ embed });
         }
