@@ -425,7 +425,7 @@ const commands = {
                     message.channel.send({ embed });
                     
                 } else {
-                    message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));;
+                    message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
                 }
             } catch(e) {
                 console.log(e);
@@ -498,7 +498,7 @@ const otherFunctions = (message) => {
             embed.addField('Sender', message.author);
             embed.addField('Server', message.guild);
             embed.addField('Channel', message.channel, true);
-            embed.addField('Link', `https://discordapp.com/channels/${message.guild.id}/${message.channel.id}?jump=${message.id}', true);
+            embed.addField('Link', `https://discordapp.com/channels/${message.guild.id}/${message.channel.id}?jump=${message.id}`, true);
             embed.setTimestamp();
             sendDM({ embed });
         }
