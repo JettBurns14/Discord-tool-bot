@@ -510,7 +510,7 @@ const otherFunctions = (message) => {
 
 setInterval(() => {
     var d = new Date(Date.now());
-    if (d.getHours() == 8 && d.getMinutes() == 45) {
+    if (d.getHours() == 18 && d.getMinutes() == 45) {
         console.log(d);
         client.channels.find('id', '372915908730945537').send('Someone do the Daily Dose plz!');
     }
