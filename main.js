@@ -448,7 +448,48 @@ const commands = {
                 console.log(e);
             }
         }
-    }
+    },
+    mute: {
+        name: 'mute',
+        description: 'Mutes a member',
+        category: 'Moderation',
+        usage: `${prefix}mute <user>`,
+        do: (message, client, args, Discord) => {
+            try {
+                if (message.member.hasPermission("MANAGE_ROLES")) {
+                    let reason = args.slice(1).join(' ');
+                    if (message.mentions.members.size !== 0){
+                        message.mentions.members.first().addRole('Muted', reason);
+                        message.channel.send(`${message.mentions.users.first()} has been muted by <@${message.author.id}> because: ${reason}`);
+                    } else {
+                        message.channel.send("You didn't identify a valid user").then(msg => msg.delete(deleteDelay));
+                    }
+                }
+            } catch(e) {
+                console.log(e);
+            }
+        }
+    },
+    unmute: {
+        name: 'unmute',
+        description: 'Unmutes a member',
+        category: 'Moderation',
+        usage: `${prefix}unmute <user>`,
+        do: (message, client, args, Discord) => {
+            try {
+                if (message.member.hasPermission("MANAGE_ROLES")) {
+                    if (message.mentions.members.size !== 0){
+                        message.mentions.members.first().removeRole('Muted');
+                        message.channel.send(`${message.mentions.users.first()} has been unmuted by <@${message.author.id}>.`);
+                    } else {
+                        message.channel.send("You didn't identify a valid user").then(msg => msg.delete(deleteDelay));
+                    }
+                }
+            } catch(e) {
+                console.log(e);
+            }
+        }
+    },
         
     /*
     blacklist: {
