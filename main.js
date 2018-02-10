@@ -459,7 +459,7 @@ const commands = {
                 if (message.member.hasPermission("MANAGE_ROLES")) {
                     let reason = args.slice(1).join(' ');
                     if (message.mentions.members.size !== 0){
-                        message.mentions.members.first().addRole('Muted', reason);
+                        message.mentions.members.first().addRole('3986618199898849928', reason);
                         message.channel.send(`${message.mentions.users.first()} has been muted by <@${message.author.id}> because: ${reason}`);
                     } else {
                         message.channel.send("You didn't identify a valid user").then(msg => msg.delete(deleteDelay));
@@ -479,7 +479,7 @@ const commands = {
             try {
                 if (message.member.hasPermission("MANAGE_ROLES")) {
                     if (message.mentions.members.size !== 0){
-                        message.mentions.members.first().removeRole('Muted');
+                        message.mentions.members.first().removeRole('3986618199898849928');
                         message.channel.send(`${message.mentions.users.first()} has been unmuted by <@${message.author.id}>.`);
                     } else {
                         message.channel.send("You didn't identify a valid user").then(msg => msg.delete(deleteDelay));
