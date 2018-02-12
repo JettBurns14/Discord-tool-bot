@@ -639,7 +639,7 @@ client.on("messageReactionAdd", (messageReaction, user) => {
             embed.addField('Author', messageReaction.message.author);
             embed.addField('Channel', messageReaction.message.channel);
             embed.addField('Message', messageReaction.message.content);
-            if (messageReaction.count >= 5) messageReaction.message.guild.channels.find('id', '412610188944605184').send({ embed });
+            if (messageReaction.count >= 1) messageReaction.message.guild.channels.find('id', '412610188944605184').send({ embed });
     }
 });
 
