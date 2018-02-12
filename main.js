@@ -626,13 +626,20 @@ client.on("messageReactionAdd", (messageReaction, user) => {
                 embed.setFooter(messageReaction.message.createdTimestamp);
                 // embed.addField('Flagged by:', 'WIP');
                 if (messageReaction.message.guild.channels.exists('name', 'staff-logs')) {
-                    client.channels.find('name', 'staff-logs').send({ embed });
+                    //client.channels.find('name', 'staff-logs').send({ embed });
                 }
             }
             break;
         case "📌":
             if (messageReaction.count >= 10) messageReaction.message.pin();
             break;
+        case "⭐":
+            let embed = new Discord.RichEmbed();
+            embed.setColor('#ffff80');
+            embed.addField('Author', messageReaction.message.author);
+            embed.addField('Channel', messageReaction.message.channel);
+            embed.addField('Message', messageReaction.message.content);
+            if (messageReaction.count >= 5) messageReaction.message.guild.channels.find('id', '412610188944605184').send({ embed });
     }
 });
 
