@@ -557,9 +557,15 @@ const otherFunctions = (message) => {
 
 setInterval(() => {
     var d = new Date(Date.now());
-    if (d.getHours() == 18 && d.getMinutes() == 45) {
+    if (d.getHours() == 16 && d.getMinutes() == 15) {
         console.log(d);
-        client.channels.find('id', '372915908730945537').send('Someone do the Daily Dose plz!');
+        client.channels.find('id', '372915908730945537').send(`Someone do the Daily Dose plz!
+
+Get __Word of the day__ here: https://www.merriam-webster.com/word-of-the-day
+Get __Phobia of the day__ here: http://phobialist.com/
+Get __Fact of the day__ here: https://www.beagreatteacher.com/daily-fun-fact/
+Challenge and question of the day can be your own.
+Make sure the first three haven't been used before by searching the channel.`);
     }
 }, 1000 * 60);
 
