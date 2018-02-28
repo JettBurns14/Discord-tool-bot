@@ -90,7 +90,7 @@ const commands = {
                     message.channel.send({ embed });
                 }
 
-            } catch((e) => {
+            } catch(e => {
                 sendError(e);
             });
         }
@@ -116,7 +116,7 @@ const commands = {
                     message.delete();
                     message.channel.send("You do not have permissions to use this command.").then(msg => msg.delete(deleteDelay));
                 }
-            } catch((e) => {
+            } catch(e => {
                 sendError(e);
             });
         }
@@ -142,7 +142,7 @@ const commands = {
                     message.delete();
                     message.channel.send("You do not have permissions to use this command.").then(msg => msg.delete(deleteDelay));
                 }
-            } catch((e) => {
+            } catch(e => {
                 sendError(e);
             });
         }
@@ -168,7 +168,7 @@ const commands = {
                     message.delete();
                     message.channel.send("You do not have permissions to use this command.").then(msg => msg.delete(deleteDelay));
                 }
-            } catch((e) => {
+            } catch(e => {
                 sendError(e);
             });
         }
@@ -184,7 +184,7 @@ const commands = {
                 embed.addField('Members', message.guild.memberCount);
                 embed.setColor(embedColor);
                 message.channel.send({ embed });
-            } catch((e) => {
+            } catch(e => {
                 sendError(e);
             });
         }
@@ -197,7 +197,7 @@ const commands = {
         do: (message, client, args, Discord) => {
             try {
                 message.channel.send(':clock230: Bot has been online for ' + millisToTime(client.uptime));
-            } catch((e) => {
+            } catch(e => {
                 sendError(e);
             });
         }
@@ -218,7 +218,7 @@ const commands = {
                 embed.addField('GitHub', 'https://github.com/JettBurns14/Discord-tool-bot', true);
                 embed.setColor(embedColor);
                 message.channel.send({ embed });
-            } catch((e) => {
+            } catch(e => {
                 sendError(e);
             });
         }
@@ -257,7 +257,7 @@ const commands = {
                     sendError(e);
                 });
                 //console.log(Object.entries(Object.values(member.permissions.serialize()).filter(x => x == true)));
-            } catch((e) => {
+            } catch(e => {
                 sendError(e);
             });
         }
@@ -276,7 +276,7 @@ const commands = {
                     message.delete();
                     message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
                 }
-            } catch((e) => {
+            } catch(e => {
                 sendError(e);
             });
         }
@@ -307,7 +307,7 @@ const commands = {
                     message.delete();
                     message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
                 }
-            } catch((e) => {
+            } catch(e => {
                 sendError(e);
             });
         }
@@ -344,7 +344,7 @@ const commands = {
                     message.reply(":x: Only the bot owners can use this command.").then(msg => msg.delete(deleteDelay));
                     return;
                 }                
-            } catch((e) => {
+            } catch(e => {
                 sendError(e);
             });
         }
@@ -371,7 +371,7 @@ const commands = {
                 }).catch(e => {
                     sendError(e);
                 });
-            } catch((e) => {
+            } catch(e => {
                 sendError(e);
             });
         }
@@ -397,7 +397,7 @@ const commands = {
                     message.delete();
                     message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
                 }
-            } catch((e) => {
+            } catch(e => {
                 sendError(e);
             });
         }
@@ -423,7 +423,7 @@ const commands = {
                     message.delete();
                     message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
                 }
-            } catch((e) => {
+            } catch(e => {
                 sendError(e);
             });
         }
@@ -449,7 +449,7 @@ const commands = {
                     message.delete();
                     message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
                 }
-            } catch((e) => {
+            } catch(e => {
                 sendError(e);
             });
         }
@@ -473,7 +473,7 @@ const commands = {
                     message.delete();
                     message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
                 }
-            } catch((e) => {
+            } catch(e => {
                 sendError(e);
             });
         }
@@ -492,7 +492,7 @@ const commands = {
                         sendError(e);
                     });
                 }
-            } catch((e) => {
+            } catch(e => {
                 sendError(e);
             });
         }
@@ -517,9 +517,9 @@ const commands = {
                         message.channel.send("You didn't identify a valid user").then(msg => msg.delete(deleteDelay));
                     }
                 }
-            } catch(e) {
-                console.log(e);
-            }
+            } catch(e => {
+                sendError(e);
+            });
         }
     },
     unmute: {
@@ -541,7 +541,7 @@ const commands = {
                         message.channel.send("You didn't identify a valid user").then(msg => msg.delete(deleteDelay));
                     }
                 }
-            } catch((e) => {
+            } catch(e => {
                 sendError(e);
             });
         }
