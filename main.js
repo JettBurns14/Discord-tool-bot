@@ -506,7 +506,7 @@ const commands = {
             try {
                 if (message.member.hasPermission("MANAGE_ROLES")) {
                     let reason = args.slice(1).join(' ');
-                    let muteRole = message.guild.roles.get("3986618199898849928");
+                    let muteRole = message.guild.roles.find("id", "398661819989884928");
                     if (message.mentions.members.size !== 0){
                         message.mentions.members.first().addRole(muteRole, reason).then(() => {
                             message.channel.send(`${message.mentions.users.first()} has been muted by <@${message.author.id}> because: ${reason}`);
@@ -532,7 +532,7 @@ const commands = {
             try {
                 if (message.member.hasPermission("MANAGE_ROLES")) {
                     if (message.mentions.members.size !== 0){
-                        let muteRole = message.guild.roles.get("3986618199898849928");
+                        let muteRole = message.guild.roles.find("id", "398661819989884928");
                         message.mentions.members.first().removeRole(muteRole).then(() => {
                             message.channel.send(`${message.mentions.users.first()} has been unmuted by <@${message.author.id}>.`);
                         }).catch(e => {
