@@ -7,6 +7,7 @@
     Auto delete mod cmds
     DM me errors
     Management category
+    Should mod cmds be deleted?
     
 ***/
 
@@ -16,6 +17,7 @@ const client = new Discord.Client();
 
 const prefix = '=';
 const deleteDelay = 5000; // 5 second delete delay.
+const embedColor = '#00ffcc'; // Color of all embeds
 const whitelistRoles = ['Trusty flagger'];
 const creators = ["<@218397146049806337>", "<@309845156696424458>"];
 
@@ -31,6 +33,31 @@ const getDefaultChannel = async (guild) => {
               Long.fromString(a.id).sub(Long.fromString(b.id)).toNumber()).first();
 }
 
+const millisToTime = function(milliseconds) {
+    let x = milliseconds / 1000;
+    let s = Math.floor(x % 60);
+    x /= 60;
+    let m = Math.floor(x % 60);
+    x /= 60;
+    let h = Math.floor(x % 24);
+
+    return h + ' Hours, ' + m + ' Minutes, ' + s + " Seconds";
+};
+
+const sendDM = (msg) => {
+    client.users.find('id', '218397146049806337').send(msg);
+};
+
+const sendError = (error) => {
+    let embed = new Discord.RichEmbed();
+    embed.setColor('#e60000');
+    embed.setAuthor('Opps, we have an error!', 'https://media.discordapp.net/attachments/386537690260176897/418165473897611274/unknown.png');
+    embed.setThumbnail('https://media.discordapp.net/attachments/386537690260176897/418165473897611274/unknown.png');
+    embed.addField('Error', error);
+    embed.setTimestamp();
+    sendDM({ embed });
+};
+
 const commands = {
     help: {
         name: 'help',
@@ -41,7 +68,7 @@ const commands = {
             try {
                 if (!args[0]){
                     let embed = new Discord.RichEmbed();
-                    embed.setColor('#00ffcc');
+                    embed.setColor(embedColor);
                     embed.setAuthor('My Commands', client.user.avatarURL);
                     embed.addField('General', Object.keys(commands).filter(function(key) {
                         return commands[key].category === 'General';
@@ -57,15 +84,15 @@ const commands = {
                 } else {                 
                     let selection = args[0];
                     let embed = new Discord.RichEmbed();
-                    embed.setColor('#00ffcc');
+                    embed.setColor(embedColor);
                     embed.addField('Usage:', commands[selection].usage);
                     embed.addField('Description:', commands[selection].description);
                     message.channel.send({ embed });
                 }
 
-            } catch (e) {
-                console.log(e);
-            }
+            } catch((e) => {
+                sendError(e);
+            });
         }
     },
     purge: {
@@ -79,16 +106,19 @@ const commands = {
                     if (args[0] <= 100 && args >= 1){
                         message.channel.bulkDelete(parseInt(args[0]) + 1).then(() => {
                             message.reply(`Deleted ${args[0]} messages`).then(msg => msg.delete(deleteDelay));
+                        }).catch(e => {
+                            sendError(e);
                         });
                     } else {
                         message.reply("Please provide a number ≤ 100 and ≥ 1").then(msg => msg.delete(deleteDelay));
                     }
                 } else {
+                    message.delete();
                     message.channel.send("You do not have permissions to use this command.").then(msg => msg.delete(deleteDelay));
                 }
-            } catch (e) {
-                console.log(e);
-            }
+            } catch((e) => {
+                sendError(e);
+            });
         }
     },
     kick: {
@@ -101,18 +131,20 @@ const commands = {
                 if (message.member.hasPermission("KICK_MEMBERS")){
                     let reason = args.slice(1).join(' ');
                     if(message.mentions.members.size !== 0){
-                        message.mentions.members.first().kick(reason);
+                        message.mentions.members.first().kick(reason).catch(e => {
+                            sendError(e);
+                        });
                         message.channel.send(`<@${message.mentions.users.first().id}> has been kicked by <@${message.author.id}> because: ${reason}`);
-                       
                     } else {
                         message.channel.send("You didn't identify a valid user").then(msg => msg.delete(deleteDelay));
                     }
                 } else {
+                    message.delete();
                     message.channel.send("You do not have permissions to use this command.").then(msg => msg.delete(deleteDelay));
                 }
-            } catch(e) {
-                console.log(e);
-            }
+            } catch((e) => {
+                sendError(e);
+            });
         }
     },
     ban: {
@@ -124,16 +156,21 @@ const commands = {
             try {
                 if (message.member.hasPermission("BAN_MEMBERS")) {
                     let reason = args.slice(1).join(' ');
-                    if(message.mentions.members.size !== 0){
-                        message.mentions.members.first().ban(reason);
+                    if (message.mentions.members.size !== 0) {
+                        message.mentions.members.first().ban(reason).catch(e => {
+                            sendError(e);
+                        });
                         message.channel.send(`<@${message.mentions.users.first().id}> has been banned by <@${message.author.id}> because: ${reason}`);
                     } else {
                         message.channel.send("You didn't identify a valid user").then(msg => msg.delete(deleteDelay));
                     }
+                } else {
+                    message.delete();
+                    message.channel.send("You do not have permissions to use this command.").then(msg => msg.delete(deleteDelay));
                 }
-            } catch(e) {
-                console.log(e);              
-            }
+            } catch((e) => {
+                sendError(e);
+            });
         }
     },
     memberCount: {
@@ -145,11 +182,11 @@ const commands = {
             try {
                 let embed = new Discord.RichEmbed();
                 embed.addField('Members', message.guild.memberCount);
-                embed.setColor('#00ffcc'); // #00ffcc? #6699ff?
+                embed.setColor(embedColor);
                 message.channel.send({ embed });
-            } catch(e) {
-                console.log(e);
-            }
+            } catch((e) => {
+                sendError(e);
+            });
         }
     },
     uptime: {
@@ -159,20 +196,10 @@ const commands = {
         usage: `${prefix}uptime`,
         do: (message, client, args, Discord) => {
             try {
-                millisToTime = function(milliseconds) {
-                  let x = milliseconds / 1000;
-                  let s = Math.floor(x % 60);
-                  x /= 60;
-                  let m = Math.floor(x % 60);
-                  x /= 60;
-                  let h = Math.floor(x % 24);
-
-                  return h + ' Hours, ' + m + ' Minutes, ' + s + " Seconds";
-              };
                 message.channel.send(':clock230: Bot has been online for ' + millisToTime(client.uptime));
-            } catch(e) {
-                console.log(e);
-            }
+            } catch((e) => {
+                sendError(e);
+            });
         }
     },
     info: {
@@ -184,18 +211,16 @@ const commands = {
             try {
                 let embed = new Discord.RichEmbed();
                 embed.setThumbnail(client.user.avatarURL);
-                embed.addField('Users', client.users.size, true);
-                // embed.addField('Channels', client.channels.size, true); 
+                embed.addField('Users', client.users.size, true); 
                 embed.addField('Servers', client.guilds.size, true);
                 embed.addField('Creators', creators[0] + ', ' + creators[1], true);
                 embed.addField('Invite', 'http://bit.ly/InviteToolbot', true);
                 embed.addField('GitHub', 'https://github.com/JettBurns14/Discord-tool-bot', true);
-
-                embed.setColor('#00ffcc');
+                embed.setColor(embedColor);
                 message.channel.send({ embed });
-            } catch(e) {
-                console.log(e);
-            }
+            } catch((e) => {
+                sendError(e);
+            });
         }
     },
     userInfo: {
@@ -227,12 +252,14 @@ const commands = {
                 embed.addField('Registered', registered, true);
                 embed.addField('Roles', member.roles.map(x => x.name).join(', '), true);
                 embed.addField('Permissions', perms.join(', ').toLowerCase(), true);
-                embed.setColor('#00ffcc');
-                message.channel.send({ embed });
+                embed.setColor(embedColor);
+                message.channel.send({ embed }).catch(e => {
+                    sendError(e);
+                });
                 //console.log(Object.entries(Object.values(member.permissions.serialize()).filter(x => x == true)));
-            } catch(e) {
-                console.log(e);
-            }
+            } catch((e) => {
+                sendError(e);
+            });
         }
     },
     setGame: {
@@ -246,11 +273,12 @@ const commands = {
                     client.user.setPresence({ game: { name: args[0], type: 0 } });
                     message.channel.send(':white_check_mark: Game set to: `' + args[0] + '`').then(msg => msg.delete(deleteDelay));
                 } else {
+                    message.delete();
                     message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
                 }
-            } catch(e) {
-                console.log(e);
-            }
+            } catch((e) => {
+                sendError(e);
+            });
         }
     },
     bans: {
@@ -263,22 +291,25 @@ const commands = {
                 if (message.member.hasPermission("MANAGE_GUILD")) {
                     let embed = new Discord.RichEmbed();
                     //embed.setThumbnail(client.user.avatarURL);
-                    embed.setColor('#00ffcc');
+                    embed.setColor(embedColor);
                     message.guild.fetchBans().then(promise => {
                         let resolvedBans = Promise.resolve(promise);
                         resolvedBans.then((u) => {
                             embed.addField('Bans', u.map(x => x.tag));
                             message.channel.send({ embed });
+                        }).catch(e => {
+                            sendError(e);
                         });
-                    }).catch(reason => {
-                        console.log(reason);
+                    }).catch(e => {
+                        sendError(e);
                     });
                 } else {
+                    message.delete();
                     message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
                 }
-            } catch(e) {
-                console.log(e);
-            }
+            } catch((e) => {
+                sendError(e);
+            });
         }
     },
     eval: {
@@ -302,17 +333,20 @@ const commands = {
                             evaled = require("util").inspect(evaled);
                         }
 
-                        message.channel.send(clean(evaled), { code: "xl" });
+                        message.channel.send(clean(evaled), { code: "xl" }).catch(e => {
+                            sendError(e);
+                        });
                   } catch (err) {
                       message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
                   }
                 } else {
-                    message.reply("Only the bot owners can use this command.")
+                    message.delete();
+                    message.reply(":x: Only the bot owners can use this command.").then(msg => msg.delete(deleteDelay));
                     return;
                 }                
-            } catch (e) {
-              console.log(e);
-            }
+            } catch((e) => {
+                sendError(e);
+            });
         }
     },
     msgEdits: {
@@ -325,7 +359,7 @@ const commands = {
                 var edits = '';
                 let embed = new Discord.RichEmbed();
                 //embed.setThumbnail(client.user.avatarURL);
-                embed.setColor('#00ffcc');
+                embed.setColor(embedColor);
                 message.channel.fetchMessage(args[0])
                     .then(msg => {
                         for (var i = 0; i < msg.edits.length; ++i) {
@@ -334,10 +368,12 @@ const commands = {
                         embed.addField('Content', msg.content);
                         embed.addField('Edits', edits);
                         message.channel.send({ embed });
-                }).catch(console.error);
-            } catch(e) {
-                console.log(e);
-            }
+                }).catch(e => {
+                    sendError(e);
+                });
+            } catch((e) => {
+                sendError(e);
+            });
         }
     },
     clearReactions: {
@@ -349,18 +385,21 @@ const commands = {
             try {
                 if (message.member.hasPermission("MANAGE_MESSAGES")) {
                     let embed = new Discord.RichEmbed();
-                    embed.setColor('#00ffcc');
+                    embed.setColor(embedColor);
                     message.channel.fetchMessage(args[0]).then(msg => {
                         msg.clearReactions();
                         embed.addField('Success', ':white_check_mark: Reactions cleared.');
                         message.channel.send({ embed }).then(msg => msg.delete(deleteDelay));
-                    }).catch(console.error);
+                    }).catch(e => {
+                        sendError(e);
+                    });
                 } else {
+                    message.delete();
                     message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
                 }
-            } catch(e) {
-                console.log(e);
-            }
+            } catch((e) => {
+                sendError(e);
+            });
         }
     },
     pin: {
@@ -372,18 +411,21 @@ const commands = {
             try {
                 if (message.member.hasPermission("MANAGE_GUILD")) {
                     let embed = new Discord.RichEmbed();
-                    embed.setColor('#00ffcc');
+                    embed.setColor(embedColor);
                     message.channel.fetchMessage(args[0]).then(msg => {
                         msg.pin();
                         embed.addField('Success', ':white_check_mark: Message pinned.');
                         message.channel.send({ embed }).then(msg => msg.delete(deleteDelay));
-                    }).catch(console.error);
+                    }).catch(e => {
+                        sendError(e);
+                    });
                 } else {
+                    message.delete();
                     message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
                 }
-            } catch(e) {
-                console.log(e);
-            }
+            } catch((e) => {
+                sendError(e);
+            });
         }
     },
     unpin: {
@@ -395,18 +437,21 @@ const commands = {
             try {
                 if (message.member.hasPermission("MANAGE_GUILD")) {
                     let embed = new Discord.RichEmbed();
-                    embed.setColor('#00ffcc');
+                    embed.setColor(embedColor);
                     message.channel.fetchMessage(args[0]).then(msg => {
                         msg.unpin();
                         embed.addField('Success', ':white_check_mark: Message unpinned.');
                         message.channel.send({ embed }).then(msg => msg.delete(deleteDelay));
-                    }).catch(console.error);
+                    }).catch(e => {
+                        sendError(e);
+                    });
                 } else {
+                    message.delete();
                     message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
                 }
-            } catch(e) {
-                console.log(e);
-            }
+            } catch((e) => {
+                sendError(e);
+            });
         }
     },
     servers: {
@@ -418,18 +463,19 @@ const commands = {
             try {
                 if (message.author.id === '218397146049806337') {
                     let embed = new Discord.RichEmbed();
-                    embed.setColor('#00ffcc');
+                    embed.setColor(embedColor);
                     embed.addField('Servers', client.guilds.map(guild => guild.name));
                     embed.addField('IDs', client.guilds.map(guild => guild.id));
                     embed.addField('Owners', client.guilds.map(guild => guild.owner));
                     message.channel.send({ embed });
                     
                 } else {
+                    message.delete();
                     message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
                 }
-            } catch(e) {
-                console.log(e);
-            }
+            } catch((e) => {
+                sendError(e);
+            });
         }
     },
     say: {
@@ -442,11 +488,13 @@ const commands = {
                 if (message.author.id === '218397146049806337') {
                     message.delete().then(msg => {
                         message.channel.send(args.join(' '));
+                    }).catch(e => {
+                        sendError(e);
                     });
                 }
-            } catch(e) {
-                console.log(e);
-            }
+            } catch((e) => {
+                sendError(e);
+            });
         }
     },
     mute: {
@@ -462,9 +510,10 @@ const commands = {
                         message.mentions.members.first().addRole('3986618199898849928', reason).then(() => {
                             message.channel.send(`${message.mentions.users.first()} has been muted by <@${message.author.id}> because: ${reason}`);
                         }).catch(e => {
-                            console.log(e);
+                            sendError(e);
                         });
                     } else {
+                        message.delete();
                         message.channel.send("You didn't identify a valid user").then(msg => msg.delete(deleteDelay));
                     }
                 }
@@ -485,15 +534,16 @@ const commands = {
                         message.mentions.members.first().removeRole('3986618199898849928').then(() => {
                             message.channel.send(`${message.mentions.users.first()} has been unmuted by <@${message.author.id}>.`);
                         }).catch(e => {
-                            console.log(e);
+                            sendError(e);
                         });
                     } else {
+                        message.delete();
                         message.channel.send("You didn't identify a valid user").then(msg => msg.delete(deleteDelay));
                     }
                 }
-            } catch(e) {
-                console.log(e);
-            }
+            } catch((e) => {
+                sendError(e);
+            });
         }
     },
         
@@ -520,18 +570,16 @@ const commands = {
     }*/
 };
 
-const sendDM = (msg) => {
-    client.users.find('id', '218397146049806337').send(msg);
-};
-
 const otherFunctions = (message) => {
     var content = message.content.toLowerCase();
-    if (content.includes("good night") || content.includes("g'night") || content.includes("goodnight")) message.react("🌙");
+    if (content.includes("good night") || content.includes("g'night") || content.includes("goodnight") || content.includes("g night")) message.react("🌙");
     if (message.author.id === '309845156696424458' || message.author.id === '218397146049806337' || message.author.id === "221285118608801802" || message.author.id === "299150484218970113") {
         if (content == 'blob') {
             message.delete();
             message.channel.send("<a:rainbowBlob:402289443593125888>").then((m) => {
                 m.react("402289443593125888");
+            }).catch(e => {
+                sendError(e);
             });
         }
     }
@@ -539,7 +587,7 @@ const otherFunctions = (message) => {
     if (content.includes("jett burns") || content.includes("jett") || message.mentions.users.exists('id', '218397146049806337')) {
         if (message.author.id != '218397146049806337') {
             let embed = new Discord.RichEmbed();
-            embed.setColor('#00ffcc');
+            embed.setColor(embedColor);
             embed.setAuthor('You were mentioned!', message.author.avatarURL);
             embed.addField('Content', message.content);
             embed.addField('Sender', message.author);
@@ -575,7 +623,7 @@ client.on('ready', () => {
     client.user.setPresence({ game: { name: `${prefix}help`, type: 0 } });
     
     let embed = new Discord.RichEmbed();
-    embed.setColor('#00ffcc');
+    embed.setColor(embedColor);
     embed.setThumbnail('https://media.discordapp.net/attachments/307975805357522944/392142646618882060/image.png');
     embed.addField('Ready', 'I am online and at your service, Jett!');
     embed.setTimestamp();
@@ -583,12 +631,12 @@ client.on('ready', () => {
 });
 
 client.on("guildCreate", guild => {
-    sendDM(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`);
+    sendDM(`:inbox_tray: New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`);
     client.user.setGame(`on ${client.guilds.size} servers`);
 });
 
 client.on("guildDelete", guild => {
-    sendDM(`I have been removed from: ${guild.name} (id: ${guild.id})`);
+    sendDM(`:outbox_tray: I have been removed from: ${guild.name} (id: ${guild.id}), it had ${guild.memberCount} members.`);
     client.user.setGame(`on ${client.guilds.size} servers`);
 });
 
