@@ -696,7 +696,7 @@ client.on("messageReactionAdd", (messageReaction, user) => {
             embed.addField('Channel', messageReaction.message.channel);
             embed.addField('Message', messageReaction.message.content);
             embed.setThumbnail(messageReaction.message.author.avatarURL);
-            if (messageReaction.count >= 5){
+            if (messageReaction.count >= 7){
                 messageReaction.message.guild.channels.find('id', '412610188944605184').send({ embed });
                 messageReaction.message.clearReactions();
             }
