@@ -609,7 +609,8 @@ setInterval(() => {
     var d = new Date(Date.now());
     if (d.getHours() == 16 && d.getMinutes() == 15) {
         console.log(d);
-        client.channels.find('id', '424681674333487115').send(`Someone do the Daily Dose plz!
+        client.channels.find('id', '424681674333487115').send(`<@&395704791101079553>
+Someone do the Daily Dose plz!
 
 Get __Word of the day__ here: https://www.merriam-webster.com/word-of-the-day
 Get __Fact of the day__ here: https://www.beagreatteacher.com/daily-fun-fact/
