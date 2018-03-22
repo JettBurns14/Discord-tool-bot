@@ -713,7 +713,7 @@ client.on("guildMemberAdd", (member) => {
     ];
     var welcome = `Welcome to the ${member.guild.name}, <@${member.id}>!
 Please provide us with your Khan Academy __name__ and __username__ so we can verify you. 
-Also, let us know what roles you'd like, which are all explained in <#372915117060522007>.
+Also, let us know what roles you'd like, which are all explained in <#423253793501741076>.
 <@&380569987242393610>`
 
     //let channel = getDefaultChannel(member.guild);
