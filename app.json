@@ -1,7 +1,0 @@
-{
-  "name": "Discord Tool Bot",
-  "description": "A Discord utility bot built by Jett and Jonah.",
-  "repository": "https://github.com/JettBurns14/Discord-tool-bot",
-  "keywords": ["heroku"],
-  "image": "heroku/nodejs"
-}
