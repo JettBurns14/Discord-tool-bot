@@ -1,6 +1,8 @@
 <div align="center">
-    <h1>Discord Tool Bot</h1>
-    <img src="https://david-dm.org/JettBurns14/Discord-tool-bot.svg" alt="Dependencies">
+    <h1>
+        Discord Tool Bot<br>
+        <img src="https://david-dm.org/JettBurns14/Discord-tool-bot.svg" alt="Dependencies">
+    </h1>
 </div>
 
 A utility bot for Discord, built by [Jett Burns](https://github.com/JettBurns14) and [Jonah](https://github.com/Dopest-Pleb).
