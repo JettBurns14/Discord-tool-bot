@@ -2,8 +2,8 @@
     <h1>
         Discord Tool Bot<br>
         <img src="https://david-dm.org/JettBurns14/Discord-tool-bot.svg" alt="Dependencies">
-        <a href="https://heroku.com/deploy">
-            <img src="https://www.herokucdn.com/JettBurns14/Discord-tool-bot.svg" alt="Deploy">
+        <a href="https://heroku.com/deploy?template=https://github.com/JettBurns14/Discord-tool-bot">
+            <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
         </a>
     </h1>
 </div>
