@@ -2,6 +2,7 @@
     <h1>
         Discord Tool Bot<br>
         <img src="https://david-dm.org/JettBurns14/Discord-tool-bot.svg" alt="Dependencies">
+        <img src="https://img.shields.io/github/release/JettBurns14/Discord-tool-bot.svg" alt="Releases">
     </h1>
 </div>
 
