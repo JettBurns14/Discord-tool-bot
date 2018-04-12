@@ -11,8 +11,3 @@ Contributors:
 - [Shdaow](https://github.com/ShadowKA)
 - [Nate](https://github.com/OctoAvenger)
 - [Thomas Li](https://github.com/NovaSagittarii)
-
-
-<a href="https://heroku.com/deploy?template=https://github.com/JettBurns14/Discord-tool-bot">
-    <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
-</a>
