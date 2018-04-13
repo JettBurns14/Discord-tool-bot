@@ -3,7 +3,6 @@
         Discord Tool Bot<br>
         <img src="https://david-dm.org/JettBurns14/Discord-tool-bot.svg" alt="Dependencies">
         <img src="https://img.shields.io/github/release/JettBurns14/Discord-tool-bot.svg" alt="Releases">
-        <img src="https://img.shields.io/github/tag/JettBurns14/Discord-tool-bot.svg" alt="Tag">
     </h1>
 </div>
 
