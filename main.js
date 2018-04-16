@@ -609,12 +609,13 @@ setInterval(() => {
     var d = new Date(Date.now());
     if (d.getHours() == 16 && d.getMinutes() == 15) {
         console.log(d);
-        client.channels.find('id', '424681674333487115').send(`
-Someone do the Daily Dose plz!
+        client.channels.find('id', '424681674333487115').send(`<@&395704791101079553>
+Someone do the Daily Dose please!
 
 Get __Word of the day__ here: https://www.merriam-webster.com/word-of-the-day
 Get __Fact of the day__ here: https://www.beagreatteacher.com/daily-fun-fact/
 Get __Phobia of the day__ here: http://phobialist.com/
+Get __Quote of the day__ here: https://www.brainyquote.com/topics/day
 Challenge and question of the day can be your own.
 Make sure the first three haven't been used before by searching the channel.`);
     }
