@@ -548,7 +548,19 @@ const commands = {
             };
         }
     },
-        
+    test: {
+        name: 'test',
+        description: 'This is a test command.  What the command does depends on whatever the devs are testing at the time.',
+        category: 'General',
+        usage: '${prefix}test',
+        do: (message, client, args, Discord) => {
+            for (var i in client.channels.get("380940603246116866").fetchMessages({ limit: 1 })) {
+                message.channel.send(i);
+            }
+
+
+        }
+    }
     /*
     blacklist: {
         name: 'User blacklist',
@@ -607,6 +619,7 @@ const otherFunctions = (message) => {
 
 setInterval(() => {
     var d = new Date(Date.now());
+
     if (d.getHours() == 16 && d.getMinutes() == 15) {
         console.log(d);
         client.channels.find('id', '424681674333487115').send(`<@&395704791101079553>
