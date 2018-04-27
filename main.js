@@ -12,6 +12,7 @@
 ***/
 
 const Discord = require('discord.js');
+const request = require('request');
 const client = new Discord.Client();
 //const fs = require('fs');
 
@@ -552,13 +553,41 @@ const commands = {
         name: 'test',
         description: 'This is a test command.  What the command does depends on whatever the devs are testing at the time.',
         category: 'General',
-        usage: '${prefix}test',
+        usage: `${prefix}test`,
         do: (message, client, args, Discord) => {
-            for (var i in client.channels.get("380940603246116866").fetchMessages({ limit: 1 })) {
+            /*for (var i in client.channels.get("380940603246116866").fetchMessages({ limit: 1 })) {
                 message.channel.send(i);
+            }*/
+        }
+    },
+    levels: {
+        name: 'levels',
+        description: 'Displays top ten Mee6 users.',
+        category: 'General',
+        usage: `${prefix}levels`,
+        do: (message, client, args, Discord) => {
+            // Check if Mee6 is in server
+            if (message.guild.members.exists("id", "159985870458322944")) {
+                let serverId = message.guild.id;
+                request(`https://api.mee6.xyz/plugins/levels/leaderboard/${serverId}`, (err, res, body) => {
+                    let data = JSON.parse(body);
+                    let topTen = data.players.filter((curr, ind, arr) => {
+                        return ind < 10;
+                    });
+                    if (topTen.length === 10) {
+                        let embed = new Discord.RichEmbed();
+                        embed.setColor(embedColor);
+                        for (let i = 0; i < topTen; i++) {
+                            embed.addField(i, `<@${topTen[i].id}> – **${topTen[i].xp.toLocaleString()}** Exp – Level **${topTen[i].level}**`);
+                        }
+                        message.channel.send({ embed });
+                    } else {
+                        sendError('Couldn\'t get top ten Mee6 users');
+                    }
+                });
+            } else {
+                message.channel.send('This command only works if Mee6 is in the server');
             }
-
-
         }
     }
     /*
