@@ -567,14 +567,21 @@ const commands = {
         usage: `${prefix}levels`,
         do: (message, client, args, Discord) => {
             // Check if Mee6 is in server
+            console.log('levels fired');
             if (message.guild.members.exists("id", "159985870458322944")) {
                 let serverId = message.guild.id;
+                console.log(serverId);
                 request(`https://api.mee6.xyz/plugins/levels/leaderboard/${serverId}`, (err, res, body) => {
+                    console.log(res);
+                    console.log(body);
                     let data = JSON.parse(body);
+                    console.log(data);
                     let topTen = data.players.filter((curr, ind, arr) => {
                         return ind < 10;
                     });
+                    console.log(topTen);
                     if (topTen.length === 10) {
+                        console.log('topTen is 10 long');
                         let embed = new Discord.RichEmbed();
                         embed.setColor(embedColor);
                         for (let i = 0; i < topTen; i++) {
