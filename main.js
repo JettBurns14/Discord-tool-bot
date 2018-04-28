@@ -567,26 +567,24 @@ const commands = {
         usage: `${prefix}levels`,
         do: (message, client, args, Discord) => {
             // Check if Mee6 is in server
-            console.log('levels fired');
             if (message.guild.members.exists("id", "159985870458322944")) {
                 let serverId = message.guild.id;
-                console.log(serverId);
+                // Get Mee6 stats
                 request(`https://api.mee6.xyz/plugins/levels/leaderboard/${serverId}`, (err, res, body) => {
-                    console.log(res);
-                    console.log(body);
                     let data = JSON.parse(body);
-                    console.log(data);
+                    // Get top ten users
                     let topTen = data.players.filter((curr, ind, arr) => {
                         return ind < 10;
                     });
-                    console.log(topTen);
+                    // Incase the above doesn't work
                     if (topTen.length === 10) {
-                        console.log('topTen is 10 long');
                         let embed = new Discord.RichEmbed();
                         embed.setColor(embedColor);
+                        // Add 10 fields in embed
                         for (let i = 0; i < topTen; i++) {
                             embed.addField(i, `<@${topTen[i].id}> – **${topTen[i].xp.toLocaleString()}** Exp – Level **${topTen[i].level}**`);
                         }
+                        embed.addField('', '');
                         message.channel.send({ embed });
                     } else {
                         sendError('Couldn\'t get top ten Mee6 users');
