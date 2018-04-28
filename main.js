@@ -584,7 +584,7 @@ const commands = {
                         for (let i = 0; i < topTen; i++) {
                             embed.addField(i, `<@${topTen[i].id}> – **${topTen[i].xp.toLocaleString()}** Exp – Level **${topTen[i].level}**`);
                         }
-                        embed.addField('', '');
+                        embed.setThumbnail(`https://discordapp.com/api/guilds/372895163279998976/icons/${data.guild.icon}`);
                         message.channel.send({ embed });
                     } else {
                         sendError('Couldn\'t get top ten Mee6 users');
