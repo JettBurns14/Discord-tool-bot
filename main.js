@@ -582,9 +582,9 @@ const commands = {
                         embed.setColor(embedColor);
                         // Add 10 fields in embed
                         topTen.forEach((user, i) => {
-                            embed.addField(i, `<@${user.id}> – **${user.xp.toLocaleString()}** Exp – Level **${user.level}**`);
+                            embed.addField(i + 1, `<@${user.id}> – **${user.xp.toLocaleString()}** Exp – Level **${user.level}**`);
                         });
-                        embed.setThumbnail(`https://discordapp.com/api/guilds/372895163279998976/icons/${data.guild.icon}`);
+                        embed.setThumbnail(message.guild.iconURL);
                         message.channel.send({ embed });
                     } else {
                         sendError('Couldn\'t get top ten Mee6 users');
