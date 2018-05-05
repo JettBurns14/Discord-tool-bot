@@ -577,15 +577,20 @@ const commands = {
                         return ind < 10;
                     });
                     // Incase the above doesn't work
+                    console.log(topTen);
                     if (topTen.length === 10) {
+                        console.log('topTen = 10');
                         let embed = new Discord.RichEmbed();
                         embed.setColor(embedColor);
                         // Add 10 fields in embed
                         for (let i = 0; i < topTen; i++) {
+                            console.log(i);
                             embed.addField(i, `<@${topTen[i].id}> – **${topTen[i].xp.toLocaleString()}** Exp – Level **${topTen[i].level}**`);
                         }
                         // Gotta wait before sending embed
+                        console.log(embed.fields);
                         setTimeout(() => {
+                            console.log('sending embed')
                             embed.setThumbnail(`https://discordapp.com/api/guilds/372895163279998976/icons/${data.guild.icon}`);
                             message.channel.send({ embed });
                         }, 500);
