@@ -606,6 +606,7 @@ const commands = {
                 let serverId = message.guild.id;
                 // Get Mee6 stats
                 request(`https://api.mee6.xyz/plugins/levels/leaderboard/${serverId}`, (err, res, body) => {
+                    message.channel.send(err);
                     let data = JSON.parse(body);
                     for (let i = 0; i < data.players.length; i++) {
                         if (data.players[i].id === message.author.id) {
