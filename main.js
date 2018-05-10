@@ -610,7 +610,7 @@ const commands = {
                     let data = JSON.parse(body);
                     for (let i = 0; i < data.players.length; i++) {
                         if (data.players[i].id === message.author.id) {
-                            let embed = new Discord.RichEmbed();
+                            var embed = new Discord.RichEmbed();
                             let user = data.players[i];
                             embed.setColor(embedColor);
                             embed.setAuthor(user.username, "https://cdn.discordapp.com/avatars/${serverId}/${user.avatar}")
