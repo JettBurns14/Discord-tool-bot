@@ -698,7 +698,7 @@ client.on('message', (message) => {
     let args = message.content.split(" ").splice(1);
     let command = message.content.substring(prefix.length).split(' ');
     for (let i in commands){
-        if (command[0] === commands[i].name) {
+        if (command[0].toLowerCase() === commands[i].name.toLowerCase()) {
             commands[i].do(message, client, args, Discord);
         }
     }
