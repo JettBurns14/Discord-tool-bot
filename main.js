@@ -594,6 +594,36 @@ const commands = {
                 message.channel.send('This command only works if Mee6 is in the server');
             }
         }
+    },
+    rank: {
+        name: 'rank',
+        description: 'Displays your current Mee6 stats.',
+        category: 'General',
+        usage: `${prefix}rank`,
+        do: (message, client, args, Discord) => {
+            // Check if Mee6 is in server
+            if (message.guild.members.exists("id", "159985870458322944")) {
+                let serverId = message.guild.id;
+                // Get Mee6 stats
+                request(`https://api.mee6.xyz/plugins/levels/leaderboard/${serverId}`, (err, res, body) => {
+                    let data = JSON.parse(body);
+                    for (let i = 0; i < data.players.length; i++) {
+                        if (data.players[i].id === message.author.id) {
+                            let embed = new Discord.RichEmbed();
+                            let user = data.players[i];
+                            embed.setColor(embedColor);
+                            embed.setAuthor(user.username, "https://cdn.discordapp.com/avatars/${serverId}/${user.avatar}")
+                            embed.addField("Rank", "${i + 1}/${data.players.length}", true);
+                            embed.addField("Lvl.", user.level, true);
+                            embed.addField("Exp.", "${user.detailed_xp[0]}/${user.detailed_xp[1]} (tot. ${user.detailed_xp[2]})", true);
+                        }
+                    }
+                    message.channel.send({ embed });
+                });
+            } else {
+                message.channel.send('This command only works if Mee6 is in the server');
+            }
+        }
     }
     /*
     blacklist: {
