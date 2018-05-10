@@ -601,7 +601,6 @@ const commands = {
         category: 'General',
         usage: `${prefix}rank`,
         do: (message, client, args, Discord) => {
-            message.channel.send("This command works but Jonah needs the logs from Jett to fix a small error.  So ping him a lot.");
             // Check if Mee6 is in server
             if (message.guild.members.exists("id", "159985870458322944")) {
                 let serverId = message.guild.id;
