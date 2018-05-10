@@ -613,10 +613,10 @@ const commands = {
                             var embed = new Discord.RichEmbed();
                             let user = data.players[i];
                             embed.setColor(embedColor);
-                            embed.setAuthor(user.username, "https://cdn.discordapp.com/avatars/${serverId}/${user.avatar}")
-                            embed.addField("Rank", "${i + 1}/${data.players.length}", true);
+                            embed.setAuthor(user.username, `https://cdn.discordapp.com/avatars/${serverId}/${user.avatar}`)
+                            embed.addField("Rank", `${i + 1}/${data.players.length}`, true);
                             embed.addField("Lvl.", user.level, true);
-                            embed.addField("Exp.", "${user.detailed_xp[0]}/${user.detailed_xp[1]} (tot. ${user.detailed_xp[2]})", true);
+                            embed.addField("Exp.", `${user.detailed_xp[0]}/${user.detailed_xp[1]} (tot. ${user.detailed_xp[2]})`, true);
                         }
                     }
                     message.channel.send({ embed });
