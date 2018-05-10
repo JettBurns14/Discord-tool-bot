@@ -604,22 +604,28 @@ const commands = {
             // Check if Mee6 is in server
             if (message.guild.members.exists("id", "159985870458322944")) {
                 let serverId = message.guild.id;
+                let playerGot = false;
+                let embed = new Discord.RichEmbed();
+                var page = 0;
                 // Get Mee6 stats
-                request(`https://api.mee6.xyz/plugins/levels/leaderboard/${serverId}`, (err, res, body) => {
-                    let data = JSON.parse(body);
-                    for (let i = 0; i < data.players.length; i++) {
-                        if (data.players[i].id === message.author.id) {
-                            var embed = new Discord.RichEmbed();
-                            let user = data.players[i];
-                            embed.setColor(embedColor);
-                            embed.setAuthor(user.username, message.author.avatarURL)
-                            embed.addField("Rank", `${i + 1}`, true);
-                            embed.addField("Lvl.", user.level, true);
-                            embed.addField("Exp.", `${user.detailed_xp[0]}/${user.detailed_xp[1]} (tot. ${user.detailed_xp[2]})`, true);
+                while (!playerGot) {
+                    request(`https://api.mee6.xyz/plugins/levels/leaderboard/${serverId}?page=${page}`, (err, res, body) => {
+                        let data = JSON.parse(body);
+                        for (let i = 0; i < data.players.length; i++) {
+                            if (data.players[i].id === message.author.id) {
+                                playerGot = true;
+                                let user = data.players[i];
+                                embed.setColor(embedColor);
+                                embed.setAuthor(user.username, message.author.avatarURL)
+                                embed.addField("Rank", `${i + 1}`, true);
+                                embed.addField("Lvl.", user.level, true);
+                                embed.addField("Exp.", `${user.detailed_xp[0]}/${user.detailed_xp[1]} (tot. ${user.detailed_xp[2]})`, true);
+                            }
                         }
-                    }
-                    message.channel.send({ embed });
-                });
+                    });
+                    page++;
+                }
+                message.channel.send({ embed });
             } else {
                 message.channel.send('This command only works if Mee6 is in the server');
             }
