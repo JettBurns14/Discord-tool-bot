@@ -613,7 +613,7 @@ const commands = {
                             let user = data.players[i];
                             embed.setColor(embedColor);
                             embed.setAuthor(user.username, message.author.avatarURL)
-                            embed.addField("Rank", `${i + 1}/${data.players.length}`, true);
+                            embed.addField("Rank", `${i + 1}`, true);
                             embed.addField("Lvl.", user.level, true);
                             embed.addField("Exp.", `${user.detailed_xp[0]}/${user.detailed_xp[1]} (tot. ${user.detailed_xp[2]})`, true);
                         }
