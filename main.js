@@ -601,12 +601,12 @@ const commands = {
         category: 'General',
         usage: `${prefix}rank`,
         do: (message, client, args, Discord) => {
+            message.channel.send("This command works but Jonah needs the logs from Jett to fix a small error.  So ping him a lot.");
             // Check if Mee6 is in server
             if (message.guild.members.exists("id", "159985870458322944")) {
                 let serverId = message.guild.id;
                 // Get Mee6 stats
                 request(`https://api.mee6.xyz/plugins/levels/leaderboard/${serverId}`, (err, res, body) => {
-                    message.channel.send(err);
                     let data = JSON.parse(body);
                     for (let i = 0; i < data.players.length; i++) {
                         if (data.players[i].id === message.author.id) {
