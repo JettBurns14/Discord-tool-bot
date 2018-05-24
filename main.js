@@ -702,7 +702,7 @@ setInterval(() => {
             console.log(d);
             // Send DD reminder.
             client.channels.find('id', '424681674333487115').send(`<@&395704791101079553> \nSomeone do the Daily Dose please! \n\nGet __Word of the day__ here: https://www.merriam-webster.com/word-of-the-day \nGet __Fact of the day__ here: https://www.beagreatteacher.com/daily-fun-fact/ \nGet __Phobia of the day__ here: http://phobialist.com/ \nGet __Quote of the day__ here: https://www.brainyquote.com/topics/day \nChallenge and question of the day can be your own. \nMake sure the first three haven't been used before by searching the channel.`);
-        }
+        });
     }
 }, 1000 * 60);
 
