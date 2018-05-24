@@ -667,7 +667,6 @@ const otherFunctions = (message) => {
             });
         }
     }
-    //if (content.includes("yay")) message.react("402289443593125888");
     if (content.includes("jett burns") || content.includes("jett") || message.mentions.users.exists('id', '218397146049806337')) {
         if (message.author.id != '218397146049806337') {
             let embed = new Discord.RichEmbed();
@@ -689,18 +688,21 @@ const otherFunctions = (message) => {
 
 setInterval(() => {
     var d = new Date(Date.now());
-
+    
+    // If the time is 11:15 AM CST, execute this code.
     if (d.getHours() == 16 && d.getMinutes() == 15) {
-        console.log(d);
-        client.channels.find('id', '424681674333487115').send(`<@&395704791101079553>
-Someone do the Daily Dose please!
-
-Get __Word of the day__ here: https://www.merriam-webster.com/word-of-the-day
-Get __Fact of the day__ here: https://www.beagreatteacher.com/daily-fun-fact/
-Get __Phobia of the day__ here: http://phobialist.com/
-Get __Quote of the day__ here: https://www.brainyquote.com/topics/day
-Challenge and question of the day can be your own.
-Make sure the first three haven't been used before by searching the channel.`);
+        // Find Daily Dose channel and most recent message.
+        client.channels.find('id', '380940603246116866').fetchMessages({ limit: 1 }).then(msg => {
+            // If the message's created day is equal to today, that means someone posted today, so return.
+            if (new Date(msg.first().createdTimestamp).getDay() == new Date(Date.now()).getDay()) {
+                message.channel.send("Yay, the Daily Dose is done, have a cookie: 🍪");
+                return;
+            }
+            // If it doesn't return, this means nobody has posted for today yet.
+            console.log(d);
+            // Send DD reminder.
+            client.channels.find('id', '424681674333487115').send(`<@&395704791101079553> \nSomeone do the Daily Dose please! \n\nGet __Word of the day__ here: https://www.merriam-webster.com/word-of-the-day \nGet __Fact of the day__ here: https://www.beagreatteacher.com/daily-fun-fact/ \nGet __Phobia of the day__ here: http://phobialist.com/ \nGet __Quote of the day__ here: https://www.brainyquote.com/topics/day \nChallenge and question of the day can be your own. \nMake sure the first three haven't been used before by searching the channel.`);
+        }
     }
 }, 1000 * 60);
 
