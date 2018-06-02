@@ -549,17 +549,6 @@ const commands = {
             };
         }
     },
-    test: {
-        name: 'test',
-        description: 'This is a test command.  What the command does depends on whatever the devs are testing at the time.',
-        category: 'General',
-        usage: `${prefix}test`,
-        do: (message, client, args, Discord) => {
-            /*for (var i in client.channels.get("380940603246116866").fetchMessages({ limit: 1 })) {
-                message.channel.send(i);
-            }*/
-        }
-    },
     levels: {
         name: 'levels',
         description: 'Displays top ten Mee6 users.',
@@ -590,42 +579,6 @@ const commands = {
                         sendError('Couldn\'t get top ten Mee6 users');
                     }
                 });
-            } else {
-                message.channel.send('This command only works if Mee6 is in the server');
-            }
-        }
-    },
-    rank: {
-        name: 'rank',
-        description: 'Displays your current Mee6 stats.',
-        category: 'General',
-        usage: `${prefix}rank`,
-        do: (message, client, args, Discord) => {
-            // Check if Mee6 is in server
-            if (message.guild.members.exists("id", "159985870458322944")) {
-                let serverId = message.guild.id;
-                let playerGot = false;
-                let embed = new Discord.RichEmbed();
-                var page = 0;
-                // Get Mee6 stats
-                while (!playerGot) {
-                    request(`https://api.mee6.xyz/plugins/levels/leaderboard/${serverId}?page=${page}`, (err, res, body) => {
-                        let data = JSON.parse(body);
-                        for (let i = 0; i < data.players.length; i++) {
-                            if (data.players[i].id === message.author.id) {
-                                playerGot = true;
-                                let user = data.players[i];
-                                embed.setColor(embedColor);
-                                embed.setAuthor(user.username, message.author.avatarURL)
-                                embed.addField("Rank", `${page * 100 + i + 1}`, true);
-                                embed.addField("Lvl.", user.level, true);
-                                embed.addField("Exp.", `${user.detailed_xp[0]}/${user.detailed_xp[1]} (tot. ${user.detailed_xp[2]})`, true);
-                            }
-                        }
-                    });
-                    page++;
-                }
-                message.channel.send({ embed });
             } else {
                 message.channel.send('This command only works if Mee6 is in the server');
             }
