@@ -1,13 +1,32 @@
 /***
 
-    Discord utility bot built mostly by Jett and Jonah. 
+    Discord utility bot built mostly by Jett, Jonah, and some cool contributors.
     
     TODO:
-    Add a category property for each cmd, since some are for moderation.
-    Auto delete mod cmds
-    DM me errors
-    Management category
-    Should mod cmds be deleted?
+    - Add modules to clean up this code!!!
+    - Add a databse to manage server-specific data, then bot can be added to other servers and work
+    - Management category
+    - Should mod cmds be deleted?
+    - Turn the roles channel into a bot controlled one
+      Any comments that are not role giving commands are deleted, channel will only allow giving of roles
+    - Have a report feature that deletes a post after 3-5 flags, only if user is able to
+      Included with the above, a message can be approved with a reaction from staff
+    - Bulk add roles to someone, at least 1, check if roles are different. addRoles <user> <roles, ...>
+    - Server info
+    - Roleinfo
+    - Total number of msgs in server
+    - Ping command
+    - Channel info
+    - Deletion logs
+    - Unban cmd
+    - Polls
+    - View active invites for a server
+    - Lock a channel
+    - Return errors if bot doesn’t have right channels to post logs and stuff in
+    - Binary convertor
+    - Cmd to make bot react to given message, with given emoji
+    - If message gets N downvotes, it can’t get to star board
+    - Cmd to post something in #announcements, will look cleaner
     
 ***/
 
@@ -648,13 +667,14 @@ setInterval(() => {
         client.channels.find('id', '380940603246116866').fetchMessages({ limit: 1 }).then(msg => {
             // If the message's created day is equal to today, that means someone posted today, so return.
             if (new Date(msg.first().createdTimestamp).getDay() == new Date(Date.now()).getDay()) {
-                message.channel.send("Yay, the Daily Dose is done, have a cookie: 🍪");
+                console.log('DD was posted today.');
+                client.channels.find('id', '424681674333487115').send("Yay, the Daily Dose is done, have a cookie: 🍪");
                 return;
             }
             // If it doesn't return, this means nobody has posted for today yet.
             console.log(d);
             // Send DD reminder.
-            client.channels.find('id', '424681674333487115').send(`<@&395704791101079553> \nSomeone do the Daily Dose please! \n\nGet __Word of the day__ here: https://www.merriam-webster.com/word-of-the-day \nGet __Fact of the day__ here: https://www.beagreatteacher.com/daily-fun-fact/ \nGet __Phobia of the day__ here: http://phobialist.com/ \nGet __Quote of the day__ here: https://www.brainyquote.com/topics/day \nChallenge and question of the day can be your own. \nMake sure the first three haven't been used before by searching the channel.`);
+            client.channels.find('id', '424681674333487115').send(`<@&395704791101079553> \nSomeone do the Daily Dose please! \n\nGet __Word of the day__ here: <https://www.merriam-webster.com/word-of-the-day> \nGet __Fact of the day__ here: <https://www.beagreatteacher.com/daily-fun-fact> \nGet __Phobia of the day__ here: <http://phobialist.com> \nGet __Quote of the day__ here: <https://www.brainyquote.com/topics/day> \nChallenge and question of the day can be your own. \nMake sure the first three haven't been used before by searching the channel.`);
         });
     }
 }, 1000 * 60);
