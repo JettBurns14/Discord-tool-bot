@@ -64,8 +64,14 @@ const millisToTime = function(milliseconds) {
     return h + ' Hours, ' + m + ' Minutes, ' + s + " Seconds";
 };
 
-const sendDM = (msg) => {
+const sendDM = msg => {
     client.users.find('id', '218397146049806337').send(msg);
+};
+
+const permError = message => {
+    message.delete(deleteDelay);
+    message.channel.send("You do not have permissions to use this command.")
+        .then(msg => msg.delete(deleteDelay));
 };
 
 const sendError = (error) => {
@@ -133,8 +139,7 @@ const commands = {
                         message.reply("Please provide a number ≤ 100 and ≥ 1").then(msg => msg.delete(deleteDelay));
                     }
                 } else {
-                    message.delete();
-                    message.channel.send("You do not have permissions to use this command.").then(msg => msg.delete(deleteDelay));
+                    permError(message);
                 }
             } catch(e) {
                 sendError(e);
@@ -159,8 +164,7 @@ const commands = {
                         message.channel.send("You didn't identify a valid user").then(msg => msg.delete(deleteDelay));
                     }
                 } else {
-                    message.delete();
-                    message.channel.send("You do not have permissions to use this command.").then(msg => msg.delete(deleteDelay));
+                    permError(message);
                 }
             } catch(e) {
                 sendError(e);
@@ -185,8 +189,7 @@ const commands = {
                         message.channel.send("You didn't identify a valid user").then(msg => msg.delete(deleteDelay));
                     }
                 } else {
-                    message.delete();
-                    message.channel.send("You do not have permissions to use this command.").then(msg => msg.delete(deleteDelay));
+                    permError(message);
                 }
             } catch(e) {
                 sendError(e);
@@ -293,8 +296,7 @@ const commands = {
                     client.user.setPresence({ game: { name: args[0], type: 0 } });
                     message.channel.send(':white_check_mark: Game set to: `' + args[0] + '`').then(msg => msg.delete(deleteDelay));
                 } else {
-                    message.delete();
-                    message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
+                    permError(message);
                 }
             } catch(e) {
                 sendError(e);
@@ -324,8 +326,7 @@ const commands = {
                         sendError(e);
                     });
                 } else {
-                    message.delete();
-                    message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
+                    permError(message);
                 }
             } catch(e) {
                 sendError(e);
@@ -360,9 +361,7 @@ const commands = {
                       message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
                   }
                 } else {
-                    message.delete();
-                    message.reply(":x: Only the bot owners can use this command.").then(msg => msg.delete(deleteDelay));
-                    return;
+                    permError(message);
                 }                
             } catch(e) {
                 sendError(e);
@@ -414,8 +413,7 @@ const commands = {
                         sendError(e);
                     });
                 } else {
-                    message.delete();
-                    message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
+                    permError(message);
                 }
             } catch(e) {
                 sendError(e);
@@ -440,8 +438,7 @@ const commands = {
                         sendError(e);
                     });
                 } else {
-                    message.delete();
-                    message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
+                    permError(message);
                 }
             } catch(e) {
                 sendError(e);
@@ -466,8 +463,7 @@ const commands = {
                         sendError(e);
                     });
                 } else {
-                    message.delete();
-                    message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
+                    permError(message);
                 }
             } catch(e) {
                 sendError(e);
@@ -490,8 +486,7 @@ const commands = {
                     message.channel.send({ embed });
                     
                 } else {
-                    message.delete();
-                    message.channel.send(':x: You don\'t have permission to use this command!').then(msg => msg.delete(deleteDelay));
+                    permError(message);
                 }
             } catch(e) {
                 sendError(e);
@@ -506,11 +501,13 @@ const commands = {
         do: (message, client, args, Discord) => {
             try {
                 if (message.author.id === '218397146049806337') {
-                    message.delete().then(msg => {
+                    message.delete().then(() => {
                         message.channel.send(args.join(' '));
                     }).catch(e => {
                         sendError(e);
                     });
+                } else {
+                    permError(message);
                 }
             } catch(e) {
                 sendError(e);
@@ -534,8 +531,7 @@ const commands = {
                             sendError(e);
                         });
                     } else {
-                        message.delete();
-                        message.channel.send("You didn't identify a valid user").then(msg => msg.delete(deleteDelay));
+                        permError(message);
                     }
                 }
             } catch(e) {
@@ -559,8 +555,7 @@ const commands = {
                             sendError(e);
                         });
                     } else {
-                        message.delete();
-                        message.channel.send("You didn't identify a valid user").then(msg => msg.delete(deleteDelay));
+                        permError(message);
                     }
                 }
             } catch(e) {
@@ -578,11 +573,11 @@ const commands = {
             if (message.guild.members.exists("id", "159985870458322944")) {
                 let serverId = message.guild.id;
                 // Get Mee6 stats
-                request(`https://api.mee6.xyz/plugins/levels/leaderboard/${serverId}`, (err, res, body) => {
+                request(`https://mee6.xyz/api/plugins/levels/leaderboard/${serverId}`, (err, res, body) => {
                     let data = JSON.parse(body);
                     // Get top ten users
-                    let topTen = data.players.filter((curr, ind, arr) => {
-                        return ind < 10;
+                    let topTen = data.players.filter((curr, idx, arr) => {
+                        return idx < 10;
                     });
                     // Incase the above doesn't work
                     if (topTen.length === 10) {
@@ -599,7 +594,7 @@ const commands = {
                     }
                 });
             } else {
-                message.channel.send('This command only works if Mee6 is in the server');
+                permError(message);
             }
         }
     }
@@ -631,8 +626,8 @@ const otherFunctions = (message) => {
     if (content.includes("good night") || content.includes("g'night") || content.includes("goodnight") || content.includes("g night")) message.react("🌙");
     if (message.author.id === '309845156696424458' || message.author.id === '218397146049806337' || message.author.id === "221285118608801802" || message.author.id === "299150484218970113") {
         if (content == 'blob') {
-            message.delete();
-            message.channel.send("<a:rainbowBlob:402289443593125888>").then((m) => {
+            message.channel.send("<a:rainbowBlob:402289443593125888>").then((m) => {            
+                message.delete();
                 m.react("402289443593125888");
             }).catch(e => {
                 sendError(e);
@@ -656,28 +651,6 @@ const otherFunctions = (message) => {
     // If bot is mentioned, react with thinking.
     if (message.mentions.users.exists('id', '372013264453894154')) message.react("🤔");
 };
-
-
-setInterval(() => {
-    var d = new Date(Date.now());
-    
-    // If the time is 11:15 AM CST, execute this code.
-    if (d.getHours() == 16 && d.getMinutes() == 15) {
-        // Find Daily Dose channel and most recent message.
-        client.channels.find('id', '380940603246116866').fetchMessages({ limit: 1 }).then(msg => {
-            // If the message's created day is equal to today, that means someone posted today, so return.
-            if (new Date(msg.first().createdTimestamp).getDay() == new Date(Date.now()).getDay()) {
-                console.log('DD was posted today.');
-                client.channels.find('id', '424681674333487115').send("Yay, the Daily Dose is done, have a cookie: 🍪");
-                return;
-            }
-            // If it doesn't return, this means nobody has posted for today yet.
-            console.log(d);
-            // Send DD reminder.
-            client.channels.find('id', '424681674333487115').send(`<@&395704791101079553> \nSomeone do the Daily Dose please! \n\nGet __Word of the day__ here: <https://www.merriam-webster.com/word-of-the-day> \nGet __Fact of the day__ here: <https://www.beagreatteacher.com/daily-fun-fact> \nGet __Phobia of the day__ here: <http://phobialist.com> \nGet __Quote of the day__ here: <https://www.brainyquote.com/topics/day> \nChallenge and question of the day can be your own. \nMake sure the first three haven't been used before by searching the channel.`);
-        });
-    }
-}, 1000 * 60);
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
@@ -749,17 +722,6 @@ client.on("messageReactionAdd", (messageReaction, user) => {
         case "📌":
             if (messageReaction.count >= 10) messageReaction.message.pin();
             break;
-        case "⭐":
-            let embed = new Discord.RichEmbed();
-            embed.setColor('#ffd633');
-            embed.addField('Author', messageReaction.message.author);
-            embed.addField('Channel', messageReaction.message.channel);
-            embed.addField('Message', messageReaction.message.content);
-            embed.setThumbnail(messageReaction.message.author.avatarURL);
-            if (messageReaction.count >= 7){
-                messageReaction.message.guild.channels.find('id', '412610188944605184').send({ embed });
-                messageReaction.message.clearReactions();
-            }
     }
 });
 
