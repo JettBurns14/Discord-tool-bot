@@ -293,8 +293,8 @@ const commands = {
         do: (message, client, args, Discord) => {
             try {
                 if (message.author.id == '218397146049806337') {
-                    client.user.setPresence({ game: { name: args[0], type: 0 } });
-                    message.channel.send(':white_check_mark: Game set to: `' + args[0] + '`').then(msg => msg.delete(deleteDelay));
+                    client.user.setPresence({ game: { name: args.join(' '), type: 0 } });
+                    message.channel.send(':white_check_mark: Game set to: `' + args.join(' ') + '`').then(msg => msg.delete(deleteDelay));
                 } else {
                     permError(message);
                 }
@@ -747,4 +747,9 @@ client.on("guildMemberRemove", (member) => {
     member.guild.channels.find("name", "general").send(`Aw, ${member.user.tag} just left the server, bye bye...`);
 });
 
-client.login(process.env.BOT_TOKEN);
+client.login(process.env.TOOLBOT_TOKEN);
+
+
+
+
+// Add Khanbot code here?
