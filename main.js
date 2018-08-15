@@ -1,8 +1,14 @@
 /***
 
     Discord utility bot built mostly by Jett, Jonah, and some cool contributors.
-    
+
     TODO:
+    - Word filter
+    - Better mute command, hooked up to server's DB.
+    
+
+
+    IDEAS:
     - Add modules to clean up this code!!!
     - Add a databse to manage server-specific data, then bot can be added to other servers and work
     - Management category
@@ -27,7 +33,7 @@
     - Cmd to make bot react to given message, with given emoji
     - If message gets N downvotes, it can’t get to star board
     - Cmd to post something in #announcements, will look cleaner
-    
+
 ***/
 
 const Discord = require('discord.js');
@@ -47,9 +53,9 @@ const getDefaultChannel = async (guild) => {
 
     if(guild.channels.exists("name", "general"))
         return guild.channels.find("name", "general");
-    return guild.channels.filter(c => c.type === "text" && 
+    return guild.channels.filter(c => c.type === "text" &&
                                  c.permissionsFor(guild.client.user).has("SEND_MESSAGES"))
-        .sort((a, b) => a.position - b.position || 
+        .sort((a, b) => a.position - b.position ||
               Long.fromString(a.id).sub(Long.fromString(b.id)).toNumber()).first();
 }
 
@@ -71,7 +77,7 @@ const sendDM = msg => {
 const permError = message => {
     message.delete(deleteDelay);
     message.channel.send("You do not have permissions to use this command.")
-        .then(msg => msg.delete(deleteDelay));
+        .then(deleteMessage(msg));
 };
 
 const sendError = (error) => {
@@ -84,6 +90,10 @@ const sendError = (error) => {
     sendDM({ embed });
 };
 
+const deleteMessage = (msg) => {
+    msg.delete(deleteDelay);
+};
+
 const commands = {
     help: {
         name: 'help',
@@ -91,34 +101,29 @@ const commands = {
         description: 'Returns all of my commands.',
         usage: `${prefix}help`,
         do: (message, client, args, Discord) => {
-            try {
-                if (!args[0]){
-                    let embed = new Discord.RichEmbed();
-                    embed.setColor(embedColor);
-                    embed.setAuthor('My Commands', client.user.avatarURL);
-                    embed.addField('General', Object.keys(commands).filter(function(key) {
-                        return commands[key].category === 'General';
-                    }).map(function(key) {
-                        return commands[key].name;
-                    }));
-                    embed.addField('Moderation', Object.keys(commands).filter(function(key) {
-                        return commands[key].category === 'Moderation';
-                    }).map(function(key) {
-                        return commands[key].name;
-                    }));
-                    message.channel.send({ embed });
-                } else {                 
-                    let selection = args[0];
-                    let embed = new Discord.RichEmbed();
-                    embed.setColor(embedColor);
-                    embed.addField('Usage:', commands[selection].usage);
-                    embed.addField('Description:', commands[selection].description);
-                    message.channel.send({ embed });
-                }
-
-            } catch(e) {
-                sendError(e);
-            };
+            if (!args[0]){
+                let embed = new Discord.RichEmbed();
+                embed.setColor(embedColor);
+                embed.setAuthor('My Commands', client.user.avatarURL);
+                embed.addField('General', Object.keys(commands).filter(function(key) {
+                    return commands[key].category === 'General';
+                }).map(function(key) {
+                    return commands[key].name;
+                }));
+                embed.addField('Moderation', Object.keys(commands).filter(function(key) {
+                    return commands[key].category === 'Moderation';
+                }).map(function(key) {
+                    return commands[key].name;
+                }));
+                message.channel.send({ embed });
+            } else {
+                let selection = args[0];
+                let embed = new Discord.RichEmbed();
+                embed.setColor(embedColor);
+                embed.addField('Usage:', commands[selection].usage);
+                embed.addField('Description:', commands[selection].description);
+                message.channel.send({ embed });
+            }
         }
     },
     purge: {
@@ -127,23 +132,19 @@ const commands = {
         description: 'Remove messages in bulk, 1-100.',
         usage: `${prefix}purge <number>`,
         do: (message, client, args, Discord) => {
-            try {
-                if (message.member.hasPermission("MANAGE_MESSAGES")) {
-                    if (args[0] <= 100 && args >= 1){
-                        message.channel.bulkDelete(parseInt(args[0]) + 1).then(() => {
-                            message.reply(`Deleted ${args[0]} messages`).then(msg => msg.delete(deleteDelay));
-                        }).catch(e => {
-                            sendError(e);
-                        });
-                    } else {
-                        message.reply("Please provide a number ≤ 100 and ≥ 1").then(msg => msg.delete(deleteDelay));
-                    }
+            if (message.member.hasPermission("MANAGE_MESSAGES")) {
+                if (args[0] <= 100 && args >= 1){
+                    message.channel.bulkDelete(parseInt(args[0]) + 1).then(() => {
+                        message.reply(`Deleted ${args[0]} messages`).then(deleteMessage(msg));
+                    }).catch(e => {
+                        sendError(e);
+                    });
                 } else {
-                    permError(message);
+                    message.reply("Please provide a number ≤ 100 and ≥ 1").then(deleteMessage(msg));
                 }
-            } catch(e) {
-                sendError(e);
-            };
+            } else {
+                permError(message);
+            }
         }
     },
     kick: {
@@ -152,23 +153,19 @@ const commands = {
         category: 'Moderation',
         usage: `${prefix}kick <member> [reason]`,
         do: (message, client, args, Discord) => {
-            try {
-                if (message.member.hasPermission("KICK_MEMBERS")){
-                    let reason = args.slice(1).join(' ');
-                    if(message.mentions.members.size !== 0){
-                        message.mentions.members.first().kick(reason).catch(e => {
-                            sendError(e);
-                        });
-                        message.channel.send(`<@${message.mentions.users.first().id}> has been kicked by <@${message.author.id}> because: ${reason}`);
-                    } else {
-                        message.channel.send("You didn't identify a valid user").then(msg => msg.delete(deleteDelay));
-                    }
+            if (message.member.hasPermission("KICK_MEMBERS")){
+                let reason = args.slice(1).join(' ');
+                if(message.mentions.members.size !== 0){
+                    message.mentions.members.first().kick(reason).catch(e => {
+                        sendError(e);
+                    });
+                    message.channel.send(`<@${message.mentions.users.first().id}> has been kicked by <@${message.author.id}> because: ${reason}`);
                 } else {
-                    permError(message);
+                    message.channel.send("You didn't identify a valid user").then(deleteMessage(msg));
                 }
-            } catch(e) {
-                sendError(e);
-            };
+            } else {
+                permError(message);
+            }
         }
     },
     ban: {
@@ -177,23 +174,19 @@ const commands = {
         category: 'Moderation',
         usage: `${prefix}ban <member> [reason]`,
         do: (message, client, args, Discord) => {
-            try {
-                if (message.member.hasPermission("BAN_MEMBERS")) {
-                    let reason = args.slice(1).join(' ');
-                    if (message.mentions.members.size !== 0) {
-                        message.mentions.members.first().ban(reason).catch(e => {
-                            sendError(e);
-                        });
-                        message.channel.send(`<@${message.mentions.users.first().id}> has been banned by <@${message.author.id}> because: ${reason}`);
-                    } else {
-                        message.channel.send("You didn't identify a valid user").then(msg => msg.delete(deleteDelay));
-                    }
+            if (message.member.hasPermission("BAN_MEMBERS")) {
+                let reason = args.slice(1).join(' ');
+                if (message.mentions.members.size !== 0) {
+                    message.mentions.members.first().ban(reason).catch(e => {
+                        sendError(e);
+                    });
+                    message.channel.send(`<@${message.mentions.users.first().id}> has been banned by <@${message.author.id}> because: ${reason}`);
                 } else {
-                    permError(message);
+                    message.channel.send("You didn't identify a valid user").then(deleteMessage(msg));
                 }
-            } catch(e) {
-                sendError(e);
-            };
+            } else {
+                permError(message);
+            }
         }
     },
     memberCount: {
@@ -202,14 +195,10 @@ const commands = {
         category: 'General',
         usage: `${prefix}memberCount`,
         do: (message, client, args, Discord) => {
-            try {
-                let embed = new Discord.RichEmbed();
-                embed.addField('Members', message.guild.memberCount);
-                embed.setColor(embedColor);
-                message.channel.send({ embed });
-            } catch(e) {
-                sendError(e);
-            };
+            let embed = new Discord.RichEmbed();
+            embed.addField('Members', message.guild.memberCount);
+            embed.setColor(embedColor);
+            message.channel.send({ embed });
         }
     },
     uptime: {
@@ -218,11 +207,7 @@ const commands = {
         category: 'General',
         usage: `${prefix}uptime`,
         do: (message, client, args, Discord) => {
-            try {
-                message.channel.send(':clock230: Bot has been online for ' + millisToTime(client.uptime));
-            } catch(e) {
-                sendError(e);
-            };
+            message.channel.send(':clock230: Bot has been online for ' + millisToTime(client.uptime));
         }
     },
     info: {
@@ -231,19 +216,15 @@ const commands = {
         category: 'General',
         usage: `${prefix}info`,
         do: (message, client, args, Discord) => {
-            try {
-                let embed = new Discord.RichEmbed();
-                embed.setThumbnail(client.user.avatarURL);
-                embed.addField('Users', client.users.size, true); 
-                embed.addField('Servers', client.guilds.size, true);
-                embed.addField('Creators', creators[0] + ', ' + creators[1], true);
-                embed.addField('Invite', 'http://bit.ly/InviteToolbot', true);
-                embed.addField('GitHub', 'https://github.com/JettBurns14/Discord-tool-bot', true);
-                embed.setColor(embedColor);
-                message.channel.send({ embed });
-            } catch(e) {
-                sendError(e);
-            };
+            let embed = new Discord.RichEmbed();
+            embed.setThumbnail(client.user.avatarURL);
+            embed.addField('Users', client.users.size, true);
+            embed.addField('Servers', client.guilds.size, true);
+            embed.addField('Creators', creators[0] + ', ' + creators[1], true);
+            embed.addField('Invite', 'http://bit.ly/InviteToolbot', true);
+            embed.addField('GitHub', 'https://github.com/JettBurns14/Discord-tool-bot', true);
+            embed.setColor(embedColor);
+            message.channel.send({ embed });
         }
     },
     userInfo: {
@@ -252,37 +233,33 @@ const commands = {
         category: 'General',
         usage: `${prefix}userInfo <member>`,
         do: (message, client, args, Discord) => {
-            try {
-                let member = message.mentions.members.first();
-                let joined = new Date(member.joinedAt);
-                let registered = new Date(member.user.createdAt);
-                let embed = new Discord.RichEmbed();
-                let perms = [];
-                for (let [key, value] of Object.entries(member.permissions.serialize())) {
-                    if (value == true) {
-                        perms.push(key);
-                    } else {
-                        continue;
-                    }
+            let member = message.mentions.members.first();
+            let joined = new Date(member.joinedAt);
+            let registered = new Date(member.user.createdAt);
+            let embed = new Discord.RichEmbed();
+            let perms = [];
+            for (let [key, value] of Object.entries(member.permissions.serialize())) {
+                if (value == true) {
+                    perms.push(key);
+                } else {
+                    continue;
                 }
-                embed.setAuthor(member.user.tag, member.user.avatarURL);
-                embed.setThumbnail(member.user.avatarURL);
-                embed.addField('ID', member.id, true);
-                embed.addField('Nickname', (member.nickname != null ? member.nickname : 'None'), true);
-                embed.addField('Status', member.presence.status, true);
-                embed.addField('Game', (member.presence.game != null ? member.presence.game.name : 'None'), true);
-                embed.addField('Joined', joined, true);
-                embed.addField('Registered', registered, true);
-                embed.addField('Roles', member.roles.map(x => x.name).join(', '), true);
-                embed.addField('Permissions', perms.join(', ').toLowerCase(), true);
-                embed.setColor(embedColor);
-                message.channel.send({ embed }).catch(e => {
-                    sendError(e);
-                });
-                //console.log(Object.entries(Object.values(member.permissions.serialize()).filter(x => x == true)));
-            } catch(e) {
+            }
+            embed.setAuthor(member.user.tag, member.user.avatarURL);
+            embed.setThumbnail(member.user.avatarURL);
+            embed.addField('ID', member.id, true);
+            embed.addField('Nickname', (member.nickname != null ? member.nickname : 'None'), true);
+            embed.addField('Status', member.presence.status, true);
+            embed.addField('Game', (member.presence.game != null ? member.presence.game.name : 'None'), true);
+            embed.addField('Joined', joined, true);
+            embed.addField('Registered', registered, true);
+            embed.addField('Roles', member.roles.map(x => x.name).join(', '), true);
+            embed.addField('Permissions', perms.join(', ').toLowerCase(), true);
+            embed.setColor(embedColor);
+            message.channel.send({ embed }).catch(e => {
                 sendError(e);
-            };
+            });
+            //console.log(Object.entries(Object.values(member.permissions.serialize()).filter(x => x == true)));
         }
     },
     setGame: {
@@ -291,16 +268,12 @@ const commands = {
         category: 'Moderation',
         usage: `${prefix}setGame <game>`,
         do: (message, client, args, Discord) => {
-            try {
-                if (message.author.id == '218397146049806337') {
-                    client.user.setPresence({ game: { name: args.join(' '), type: 0 } });
-                    message.channel.send(':white_check_mark: Game set to: `' + args.join(' ') + '`').then(msg => msg.delete(deleteDelay));
-                } else {
-                    permError(message);
-                }
-            } catch(e) {
-                sendError(e);
-            };
+            if (message.author.id == '218397146049806337') {
+                client.user.setPresence({ game: { name: args.join(' '), type: 0 } });
+                message.channel.send(':white_check_mark: Game set to: `' + args.join(' ') + '`').then(deleteMessage(msg));
+            } else {
+                permError(message);
+            }
         }
     },
     bans: {
@@ -309,28 +282,24 @@ const commands = {
         category: 'Moderation',
         usage: `${prefix}bans`,
         do: (message, client, args, Discord) => {
-            try {
-                if (message.member.hasPermission("MANAGE_GUILD")) {
-                    let embed = new Discord.RichEmbed();
-                    //embed.setThumbnail(client.user.avatarURL);
-                    embed.setColor(embedColor);
-                    message.guild.fetchBans().then(promise => {
-                        let resolvedBans = Promise.resolve(promise);
-                        resolvedBans.then((u) => {
-                            embed.addField('Bans', u.map(x => x.tag));
-                            message.channel.send({ embed });
-                        }).catch(e => {
-                            sendError(e);
-                        });
+            if (message.member.hasPermission("MANAGE_GUILD")) {
+                let embed = new Discord.RichEmbed();
+                //embed.setThumbnail(client.user.avatarURL);
+                embed.setColor(embedColor);
+                message.guild.fetchBans().then(promise => {
+                    let resolvedBans = Promise.resolve(promise);
+                    resolvedBans.then((u) => {
+                        embed.addField('Bans', u.map(x => x.tag));
+                        message.channel.send({ embed });
                     }).catch(e => {
                         sendError(e);
                     });
-                } else {
-                    permError(message);
-                }
-            } catch(e) {
-                sendError(e);
-            };
+                }).catch(e => {
+                    sendError(e);
+                });
+            } else {
+                permError(message);
+            }
         }
     },
     eval: {
@@ -338,34 +307,30 @@ const commands = {
         description: 'Evaluates JavaScript code.',
         usage: `${prefix}eval <code>`,
         do: (message, client, args, Discord) => {
-            try {
-                if (message.author.id === "218397146049806337" || message.author.id === "309845156696424458") {
-                    function clean(text) {
-                        if (typeof(text) === "string")
-                            return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
-                        else
-                            return text;
+            if (message.author.id === "218397146049806337" || message.author.id === "309845156696424458") {
+                function clean(text) {
+                    if (typeof(text) === "string")
+                        return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
+                    else
+                        return text;
+                }
+                try {
+                    const code = args.join(" ");
+                    let evaled = eval(code);
+
+                    if (typeof evaled !== "string") {
+                        evaled = require("util").inspect(evaled);
                     }
-                    try {
-                        const code = args.join(" ");
-                        let evaled = eval(code);
 
-                        if (typeof evaled !== "string") {
-                            evaled = require("util").inspect(evaled);
-                        }
-
-                        message.channel.send(clean(evaled), { code: "xl" }).catch(e => {
-                            sendError(e);
-                        });
-                  } catch (err) {
-                      message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
-                  }
-                } else {
-                    permError(message);
-                }                
-            } catch(e) {
-                sendError(e);
-            };
+                    message.channel.send(clean(evaled), { code: "xl" }).catch(e => {
+                        sendError(e);
+                    });
+              } catch (err) {
+                  message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
+              }
+            } else {
+                permError(message);
+            }
         }
     },
     msgEdits: {
@@ -374,25 +339,21 @@ const commands = {
         category: 'Moderation',
         usage: `${prefix}msgEdits <messageID>`,
         do: (message, client, args, Discord) => {
-            try {
-                var edits = '';
-                let embed = new Discord.RichEmbed();
-                //embed.setThumbnail(client.user.avatarURL);
-                embed.setColor(embedColor);
-                message.channel.fetchMessage(args[0])
-                    .then(msg => {
-                        for (var i = 0; i < msg.edits.length; ++i) {
-                            edits += msg.edits[i] + ', ';
-                        }
-                        embed.addField('Content', msg.content);
-                        embed.addField('Edits', edits);
-                        message.channel.send({ embed });
-                }).catch(e => {
-                    sendError(e);
-                });
-            } catch(e) {
+            var edits = '';
+            let embed = new Discord.RichEmbed();
+            //embed.setThumbnail(client.user.avatarURL);
+            embed.setColor(embedColor);
+            message.channel.fetchMessage(args[0])
+                .then(msg => {
+                    for (var i = 0; i < msg.edits.length; ++i) {
+                        edits += msg.edits[i] + ', ';
+                    }
+                    embed.addField('Content', msg.content);
+                    embed.addField('Edits', edits);
+                    message.channel.send({ embed });
+            }).catch(e => {
                 sendError(e);
-            };
+            });
         }
     },
     clearReactions: {
@@ -401,23 +362,19 @@ const commands = {
         category: 'Moderation',
         usage: `${prefix}clearReactions <messageId>`,
         do: (message, client, args, Discord) => {
-            try {
-                if (message.member.hasPermission("MANAGE_MESSAGES")) {
-                    let embed = new Discord.RichEmbed();
-                    embed.setColor(embedColor);
-                    message.channel.fetchMessage(args[0]).then(msg => {
-                        msg.clearReactions();
-                        embed.addField('Success', ':white_check_mark: Reactions cleared.');
-                        message.channel.send({ embed }).then(msg => msg.delete(deleteDelay));
-                    }).catch(e => {
-                        sendError(e);
-                    });
-                } else {
-                    permError(message);
-                }
-            } catch(e) {
-                sendError(e);
-            };
+            if (message.member.hasPermission("MANAGE_MESSAGES")) {
+                let embed = new Discord.RichEmbed();
+                embed.setColor(embedColor);
+                message.channel.fetchMessage(args[0]).then(msg => {
+                    msg.clearReactions();
+                    embed.addField('Success', ':white_check_mark: Reactions cleared.');
+                    message.channel.send({ embed }).then(deleteMessage(msg));
+                }).catch(e => {
+                    sendError(e);
+                });
+            } else {
+                permError(message);
+            }
         }
     },
     pin: {
@@ -426,23 +383,19 @@ const commands = {
         category: 'Moderation',
         usage: `${prefix}pin <messageId>`,
         do: (message, client, args, Discord) => {
-            try {
-                if (message.member.hasPermission("MANAGE_GUILD")) {
-                    let embed = new Discord.RichEmbed();
-                    embed.setColor(embedColor);
-                    message.channel.fetchMessage(args[0]).then(msg => {
-                        msg.pin();
-                        embed.addField('Success', ':white_check_mark: Message pinned.');
-                        message.channel.send({ embed }).then(msg => msg.delete(deleteDelay));
-                    }).catch(e => {
-                        sendError(e);
-                    });
-                } else {
-                    permError(message);
-                }
-            } catch(e) {
-                sendError(e);
-            };
+            if (message.member.hasPermission("MANAGE_GUILD")) {
+                let embed = new Discord.RichEmbed();
+                embed.setColor(embedColor);
+                message.channel.fetchMessage(args[0]).then(msg => {
+                    msg.pin();
+                    embed.addField('Success', ':white_check_mark: Message pinned.');
+                    message.channel.send({ embed }).then(deleteMessage(msg));
+                }).catch(e => {
+                    sendError(e);
+                });
+            } else {
+                permError(message);
+            }
         }
     },
     unpin: {
@@ -451,23 +404,19 @@ const commands = {
         category: 'Moderation',
         usage: `${prefix}unpin <messageId>`,
         do: (message, client, args, Discord) => {
-            try {
-                if (message.member.hasPermission("MANAGE_GUILD")) {
-                    let embed = new Discord.RichEmbed();
-                    embed.setColor(embedColor);
-                    message.channel.fetchMessage(args[0]).then(msg => {
-                        msg.unpin();
-                        embed.addField('Success', ':white_check_mark: Message unpinned.');
-                        message.channel.send({ embed }).then(msg => msg.delete(deleteDelay));
-                    }).catch(e => {
-                        sendError(e);
-                    });
-                } else {
-                    permError(message);
-                }
-            } catch(e) {
-                sendError(e);
-            };
+            if (message.member.hasPermission("MANAGE_GUILD")) {
+                let embed = new Discord.RichEmbed();
+                embed.setColor(embedColor);
+                message.channel.fetchMessage(args[0]).then(msg => {
+                    msg.unpin();
+                    embed.addField('Success', ':white_check_mark: Message unpinned.');
+                    message.channel.send({ embed }).then(deleteMessage(msg));
+                }).catch(e => {
+                    sendError(e);
+                });
+            } else {
+                permError(message);
+            }
         }
     },
     servers: {
@@ -476,21 +425,17 @@ const commands = {
         category: 'Moderation',
         usage: `${prefix}servers`,
         do: (message, client, args, Discord) => {
-            try {
-                if (message.author.id === '218397146049806337') {
-                    let embed = new Discord.RichEmbed();
-                    embed.setColor(embedColor);
-                    embed.addField('Servers', client.guilds.map(guild => guild.name));
-                    embed.addField('IDs', client.guilds.map(guild => guild.id));
-                    embed.addField('Owners', client.guilds.map(guild => guild.owner));
-                    message.channel.send({ embed });
-                    
-                } else {
-                    permError(message);
-                }
-            } catch(e) {
-                sendError(e);
-            };
+            if (message.author.id === '218397146049806337') {
+                let embed = new Discord.RichEmbed();
+                embed.setColor(embedColor);
+                embed.addField('Servers', client.guilds.map(guild => guild.name));
+                embed.addField('IDs', client.guilds.map(guild => guild.id));
+                embed.addField('Owners', client.guilds.map(guild => guild.owner));
+                message.channel.send({ embed });
+
+            } else {
+                permError(message);
+            }
         }
     },
     say: {
@@ -499,19 +444,15 @@ const commands = {
         category: 'Moderation',
         usage: `${prefix}say <content>`,
         do: (message, client, args, Discord) => {
-            try {
-                if (message.author.id === '218397146049806337') {
-                    message.delete().then(() => {
-                        message.channel.send(args.join(' '));
-                    }).catch(e => {
-                        sendError(e);
-                    });
-                } else {
-                    permError(message);
-                }
-            } catch(e) {
-                sendError(e);
-            };
+            if (message.author.id === '218397146049806337') {
+                message.delete().then(() => {
+                    message.channel.send(args.join(' '));
+                }).catch(e => {
+                    sendError(e);
+                });
+            } else {
+                permError(message);
+            }
         }
     },
     mute: {
@@ -520,23 +461,19 @@ const commands = {
         category: 'Moderation',
         usage: `${prefix}mute <user>`,
         do: (message, client, args, Discord) => {
-            try {
-                if (message.member.hasPermission("MANAGE_ROLES")) {
-                    let reason = args.slice(1).join(' ');
-                    let muteRole = message.guild.roles.find("id", "398661819989884928");
-                    if (message.mentions.members.size !== 0){
-                        message.mentions.members.first().addRole(muteRole, reason).then(() => {
-                            message.channel.send(`${message.mentions.users.first()} has been muted by <@${message.author.id}> because: ${reason}`);
-                        }).catch(e => {
-                            sendError(e);
-                        });
-                    } else {
-                        permError(message);
-                    }
+            if (message.member.hasPermission("MANAGE_ROLES")) {
+                let reason = args.slice(1).join(' ');
+                let muteRole = message.guild.roles.find("id", "398661819989884928");
+                if (message.mentions.members.size !== 0){
+                    message.mentions.members.first().addRole(muteRole, reason).then(() => {
+                        message.channel.send(`${message.mentions.users.first()} has been muted by <@${message.author.id}> because: ${reason}`);
+                    }).catch(e => {
+                        sendError(e);
+                    });
+                } else {
+                    permError(message);
                 }
-            } catch(e) {
-                sendError(e);
-            };
+            }
         }
     },
     unmute: {
@@ -545,22 +482,18 @@ const commands = {
         category: 'Moderation',
         usage: `${prefix}unmute <user>`,
         do: (message, client, args, Discord) => {
-            try {
-                if (message.member.hasPermission("MANAGE_ROLES")) {
-                    if (message.mentions.members.size !== 0){
-                        let muteRole = message.guild.roles.find("id", "398661819989884928");
-                        message.mentions.members.first().removeRole(muteRole).then(() => {
-                            message.channel.send(`${message.mentions.users.first()} has been unmuted by <@${message.author.id}>.`);
-                        }).catch(e => {
-                            sendError(e);
-                        });
-                    } else {
-                        permError(message);
-                    }
+            if (message.member.hasPermission("MANAGE_ROLES")) {
+                if (message.mentions.members.size !== 0){
+                    let muteRole = message.guild.roles.find("id", "398661819989884928");
+                    message.mentions.members.first().removeRole(muteRole).then(() => {
+                        message.channel.send(`${message.mentions.users.first()} has been unmuted by <@${message.author.id}>.`);
+                    }).catch(e => {
+                        sendError(e);
+                    });
+                } else {
+                    permError(message);
                 }
-            } catch(e) {
-                sendError(e);
-            };
+            }
         }
     },
     levels: {
@@ -615,7 +548,7 @@ const commands = {
                     }
                 }
             } catch(e) {
-                console.log(e);              
+                console.log(e);
             }
         }
     }*/
@@ -626,7 +559,7 @@ const otherFunctions = (message) => {
     if (content.includes("good night") || content.includes("g'night") || content.includes("goodnight") || content.includes("g night")) message.react("🌙");
     if (message.author.id === '309845156696424458' || message.author.id === '218397146049806337' || message.author.id === "221285118608801802" || message.author.id === "299150484218970113") {
         if (content == 'blob') {
-            message.channel.send("<a:rainbowBlob:402289443593125888>").then((m) => {            
+            message.channel.send("<a:rainbowBlob:402289443593125888>").then((m) => {
                 message.delete();
                 m.react("402289443593125888");
             }).catch(e => {
@@ -656,7 +589,7 @@ client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
     client.user.setUsername('Helpful Bot');
     client.user.setPresence({ game: { name: `${prefix}help`, type: 0 } });
-    
+
     let embed = new Discord.RichEmbed();
     embed.setColor(embedColor);
     embed.setThumbnail('https://media.discordapp.net/attachments/307975805357522944/392142646618882060/image.png');
@@ -683,7 +616,11 @@ client.on('message', (message) => {
     let command = message.content.substring(prefix.length).split(' ');
     for (let i in commands){
         if (command[0].toLowerCase() === commands[i].name.toLowerCase()) {
-            commands[i].do(message, client, args, Discord);
+            try {
+                commands[i].do(message, client, args, Discord);
+            } catch(e) {
+                sendError(e);
+            }
         }
     }
 });
@@ -704,7 +641,7 @@ client.on("messageReactionAdd", (messageReaction, user) => {
                     }
                 }
             }*/
-            
+
             if (flagCount >= 3) {
                 //messageReaction.message.delete();
             } else {
