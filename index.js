@@ -1142,7 +1142,7 @@ client.on("guildMemberUpdate", (oldMember, newMember) => {
     if (oldMember.displayName !== newMember.displayName) {
         let embed = new Discord.RichEmbed();
         embed.setColor(embedGreenColor);
-        embed.setDescription(`<@${newMember.id}> changed their nickname to ${newMember.displayName}`);
+        embed.setDescription(`<@${newMember.id}> changed their nickname from ${oldMember.displayName} to ${newMember.displayName}`);
         embed.setFooter(newMember.id);
         embed.setTimestamp();
         newMember.guild.channels.find("id", LOGS_ID).send({ embed });
