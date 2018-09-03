@@ -463,8 +463,8 @@ const commands = {
         usage: `${prefix}purge <number>`,
         do: (message, client, args, Discord) => {
             if (hasManageMessages(message)) {
-                if (args[0] <= 100 && args >= 1) {
-                    message.channel.bulkDelete(args[0] + 1).then(msgs => {
+                if (+args[0] <= 100 && +args[0] >= 1) {
+                    message.channel.bulkDelete(+args[0] + 1).then(msgs => {
                         message.channel.send(`:white_check_mark: Deleted ${msgs.size - 1} messages`).then(msg => deleteMessage(msg));
                     }).catch(e => {
                         sendError(e);
