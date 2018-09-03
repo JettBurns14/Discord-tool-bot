@@ -60,127 +60,26 @@ const embedRedColor = "ff6666"; // Red.
 const embedGreenColor = "00b33c"; // Green.
 const embedYellowColor = "e6e600"; // Yellow.
 
-// Channel IDs.
-const TEST_LOG_CHANNEL = "482391130751631360"; // On TEST server, where filter alerts go.
-const TEST_QUEUE_CHANNEL = "484162867474595850"; // On TEST server.
-const LOGS_ID = "473524298368286720"; // KAD public log channel.
-const JUNKYARD_ID = "477291431069745154"; // KAD filter log channel.
+// Variables to be defined.
+let LOGS_ID;
+let JUNKYARD_ID;
+let MUTED_ROLE;
 
-// Role IDs.
-const TEST_MUTED_ROLE = "484928655659892736"; // On TEST server.
+// Channel and role IDs.
+if (process.env.DEV == 1) {
+    LOGS_ID = "482391130751631360"; // On TEST server, where filter alerts go.
+    JUNKYARD_ID = "484162867474595850"; // On TEST server.
+    MUTED_ROLE = "484928655659892736"; // On TEST server.
+} else {
+    LOGS_ID = "473524298368286720"; // KAD public log channel.
+    JUNKYARD_ID = "477291431069745154"; // KAD filter log channel.
+    MUTED_ROLE = "474244727223615492"; // KAD muted role.
+}
+// In KAD.
+const hiddenChannels = ["452247073174323222", "473221758279745552", "454132320849625109", "477291431069745154"];
 
 // Functions for filter functionality.
-const badWords = [
-    "test", "tst", "est", "tet",
-
-    "fck", "uck", "ngg", "cnt", "unt", "cnt", "bich", "blwjob", "btch", "dck",
-    "pssy", "ashole", "ahole", "cck", "sht", "stu", "gto", "godamn", "whre",
-
-    "fuck", "nigg", "fuk", "cunt", "cnut", "bitch", "dick", "d1ck", "pussy",
-    "asshole", "b1tch", "b!tch", "blowjob", "cock", "c0ck", "shit", "stfu",
-    "gtfo", "omfg", "goddamn", "cuck", "kys", "fkys", "kms", "fkms", "whore",
-    "ahole", "wh0re damned", "lmfao", "yiff", "1488", "8=D", "A55hole",
-    "abortion", "AIDs", "ainujin", "ainuzin", "akimekura", "Anal anus",
-    "anuses", "Anushead", "anuslick", "anuss", "aokan", "Arsch", "Arschloch",
-    "arsed", "arsehole", "arseholed arseholes", "arseholing", "arselicker",
-    "arses", "Ass", "asshat", "asshole", "Auschwitz", "b00bz", "b1tc",
-    "Baise bakachon", "bakatyon", "Ballsack", "BAMF", "Bastard", "Beaner",
-    "Beeatch", "beeeyotch", "beefwhistle", "beeotch Beetch", "beeyotch",
-    "Bellend", "bestiality", "beyitch", "beyotch", "Biach", "bin laden",
-    "binladen", "biotch", "bitch Bitching", "blad", "bladt", "blowjob",
-    "blowme", "blyad", "blyadt", "bon3r", "boner", "boobs", "Btch",
-    "Bukakke Bullshit", "bung", "butagorosi", "butthead", "Butthole",
-    "Buttplug", "c0ck", "Cabron", "Cacca", "Cadela", "Cagada Cameljockey",
-    "Caralho", "castrate", "Cazzo", "ceemen", "ch1nk", "chankoro", "chieokure",
-    "chikusatsu", "Ching chong Chinga", "Chingada Madre", "Chingado",
-    "Chingate", "chink", "chinpo", "Chlamydia", "choad", "chode",
-    "chonga chonko", "chonkoro", "chourimbo", "chourinbo", "chourippo",
-    "chuurembo", "chuurenbo", "circlejerk", "cl1t", "cli7 clit", "clitoris",
-    "cocain", "Cocaine", "cock", "Cocksucker", "Coglione", "Coglioni",
-    "coitus", "coituss", "cojelon cojones", "condom", "coon", "coon hunt",
-    "coon kill", "coonhunt", "coonkill", "Cooter", "cotton pic",
-    "cotton pik cottonpic", "cottonpik", "Crackhead", "CSAM", "Culear",
-    "Culero", "Culo", "Cum", "cun7", "cunt", "cvn7", "cvnt cyka", "d1kc",
-    "d4go", "dago", "Darkie", "Deez Nuts", "deeznut", "deeznuts", "Dickhead",
-    "dikc", "dildo Dio Bestia", "dong", "dongs", "douche", "Downie", "Downy",
-    "Dumbass", "Durka durka", "Dyke", "Ejaculate", "Encule enjokousai",
-    "enzyokousai", "etahinin", "etambo", "etanbo", "f0ck", "f0kc", "f3lch",
-    "facking", "fag", "faggot Fanculo", "Fanny", "fatass", "fck", "Fckn",
-    "fcuk", "fcuuk", "felch", "Fetish", "Fgt", "FiCKDiCH Figlio di Puttana",
-    "fku", "fock", "fokc", "foreskin", "Fotze", "Foutre", "fucc", "fuck",
-    "Fucking", "fuct fujinoyamai", "fukashokumin", "Fupa", "fuuck", "fuuuck",
-    "fuuuuck", "fuuuuuck", "fuuuuuuck", "fuuuuuuuck",
-    "fuuuuuuuuck fuuuuuuuuuck", "fuuuuuuuuuu", "fvck", "fxck", "fxuxcxk",
-    "g000k", "g00k", "g0ok", "gestapo", "go0k", "god damn goldenshowers",
-    "golliwogg", "gollywog", "Gooch", "gook", "goook", "Gyp", "h0m0", "h0mo",
-    "h1tl3", "h1tle hairpie", "hakujakusha", "hakuroubyo", "hakuzyakusya",
-    "hantoujin", "hantouzin", "Herpes", "hom0", "homo", "honky Hooker",
-    "hor3", "hukasyokumin", "Hure", "Hurensohn", "huzinoyamai", "hymen",
-    "inc3st", "incest", "Inculato", "Injun intercourse", "inugoroshi",
-    "inugorosi", "j1g4b0", "j1g4bo", "j1gab0", "j1gabo", "Jack Off", "jackass",
-    "JerkOff jig4b0", "jig4bo", "jigabo", "Jigaboo", "jiggaboo", "jizz",
-    "Joder", "Joto", "Jungle Bunny", "junglebunny", "k k k k1k3", "kichigai",
-    "kik3", "Kike", "kikeiji", "kikeizi", "Kilurself", "kitigai", "kkk",
-    "klu klux", "Klu Klux Klan", "kluklux knobhead", "koon hunt", "koon kill",
-    "koonhunt", "koonkill", "koroshiteyaru", "koumoujin", "koumouzin",
-    "ku klux klan kun7", "kurombo", "Kurva", "Kurwa", "kxkxk", "l3sb0",
-    "lezbo", "lezzie", "m07th3rfukr", "m0th3rfvk3r",
-    "m0th3rfvker Madonna Puttana", "manberries", "manko", "manshaft",
-    "Maricon", "Masterbat", "masterbate", "Masturbacion",
-    "masturbait Masturbare", "Masturbate", "Masturbazione", "Merda", "Merde",
-    "Meth", "Mierda", "milf", "Minge", "Miststück mitsukuchi", "mitukuti",
-    "Molest", "molester", "molestor", "Moon Cricket", "moth3rfucer",
-    "moth3rfvk3r", "moth3rfvker motherfucker", "Mulatto", "n1663r", "n1664",
-    "n166a", "n166er", "n1g3r", "n1German", "n1gg3r", "n1gGerman n3gro",
-    "n4g3r", "n4gg3r", "n4gGerman", "n4z1", "nag3r", "nagg3r", "nagGerman",
-    "neGerman", "ngGerman", "nggr NhigGerman", "ni666", "ni66a", "ni66er",
-    "ni66g", "ni6g", "ni6g6", "ni6gg", "nig66", "nig6g", "nigar",
-    "niGerman nigg3", "nigg6", "nigga", "niggaz", "nigGerman", "nigglet",
-    "niggr", "nigguh", "niggur", "niggy", "niglet", "Nignog nimpinin",
-    "ninpinin", "Nipples", "niqqa", "niqqer", "Nonce", "nugga", "Nutsack",
-    "Nutted", "nygGerman", "omeko Orgy", "p3n15", "p3n1s", "p3ni5", "p3nis",
-    "p3nl5", "p3nls", "Paki", "Panties", "Pedo", "pedoph", "pedophile pen15",
-    "pen1s", "Pendejo", "peni5", "penile", "penis", "Penis", "penl5", "penls",
-    "penus", "Perra", "phaggot phagot", "phuck", "Pikey", "Pinche", "Pizda",
-    "Polla", "Porca Madonna", "Porch monkey", "Porn", "Porra", "pr1ck preteen",
-    "prick", "pu555y", "pu55y", "pub1c", "Pube", "pubic", "pun4ni", "pun4nl",
-    "Punal", "punan1", "punani punanl", "puss1", "puss3", "puss5", "pusse",
-    "pussi", "Pussies", "pusss1", "pussse", "pusssi", "pusssl", "pusssy Pussy",
-    "Puta", "Putain", "Pute", "Puto", "Puttana", "Puttane", "Puttaniere",
-    "puzzy", "pvssy", "queef", "r3c7um r4p15t", "r4p1st", "r4p3", "r4pi5t",
-    "r4pist", "raape", "raghead", "raibyo", "Raip", "rap15t", "rap1st",
-    "Rapage rape", "Raped", "rapi5t", "Raping", "rapist", "rectum", "Red Tube",
-    "Reggin", "reipu", "retard", "Ricchione rimjob", "rizzape", "rompari",
-    "Salaud", "Salope", "sangokujin", "sangokuzin", "santorum", "Scheiße",
-    "Schlampe Schlampe", "schlong", "Schwuchtel", "Scrote", "secks",
-    "seishinhakujaku", "seishinijo", "seisinhakuzyaku", "seisinizyo Semen",
-    "semushiotoko", "semusiotoko", "sh|t", "sh17", "sh1t", "Shat", "Shemale",
-    "shi7", "shinajin", "shinheimin shirakko", "shit", "Shitty", "shl7",
-    "shlt", "shokubutsuningen", "sinazin", "sinheimin", "Skank", "SMD",
-    "Sodom sofa king", "sofaking", "Spanishick", "Spanishook", "Spanishunk",
-    "STD", "STDs", "Succhia Cazzi", "suck my", "suckmy syokubutuningen",
-    "Taint", "Tapatte", "Tapette", "Tarlouse", "tea bag", "teabag", "teebag",
-    "teensex", "teino Testa di Cazzo", "Testicles", "Thot", "tieokure",
-    "tinpo", "Tits", "tokushugakkyu", "tokusyugakkyu", "torukoburo",
-    "torukojo torukozyo", "tosatsu", "tosatu", "towelhead", "Tranny", "tunbo",
-    "tw47", "tw4t", "twat", "tyankoro", "tyonga tyonko", "tyonkoro",
-    "tyourinbo", "tyourippo", "tyurenbo", "ushigoroshi", "usigorosi",
-    "v461n4", "v461na", "v46in4 v46ina", "v4g1n4", "v4g1na", "v4gin4",
-    "v4gina", "va61n4", "va61na", "va6in4", "va6ina", "Vaccagare",
-    "Vaffanculo vag1n4", "vag1na", "vagin4", "vagina", "VateFaire",
-    "vvhitepower", "w3tb4ck", "w3tback", "Wank", "wanker wetb4ck", "wetback",
-    "wh0r3", "white power", "whitepower", "whor3", "Wog", "Wop", "x8lp3t",
-    "xbl pet", "XBLPET XBLRewards", "Xl3LPET", "yabunirami", "Zipperhead",
-    "Блядь", "сука", "アオカン", "あおかん", "イヌゴロシ", "いぬごろし インバイ",
-    "いんばい", "オナニー", "おなにー", "オメコ", "カワラコジキ", "かわらこじき",
-    "カワラモノ", "かわらもの キケイジ", "きけいじ", "キチガイ", "きちがい", "キンタマ",
-    "きんたま", "クロンボ", "くろんぼ", "コロシテヤル ころしてやる", "シナジン",
-    "しなじん", "タチンボ", "たちんぼ", "チョンコウ", "ちょんこう", "チョンコロ",
-    "ちょんころ ちょん公", "チンポ", "ちんぽ", "ツンボ", "つんぼ", "とるこじょう",
-    "とるこぶろ", "トルコ嬢", "トルコ風呂", "ニガー ニグロ", "にんぴにん",
-    "はんとうじん", "マンコ", "まんこ", "レイプ", "れいぷ", "低能", "屠殺", "強姦",
-    "援交 支那人", "精薄", "精薄者", "輪姦"
-];
+const badWords = require("./filter.json");
 const homoglyphs = Object.entries({
     "a": /[ÀÁÂÃÄÅàáâãäåɑΑαаᎪＡａ]/g,
     "b": /[ßʙΒβВЬᏴᛒＢｂ]/g,
@@ -236,7 +135,6 @@ const filter = message => {
 
     badWords.forEach(bw => {
         if (cleanedMsg.includes(` ${bw} `) || cleanedWords[0] === bw || cleanedWords[cleanedWords.length-1] === bw) {
-            console.log(message.edits.length);
             let embed = new Discord.RichEmbed();
             embed.setColor(embedRedColor);
             embed.setAuthor("Filter alert", "https://cdn.discordapp.com/attachments/306119383820795904/480069533676208130/emoji.png");
@@ -248,6 +146,7 @@ const filter = message => {
             embed.addField("Edited?", (message.edits.length === 1 ? "No" : "Yes"));
             embed.setTimestamp();
             message.delete();
+            console.log(JUNKYARD_ID);
             message.guild.channels.find("id", JUNKYARD_ID).send({ embed });
         }
     });
@@ -918,7 +817,7 @@ const commands = {
                     const member = message.guild.member(user);
                     if (member) {
                         if (reason) {
-                            let muteRole = message.guild.roles.find("id", TEST_MUTED_ROLE);
+                            let muteRole = message.guild.roles.find("id", MUTED_ROLE);
                             if (muteRole) {
                                 member.addRole(muteRole, reason).then(u => {
                                     logMessage(message, {
@@ -961,7 +860,7 @@ const commands = {
                     const member = message.guild.member(user);
                     if (member) {
                         if (reason) {
-                            let muteRole = message.guild.roles.find("id", TEST_MUTED_ROLE);
+                            let muteRole = message.guild.roles.find("id", MUTED_ROLE);
                             if (muteRole) {
                                 member.removeRole(muteRole, reason).then(u => {
                                     logMessage(message, {
@@ -1177,6 +1076,46 @@ client.on("messageReactionAdd", (reaction, user) => {
         break;
     }
 });
+client.on("messageDelete", message => {
+    // If message isn't an embed and author isn't a bot...
+    if (message.embeds.length < 1 && !message.author.bot) {
+        // if message channel isn't hidden...
+        if (hiddenChannels.indexOf(message.channel.id) === -1) {
+            // send public log of deleted messages.
+            let embed1 = new Discord.RichEmbed()
+                .setColor(embedRedColor)
+                .setDescription(`Message sent by <@${message.author.id}> deleted in <#${message.channel.id}>`)
+                .setFooter(message.id)
+                .setTimestamp();
+            message.guild.channels.find("id", LOGS_ID).send(embed1);
+        }
+
+        // Mod log of deleted messages.
+        let embed2 = new Discord.RichEmbed()
+            .setColor(embedRedColor)
+            .setDescription(`Message sent by <@${message.author.id}> deleted in <#${message.channel.id}>`)
+            .addField("Message Content", message.content)
+            .setFooter(message.id)
+            .setTimestamp();
+        message.guild.channels.find("id", JUNKYARD_ID).send(embed2);
+    }
+});
+client.on("messageDeleteBulk", messages => {
+    console.log(messages.array());
+    let embed = new Discord.RichEmbed();
+    embed.setColor(embedRedColor);
+    embed.setDescription(`Bulk delete in <#${messages.first().channel.id}>, ${messages.array().length - 1} messages deleted`);
+    embed.setTimestamp();
+    client.channels.find("id", LOGS_ID).send({ embed });
+});
+client.on("messageReactionRemoveAll", message => {
+    let embed = new Discord.RichEmbed();
+    embed.setColor(embedRedColor);
+    embed.setDescription(`Reactions removed from message in <#${message.channel.id}>.`);
+    embed.setFooter(message.id);
+    embed.setTimestamp();
+    message.guild.channels.find("id", LOGS_ID).send({ embed });
+});
 client.on("guildMemberUpdate", (oldMember, newMember) => {
     // If the member roles aren't the same
     if (!oldMember.roles.equals(newMember.roles)) {
@@ -1248,42 +1187,6 @@ client.on("channelDelete", channel => {
         client.channels.find("id", LOGS_ID).send({ embed });
     }
 });
-client.on("messageDelete", message => {
-    if (message.embeds.length < 1) {
-        // Public log of deleted messages.
-        let embed1 = new Discord.RichEmbed()
-            .setColor(embedRedColor)
-            .setDescription(`Message sent by <@${message.author.id}> deleted in <#${message.channel.id}>`)
-            .setFooter(message.id)
-            .setTimestamp();
-        message.guild.channels.find("id", LOGS_ID).send(embed1);
-
-        // Mod log of deleted messages.
-        let embed2 = new Discord.RichEmbed()
-            .setColor(embedRedColor)
-            .setDescription(`Message sent by <@${message.author.id}> deleted in <#${message.channel.id}>`)
-            .addField("Message Content", message.content)
-            .setFooter(message.id)
-            .setTimestamp();
-        message.guild.channels.find("id", JUNKYARD_ID).send(embed2);
-    }
-});
-client.on("messageDeleteBulk", messages => {
-    console.log(messages.array());
-    let embed = new Discord.RichEmbed();
-    embed.setColor(embedRedColor);
-    embed.setDescription(`Bulk delete in <#${messages.first().channel.id}>, ${messages.array().length - 1} messages deleted`);
-    embed.setTimestamp();
-    client.channels.find("id", LOGS_ID).send({ embed });
-});
-client.on("messageReactionRemoveAll", message => {
-    let embed = new Discord.RichEmbed();
-    embed.setColor(embedRedColor);
-    embed.setDescription(`Reactions removed from message in <#${message.channel.id}>.`);
-    embed.setFooter(message.id);
-    embed.setTimestamp();
-    message.guild.channels.find("id", LOGS_ID).send({ embed });
-});
 client.on("roleCreate", role => {
     let embed = new Discord.RichEmbed();
     embed.setColor(embedGreenColor);
@@ -1301,6 +1204,9 @@ client.on("roleDelete", role => {
     role.guild.channels.find("id", LOGS_ID).send({ embed });
 });
 client.on("guildMemberAdd", member => {
+    // Give new member the "new" role.
+    member.addRole("473692803193372672");
+
     let embed = new Discord.RichEmbed();
     embed.setColor(embedGreenColor);
     embed.setAuthor("Member Joined");

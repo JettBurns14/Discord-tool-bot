@@ -5,7 +5,9 @@
     "main": "main.js",
     "scripts": {
         "deploy": "git push heroku master",
-        "dev": "node index.js"
+        "dev": "node index.js",
+        "turn on": "heroku ps:scale worker=1",
+        "turn off": "heroku ps:scale worker=0"
     },
     "dependencies": {
         "discord.js": "^11.4.2",
