@@ -108,19 +108,19 @@ const homoglyphs = Object.entries({
     "z": /[ΖᏃＺｚ]/g
 });
 const deHomoglyph = str => {
-    // homoglyphs.forEach(h => str = str.replace(h[1], h[0]));
-    // return str;
+    homoglyphs.forEach(h => str = str.replace(h[1], h[0]));
+    return str;
 
     // for each letter,
     // replace letter with standard letter,
     // repeat
-    str.split("").forEach(l => {
-
-    })
-    return str.split("").map(l => {
-        homoglyphs.forEach(h => l = l.replace(h[1], h[0]));
-        return l;
-    }).join("");
+    // str.split("").forEach(l => {
+    //
+    // })
+    // return str.split("").map(l => {
+    //     homoglyphs.forEach(h => l = l.replace(h[1], h[0]));
+    //     return l;
+    // }).join("");
 };
 const deSymbolize = str => str.replace(/[~\!@#$%^&*()-=_+\[\]{}|"";:\/?.>,<`]/g, "");
 const filter = message => {
@@ -1069,11 +1069,11 @@ client.on("messageReactionAdd", (reaction, user) => {
                 }
             }
         break;
-        case "📌":
-            if (reaction.count >= 6) {
-                reaction.message.pin();
-            }
-        break;
+        // case "📌":
+        //     if (reaction.count >= 6) {
+        //         reaction.message.pin();
+        //     }
+        // break;
     }
 });
 client.on("messageDelete", message => {
