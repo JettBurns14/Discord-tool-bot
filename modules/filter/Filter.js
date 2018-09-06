@@ -42,7 +42,7 @@ class Filter {
     }
 
     // The main filter method.  Returns a promise
-    run(message, Discord) {
+    run(message, Discord, JUNKYARD_ID) {
         const cleanMessage = this.cleanMessage(message.content);
 
         if (this.cleanedMessageIsOkay(cleanMessage)) {

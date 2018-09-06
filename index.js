@@ -933,7 +933,7 @@ client.on("ready", () => {
 client.on("message", message => {
     if (message.author.bot) return;
     if (message.channel.type !== "dm") {
-        filter.run(message, Discord)
+        filter.run(message, Discord, JUNKYARD_ID)
             .catch(e => console.error("Filter error: ", e));
     }
     otherFunctions(message);
@@ -956,7 +956,7 @@ client.on("messageUpdate", (oldMsg, newMsg) => {
         console.log("Message edited:");
         console.log(`Old content: ${oldMsg.content}`);
         console.log(`New content: ${newMsg.content}`);
-        filter.run(newMsg, Discord)
+        filter.run(newMsg, Discord, JUNKYARD_ID)
             .catch(e => console.error("Filter error: ", e));
     }
 });
