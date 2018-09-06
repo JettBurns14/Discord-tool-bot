@@ -43,6 +43,7 @@ require("dotenv").load();
 // Require needed modules.
 const Discord = require("discord.js");
 const request = require("request");
+const Filter = require("./modules/filter/Filter");
 
 // Set up client.
 const client = new Discord.Client();
@@ -61,96 +62,15 @@ const embedGreenColor = "00b33c"; // Green.
 const embedYellowColor = "e6e600"; // Yellow.
 
 // Variables to be defined.
-let LOGS_ID;
-let JUNKYARD_ID;
-let MUTED_ROLE;
+const DEV_MODE = process.env.DEV == 1;
+const LOGS_ID = DEV_MODE ? process.env.LOGS_ID : "473524298368286720";
+const JUNKYARD_ID = DEV_MODE ? process.env.JUNKYARD_ID : "477291431069745154";
+const MUTED_ROLE = DEV_MODE ? process.env.MUTED_ROLE : "474244727223615492";
 
-// Channel and role IDs.
-if (process.env.DEV == 1) {
-    LOGS_ID = "482391130751631360"; // On TEST server, where filter alerts go.
-    JUNKYARD_ID = "484162867474595850"; // On TEST server.
-    MUTED_ROLE = "484928655659892736"; // On TEST server.
-} else {
-    LOGS_ID = "473524298368286720"; // KAD public log channel.
-    JUNKYARD_ID = "477291431069745154"; // KAD filter log channel.
-    MUTED_ROLE = "474244727223615492"; // KAD muted role.
-}
 // In KAD.
 const hiddenChannels = ["452247073174323222", "473221758279745552", "454132320849625109", "477291431069745154"];
 
-// Functions for filter functionality.
-const badWords = require("./filter.json");
-const homoglyphs = Object.entries({
-    "a": /[ÀÁÂÃÄÅàáâãäåɑΑαаᎪＡａ]/g,
-    "b": /[ßʙΒβВЬᏴᛒＢｂ]/g,
-    "c": /[ϲϹСсᏟⅭⅽＣｃ]/g,
-    "d": /[ĎďĐđԁժᎠḍⅮⅾＤｄ]/g,
-    "e": /[ÈÉÊËéêëĒēĔĕĖėĘĚěΕЕеᎬＥｅ]/g,
-    "f": /[ϜＦｆ]/g,
-    "g": /[ɡɢԌնᏀＧｇ]/g,
-    "h": /[ʜΗНһᎻＨｈ]/g,
-    "i": /[lɩΙІіاᎥᛁⅠⅰＩ]/g,
-    "j": /[ϳЈјյᎫＪｊ]/g,
-    "k": /[ΚκКᏦᛕKＫｋ]/g,
-    "l": /[ʟιاᏞⅬⅼＬｌ]/g,
-    "m": /[ΜϺМᎷᛖⅯⅿＭｍ]/g,
-    "n": /[ɴΝＮｎ]/g,
-    "p": /[ΡρРрᏢＰｐ]/g,
-    "q": /[ႭႳＱｑ]/g,
-    "r": /[ʀԻᏒᚱＲｒ]/g,
-    "s": /[ЅѕՏႽᏚＳｓ]/g,
-    "t": /[ΤτТᎢＴｔ]/g,
-    "u": /[μυԱՍ⋃Ｕｕ]/g,
-    "v": /[νѴѵᏙⅤⅴＶｖ]/g,
-    "w": /[ѡᎳＷｗ]/g,
-    "x": /[ΧχХхⅩⅹＸｘ]/g,
-    "y": /[ʏΥγуҮＹｙ]/g,
-    "z": /[ΖᏃＺｚ]/g
-});
-const deHomoglyph = str => {
-    homoglyphs.forEach(h => str = str.replace(h[1], h[0]));
-    return str;
-
-    // for each letter,
-    // replace letter with standard letter,
-    // repeat
-    // str.split("").forEach(l => {
-    //
-    // })
-    // return str.split("").map(l => {
-    //     homoglyphs.forEach(h => l = l.replace(h[1], h[0]));
-    //     return l;
-    // }).join("");
-};
-const deSymbolize = str => str.replace(/[~\!@#$%^&*()-=_+\[\]{}|"";:\/?.>,<`]/g, "");
-const filter = message => {
-    const rawMsg = message.content.toLowerCase();
-    console.log(`Raw msg: ${rawMsg}`);
-    const noHomoglyphs = deHomoglyph(rawMsg);
-    console.log(`Homoglyphs removed: ${noHomoglyphs}`);
-    const cleanedMsg = deSymbolize(noHomoglyphs);
-    console.log(`No symbols: ${cleanedMsg}`);
-    const cleanedWords = cleanedMsg.split(" ");
-    console.log(`Cleaned split words: ${cleanedWords}`);
-
-    badWords.forEach(bw => {
-        if (cleanedMsg.includes(` ${bw} `) || cleanedWords[0] === bw || cleanedWords[cleanedWords.length-1] === bw) {
-            let embed = new Discord.RichEmbed();
-            embed.setColor(embedRedColor);
-            embed.setAuthor("Filter alert", "https://cdn.discordapp.com/attachments/306119383820795904/480069533676208130/emoji.png");
-            embed.setThumbnail(message.author.displayAvatarURL);
-            embed.addField("Word", `"**${bw}**"`);
-            embed.addField("Author", message.author.username);
-            embed.addField("Message", message.content);
-            embed.addField("Posted in", `<#${message.channel.id}>`);
-            embed.addField("Edited?", (message.edits.length === 1 ? "No" : "Yes"));
-            embed.setTimestamp();
-            message.delete();
-            console.log(JUNKYARD_ID);
-            message.guild.channels.find("id", JUNKYARD_ID).send({ embed });
-        }
-    });
-}
+const filter = new Filter(require("./homoglyphs.json"), require("./filter.json"));
 
 // Permissions checking functions.
 const hasManageMessages = msg => {
@@ -219,7 +139,9 @@ const logMessage = (msg, obj) => {
     }
 }
 const sendDM = msg => {
-    client.users.find("id", "218397146049806337").send(msg);
+    if (!DEV_MODE) {
+        client.users.find("id", "218397146049806337").send(msg);
+    }
 };
 const sendError = err => {
     let embed = new Discord.RichEmbed();
@@ -1006,11 +928,14 @@ client.on("ready", () => {
     embed.setAuthor("Ready!", "https://media.discordapp.net/attachments/307975805357522944/392142646618882060/image.png");
     embed.setDescription("I am online and at your service, Jett!");
     embed.setTimestamp();
-    client.users.find("id", "218397146049806337").send({ embed });
+    sendDM({ embed });
 });
 client.on("message", message => {
     if (message.author.bot) return;
-    if (message.channel.type !== "dm") filter(message);
+    if (message.channel.type !== "dm") {
+        filter.run(message, Discord)
+            .catch(e => console.error("Filter error: ", e));
+    }
     otherFunctions(message);
 
     if (!message.content.startsWith(prefix)) return;
@@ -1031,7 +956,8 @@ client.on("messageUpdate", (oldMsg, newMsg) => {
         console.log("Message edited:");
         console.log(`Old content: ${oldMsg.content}`);
         console.log(`New content: ${newMsg.content}`);
-        filter(newMsg);
+        filter.run(newMsg, Discord)
+            .catch(e => console.error("Filter error: ", e));
     }
 });
 client.on("messageReactionAdd", (reaction, user) => {
