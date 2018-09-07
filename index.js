@@ -387,11 +387,12 @@ const commands = {
     },
     userInfo: {
         name: "userInfo",
-        description: "Check info about a given user.",
+        description: "Check info about yourself or a given user.",
         category: "General",
-        usage: `${prefix}userInfo <member>`,
+        usage: `${prefix}userInfo [member]`,
         do: (message, client, args, Discord) => {
             let member = message.mentions.members.first();
+            message.channel.send(member);
             let joined = new Date(member.joinedAt);
             let registered = new Date(member.user.createdAt);
             let embed = new Discord.RichEmbed();
