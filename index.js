@@ -392,7 +392,7 @@ const commands = {
         usage: `${prefix}userInfo [member]`,
         do: (message, client, args, Discord) => {
             let member = message.mentions.members.first();
-            console.log(member);
+            if (member == null) member = message.author;
             let joined = new Date(member.joinedAt);
             let registered = new Date(member.user.createdAt);
             let embed = new Discord.RichEmbed();
