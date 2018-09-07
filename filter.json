@@ -1,4 +1,8 @@
-[
+{
+    "queueSize": 6,
+    "threshold": 3,
+    "emoteFrequency": 0.5,
+    "profanity": [
     "fck", "uck", "ngg", "cnt", "unt", "cnt", "bich", "blwjob", "btch", "dck",
     "pssy", "ashole", "ahole", "cck", "sht", "stu", "gto", "godamn", "whre",
 
@@ -107,4 +111,5 @@
     "とるこぶろ", "トルコ嬢", "トルコ風呂", "ニガー ニグロ", "にんぴにん",
     "はんとうじん", "マンコ", "まんこ", "レイプ", "れいぷ", "低能", "屠殺", "強姦",
     "援交 支那人", "精薄", "精薄者", "輪姦"
-]
+    ]
+}
