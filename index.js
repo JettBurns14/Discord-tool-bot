@@ -416,7 +416,7 @@ const commands = {
                     const member = message.guild.member(user);
                     if (member) {
                         if (reason) {
-                            message.guild.kick(reason)
+                            member.kick(reason)
                             .then(u => {
                                 logMessage(message, {
                                     modAction: "Kick User",
