@@ -63,7 +63,7 @@ const embedYellowColor = "e6e600"; // Yellow.
 
 // Variables to be defined.
 const DEV_MODE = process.env.DEV == 1;
-const LOGS_ID = DEV_MODE ? process.env.LOGS_ID : "473524298368286720";
+const LOGS_ID = DEV_MODE ? process.env.LOGS_ID : "530516100354670642";
 const JUNKYARD_ID = DEV_MODE ? process.env.JUNKYARD_ID : "477291431069745154";
 const MUTED_ROLE = DEV_MODE ? process.env.MUTED_ROLE : "474244727223615492";
 
