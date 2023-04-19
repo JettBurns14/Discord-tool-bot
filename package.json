@@ -14,7 +14,7 @@
         "discord.js": "^11.4.2",
         "dotenv": "^6.0.0",
         "pg": "^7.4.3",
-        "request": "^2.87.0"
+        "request": "^2.88.2"
     },
     "devDependencies": {
         "tape": "^4.9.1"
